@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PIXEL BATTLE LIVE</title>
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Arial,sans-serif;
+color:white;
+background:linear-gradient(145deg,#100b30,#17134b,#071d35);
+min-height:100vh;
+}
+header{
+padding:22px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #ffffff20;
+}
+.logo{font-size:22px;font-weight:900;color:#50eaff}
+.logo span{color:#ff55c8}
+nav a{color:white;text-decoration:none;margin-left:12px;font-size:13px}
+.hero{text-align:center;padding:75px 20px 45px}
+.hero h1{font-size:clamp(38px,9vw,65px);margin:10px 0;text-shadow:0 0 25px #36dfff}
+.hero h1 span{color:#ff58ce}
+.hero p{color:#c9c6e9;line-height:1.7}
+.button{
+display:inline-block;padding:14px 25px;border-radius:12px;
+background:linear-gradient(90deg,#19d8ed,#9b55ff);
+color:white;font-weight:bold;text-decoration:none;margin:12px 5px;
+}
+.cards{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+gap:15px;padding:20px;max-width:900px;margin:auto;
+}
+.card{
+background:#ffffff10;border:1px solid #ffffff25;
+border-radius:18px;padding:25px 12px;text-align:center;
+}
+.card .emoji{font-size:38px}
+.card h3{color:#54eaff}
+footer{text-align:center;padding:35px;color:#aaa;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">PIXEL <span>BATTLE</span></div>
+<nav>
+<a href="#inicio">Inicio</a>
+<a href="#juego">Jugar</a>
+</nav>
+</header>
+<main id="inicio">
+<section class="hero">
+<div style="font-size:45px">⚡🎮🌟</div>
+<h1>PIXEL BATTLE <span>LIVE</span></h1>
+<p>¡Tu aventura comienza aquí!<br>
+Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.</p>
+<a class="button" href="#juego">COMENZAR AVENTURA</a>
+</section>
+<section class="cards" id="juego">
+<div class="card">
+<div class="emoji">👤</div>
+<h3>JUGADORES</h3>
+<p>Crea tu perfil gamer.</p>
+</div>
+<div class="card">
+<div class="emoji">⭐</div>
+<h3>EXPERIENCIA</h3>
+<p>Consigue XP y sube niveles.</p>
+</div>
+<div class="card">
+<div class="emoji">🪙</div>
+<h3>MONEDAS</h3>
+<p>Prepara tus recompensas.</p>
+</div>
+<div class="card">
+<div class="emoji">🏆</div>
+<h3>LOGROS</h3>
+<p>Demuestra tus habilidades.</p>
+</div>
+</section>
+</main>
+<footer>
+PIXEL BATTLE LIVE © 2026<br>
+Tu aventura, tus reglas.
+</footer>
+</body>
+</html>
