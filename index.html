@@ -103,5 +103,80 @@ Tu aventura, tus reglas.
 
   console.log("PIXEL BATTLE LIVE conectado a Supabase");
 </script>
+  <section id="registro" style="display:none; max-width:420px; margin:30px auto; padding:25px; background:#17172b; border:2px solid #7c3aed; border-radius:18px; color:white; text-align:center;">
+  <h2>🎮 Crear cuenta</h2>
+
+  <input id="username" placeholder="Nombre de jugador" required
+    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+
+  <input id="email" type="email" placeholder="Correo electrónico" required
+    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+
+  <input id="password" type="password" placeholder="Contraseña" required
+    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+
+  <input id="confirmPassword" type="password" placeholder="Confirmar contraseña" required
+    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+
+  <button onclick="registrarJugador()" style="padding:12px 22px;margin-top:12px;">
+    Crear cuenta
+  </button>
+
+  <p id="mensajeRegistro"></p>
+</section>
+
+<script>
+function mostrarRegistro() {
+  document.getElementById("registro").style.display = "block";
+}
+
+async function registrarJugador() {
+  const username = document.getElementById("username").value.trim().toLowerCase();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+  const mensaje = document.getElementById("mensajeRegistro");
+
+  if (!username || !email || !password || !confirmPassword) {
+    mensaje.textContent = "Completa todos los campos.";
+    return;
+  }
+
+  if (!/^[a-z0-9_]{3,20}$/.test(username)) {
+    mensaje.textContent = "Usa 3 a 20 caracteres: letras, números o guion bajo.";
+    return;
+  }
+
+  if (password.length < 8) {
+    mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    mensaje.textContent = "Las contraseñas no coinciden.";
+    return;
+  }
+
+  mensaje.textContent = "Creando tu cuenta...";
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        username: username,
+        display_name: username
+      }
+    }
+  });
+
+  if (error) {
+    mensaje.textContent = error.message;
+    return;
+  }
+
+  mensaje.textContent = "¡Cuenta creada! Revisa tu correo para verificarla.";
+}
+</script>
 </body>
 </html>
