@@ -109,6 +109,39 @@ Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.</p>
 </div>
 </section>
 </main>
+  <section id="perfilJugador" style="
+display:none;
+max-width:450px;
+margin:30px auto;
+padding:25px;
+background:linear-gradient(145deg,#17172b,#292052);
+border:2px solid #36dfff;
+border-radius:20px;
+color:white;
+text-align:center;
+">
+
+<h2>🎮 MI PERFIL GAMER</h2>
+
+<div style="font-size:55px">👾</div>
+
+<h3 id="perfilNombre">Jugador</h3>
+
+<p>🏆 Nivel: <span id="perfilNivel">1</span></p>
+
+<p>⭐ Experiencia: <span id="perfilXP">0</span> XP</p>
+
+<p>🪙 Monedas: <span id="perfilMonedas">100</span></p>
+
+<p>⚔️ Victorias: <span id="perfilVictorias">0</span></p>
+
+<p>💀 Derrotas: <span id="perfilDerrotas">0</span></p>
+
+<button onclick="cerrarSesion()">
+CERRAR SESIÓN
+</button>
+
+  </section>
 <footer>
 PIXEL BATTLE LIVE © 2026<br>
 Tu aventura, tus reglas.
@@ -222,7 +255,6 @@ function mostrarLogin() {
     block: "center"
   });
 }
-
 async function iniciarSesion() {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
@@ -234,7 +266,7 @@ async function iniciarSesion() {
   }
 
   if (!email.includes("@")) {
-    mensaje.textContent = "Por ahora utiliza tu correo. Estamos preparando el acceso por nombre de jugador.";
+    mensaje.textContent = "Por ahora utiliza tu correo electrónico.";
     return;
   }
 
@@ -250,9 +282,52 @@ async function iniciarSesion() {
     return;
   }
 
-  const username = data.user.user_metadata.username || "Jugador";
+  const { data: perfil, error: errorPerfil } = await supabaseClient
+    .from("player_profiles")
+    .select("*")
+    .eq("id", data.user.id)
+    .single();
 
-  mensaje.textContent = "¡Bienvenido, " + username + "! Acceso correcto. 🎮";
+  if (errorPerfil) {
+    mensaje.textContent = "No se pudo cargar tu perfil. Revisa los permisos.";
+    return;
+  }
+
+  document.getElementById("perfilNombre").textContent =
+    perfil.display_name || perfil.username;
+
+  document.getElementById("perfilNivel").textContent = perfil.level;
+  document.getElementById("perfilXP").textContent = perfil.xp;
+  document.getElementById("perfilMonedas").textContent = perfil.coins;
+  document.getElementById("perfilVictorias").textContent = perfil.victories;
+  document.getElementById("perfilDerrotas").textContent = perfil.defeats;
+
+  document.getElementById("login").style.display = "none";
+
+  const pantallaPerfil = document.getElementById("perfilJugador");
+  pantallaPerfil.style.display = "block";
+  pantallaPerfil.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+
+  mensaje.textContent = "";
+}
+async function cerrarSesion() {
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    alert("No se pudo cerrar sesión.");
+    return;
+  }
+
+  document.getElementById("perfilJugador").style.display = "none";
+  document.getElementById("login").style.display = "block";
+
+  document.getElementById("login").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
 }
 
 async function recuperarPassword() {
