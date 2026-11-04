@@ -7,6 +7,21 @@
 <title>PIXEL BATTLE LIVE</title>
 <style>
 *{box-sizing:border-box}
+  /* ANIMACION POKEBOLA */
+.pokebola-animada {
+  animation: captura 2s ease-in-out infinite;
+  transform-origin: center;
+  filter: drop-shadow(0 0 12px #ff304b);
+}
+
+@keyframes captura {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  15% { transform: rotate(-20deg) scale(1.08); }
+  30% { transform: rotate(20deg) scale(1.08); }
+  45% { transform: rotate(-18deg); }
+  60% { transform: rotate(18deg); }
+  75% { transform: rotate(0deg) scale(1.12); }
+}
 body{
 margin:0;
 font-family:Arial,sans-serif;
