@@ -89,5 +89,19 @@ Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.</p>
 PIXEL BATTLE LIVE © 2026<br>
 Tu aventura, tus reglas.
 </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://xqgxiomyxkybbqnqjore.supabase.co";
+
+  const SUPABASE_KEY = "sb_publishable_bPK-l_HqxtkheMFM59Ksqg_dhG5zPJs";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  console.log("PIXEL BATTLE LIVE conectado a Supabase");
+</script>
 </body>
 </html>
