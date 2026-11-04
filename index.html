@@ -150,7 +150,14 @@ Tu aventura, tus reglas.
 
 <script>
 function mostrarRegistro() {
-  document.getElementById("registro").style.display = "block";
+  const formulario = document.getElementById("registro");
+
+  formulario.style.display = "block";
+
+  formulario.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
 }
 
 async function registrarJugador() {
