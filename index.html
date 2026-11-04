@@ -151,6 +151,25 @@ Tu aventura, tus reglas.
 
   <p id="mensajeLogin"></p>
 </section>
+  <section id="nuevaPassword" style="display:none; max-width:420px; margin:30px auto; padding:25px; background:#17172b; border:2px solid #ff55c8; border-radius:18px; color:white; text-align:center;">
+
+  <h2>🔐 NUEVA CONTRASEÑA</h2>
+  <p>Escribe tu nueva contraseña.</p>
+
+  <input id="passwordNueva" type="password"
+    placeholder="Nueva contraseña"
+    style="width:100%;padding:12px;margin:8px 0;">
+
+  <input id="passwordNuevaConfirmar" type="password"
+    placeholder="Confirmar nueva contraseña"
+    style="width:100%;padding:12px;margin:8px 0;">
+
+  <button onclick="guardarNuevaPassword()">
+    GUARDAR CONTRASEÑA
+  </button>
+
+  <p id="mensajeNuevaPassword"></p>
+  </section>
   <section id="registro" style="display:none; max-width:420px; margin:30px auto; padding:25px; background:#17172b; border:2px solid #7c3aed; border-radius:18px; color:white; text-align:center;">
   <h2>🎮 Crear cuenta</h2>
 
@@ -174,6 +193,16 @@ Tu aventura, tus reglas.
 </section>
 
 <script>
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (event === "PASSWORD_RECOVERY" && session) {
+    const formulario = document.getElementById("nuevaPassword");
+    formulario.style.display = "block";
+    formulario.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+});
 function mostrarRegistro() {
   const formulario = document.getElementById("registro");
 
@@ -184,7 +213,6 @@ function mostrarRegistro() {
     block: "center"
   });
 }
-
 function mostrarLogin() {
   const formulario = document.getElementById("login");
   formulario.style.display = "block";
@@ -248,6 +276,36 @@ async function recuperarPassword() {
   }
 
   mensaje.textContent = "¡Enlace enviado! Revisa tu correo. 📩";
+}
+async function guardarNuevaPassword() {
+  const password = document.getElementById("passwordNueva").value;
+  const confirmar = document.getElementById("passwordNuevaConfirmar").value;
+  const mensaje = document.getElementById("mensajeNuevaPassword");
+
+  if (password.length < 8) {
+    mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
+    return;
+  }
+
+  if (password !== confirmar) {
+    mensaje.textContent = "Las contraseñas no coinciden.";
+    return;
+  }
+
+  mensaje.textContent = "Actualizando contraseña...";
+
+  const { error } = await supabaseClient.auth.updateUser({
+    password: password
+  });
+
+  if (error) {
+    mensaje.textContent = "No se pudo actualizar. Intenta nuevamente.";
+    return;
+  }
+
+  mensaje.textContent = "¡Contraseña actualizada correctamente! 🎮";
+
+  document.getElementById("nuevaPassword").style.display = "none";
 }
 async function registrarJugador() {
   const username = document.getElementById("username").value.trim().toLowerCase();
