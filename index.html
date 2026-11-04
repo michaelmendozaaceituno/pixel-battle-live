@@ -65,9 +65,12 @@ footer{text-align:center;padding:35px;color:#aaa;font-size:12px}
 <header>
 <div class="logo">PIXEL <span>BATTLE</span></div>
 <nav>
+  <nav>
 <a href="#inicio">Inicio</a>
 <a href="#juego">Jugar</a>
+<a href="#login" onclick="mostrarLogin(); return false;">Entrar</a>
 <a href="#registro" onclick="mostrarRegistro(); return false;">Registrar</a>
+  </nav>
 </nav>
 </header>
 <main id="inicio">
@@ -126,6 +129,30 @@ Tu aventura, tus reglas.
 
   console.log("PIXEL BATTLE LIVE conectado a Supabase");
 </script>
+  
+<section id="login" style="display:none; max-width:420px; margin:30px auto; padding:25px; background:linear-gradient(145deg,#17172b,#292052); border:2px solid #36dfff; border-radius:18px; color:white; text-align:center;">
+
+  <h2>⚡ ENTRAR A LA ARENA</h2>
+  <p>Bienvenido de nuevo, entrenador.</p>
+
+  <input id="loginEmail" placeholder="Usuario o correo electrónico"
+    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+
+  <input id="loginPassword" type="password" placeholder="Contraseña"
+    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+
+  <button onclick="iniciarSesion()" style="padding:12px 22px;margin-top:12px;">
+    INICIAR SESIÓN
+  </button>
+
+  <p>
+    <a href="#" onclick="recuperarPassword(); return false;" style="color:#50eaff;">
+      ¿Olvidaste tu contraseña?
+    </a>
+  </p>
+
+  <p id="mensajeLogin"></p>
+</section>
   <section id="registro" style="display:none; max-width:420px; margin:30px auto; padding:25px; background:#17172b; border:2px solid #7c3aed; border-radius:18px; color:white; text-align:center;">
   <h2>🎮 Crear cuenta</h2>
 
@@ -160,6 +187,70 @@ function mostrarRegistro() {
   });
 }
 
+function mostrarLogin() {
+  const formulario = document.getElementById("login");
+  formulario.style.display = "block";
+
+  formulario.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+
+async function iniciarSesion() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  const mensaje = document.getElementById("mensajeLogin");
+
+  if (!email || !password) {
+    mensaje.textContent = "Completa tu correo y contraseña.";
+    return;
+  }
+
+  if (!email.includes("@")) {
+    mensaje.textContent = "Por ahora utiliza tu correo. Estamos preparando el acceso por nombre de jugador.";
+    return;
+  }
+
+  mensaje.textContent = "Entrando a la arena...";
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    mensaje.textContent = "No se pudo iniciar sesión. Revisa tus datos.";
+    return;
+  }
+
+  const username = data.user.user_metadata.username || "Jugador";
+
+  mensaje.textContent = "¡Bienvenido, " + username + "! Acceso correcto. 🎮";
+}
+
+async function recuperarPassword() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const mensaje = document.getElementById("mensajeLogin");
+
+  if (!email || !email.includes("@")) {
+    mensaje.textContent = "Escribe primero tu correo electrónico.";
+    return;
+  }
+
+  mensaje.textContent = "Enviando enlace de recuperación...";
+
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: "https://michaelmendozaaceituno.github.io/pixel-battle-live/"
+  });
+
+  if (error) {
+    mensaje.textContent = "No se pudo enviar el correo. Revisa la configuración.";
+    return;
+  }
+
+  mensaje.textContent = "¡Enlace enviado! Revisa tu correo. 📩";
+}
 async function registrarJugador() {
   const username = document.getElementById("username").value.trim().toLowerCase();
   const email = document.getElementById("email").value.trim();
