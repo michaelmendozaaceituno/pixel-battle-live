@@ -136,7 +136,58 @@ text-align:center;
 <p>⚔️ Victorias: <span id="perfilVictorias">0</span></p>
 
 <p>💀 Derrotas: <span id="perfilDerrotas">0</span></p>
+<!-- CAPSULA DEL PODER -->
+<div id="panelGacha" style="
+margin-top:25px;
+padding:20px;
+background:linear-gradient(145deg,#101b40,#292052);
+border:2px solid #a855f7;
+border-radius:18px;
+">
 
+<h2 style="color:#50eaff;">🔮 CÁPSULA DEL PODER</h2>
+
+<div style="font-size:65px;margin:15px;">
+💠
+</div>
+
+<p>Tu energía disponible:</p>
+
+<h2 style="color:#ffd700;">
+<span id="saldoCapsulas">0</span>
+</h2>
+
+<p style="color:#c9c6e9;">
+100 Cápsulas de Poder = 1 tirada
+</p>
+
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+
+<button onclick="abrirGacha(1)">
+ABRIR x1
+</button>
+
+<button onclick="abrirGacha(5)">
+ABRIR x5
+</button>
+
+<button onclick="abrirGacha(10)">
+ABRIR x10
+</button>
+
+</div>
+
+<div id="resultadoGacha" style="
+margin-top:20px;
+color:white;
+line-height:1.8;
+"></div>
+
+<p style="font-size:12px;color:#aaa;">
+⭐ Protección legendaria: 50 tiradas consecutivas.
+</p>
+
+</div>
 <button onclick="cerrarSesion()">
 CERRAR SESIÓN
 </button>
