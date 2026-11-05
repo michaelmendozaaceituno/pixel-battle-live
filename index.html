@@ -480,6 +480,56 @@ async function registrarJugador() {
 
   mensaje.textContent = "¡Cuenta creada! Revisa tu correo para verificarla.";
 }
+ // ==================================
+// PIXEL BATTLE LIVE - SISTEMA GACHA
+// ==================================
+
+async function cargarSaldoCapsulas() {
+  const saldo = document.getElementById("saldoCapsulas");
+
+  const { data, error } = await supabaseClient
+    .from("power_capsule_wallets")
+    .select("balance")
+    .maybeSingle();
+
+  if (error) {
+    saldo.textContent = "Error";
+    console.error("Error cargando cápsulas:", error);
+    return;
+  }
+
+  saldo.textContent = data ? data.balance : 0;
+}
+
+async function abrirGacha(cantidad) {
+  const resultado = document.getElementById("resultadoGacha");
+
+  if (![1, 5, 10].includes(cantidad)) return;
+
+  const { data: sesion } = await supabaseClient.auth.getSession();
+
+  if (!sesion.session) {
+    resultado.textContent = "Debes iniciar sesión para jugar.";
+    return;
+  }
+
+  resultado.textContent = "🔮 Abriendo cápsulas...";
+
+  const { data, error } = await supabaseClient.rpc("open_gacha", {
+    p_pulls: cantidad
+  });
+
+  if (error) {
+    resultado.textContent = "❌ " + error.message;
+    return;
+  }
+
+  resultado.textContent =
+    "🎉 ¡Tirada completada!\n" +
+    JSON.stringify(data, null, 2);
+
+  await cargarSaldoCapsulas();
+    } 
 </script>
 </body>
 </html>
