@@ -352,7 +352,7 @@ async function iniciarSesion() {
   document.getElementById("perfilMonedas").textContent = perfil.coins;
   document.getElementById("perfilVictorias").textContent = perfil.victories;
   document.getElementById("perfilDerrotas").textContent = perfil.defeats;
-
+await cargarSaldoCapsulas();
   document.getElementById("login").style.display = "none";
 
   const pantallaPerfil = document.getElementById("perfilJugador");
