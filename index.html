@@ -487,6 +487,32 @@ async function registrarJugador() {
 async function cargarSaldoCapsulas() {
   const saldo = document.getElementById("saldoCapsulas");
 
+  if (!saldo) return;
+
+  const { data: sesion } = await supabaseClient.auth.getSession();
+  const usuario = sesion.session?.user;
+
+  if (!usuario) {
+    saldo.textContent = "0";
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("power_capsule_wallets")
+    .select("balance")
+    .eq("user_id", usuario.id)
+    .maybeSingle();
+
+  if (error) {
+    saldo.textContent = "Error";
+    console.error("Error cargando cápsulas:", error);
+    return;
+  }
+
+  saldo.textContent = data ? data.balance : 0;
+}
+  const saldo = document.getElementById("saldoCapsulas");
+
   const { data, error } = await supabaseClient
     .from("power_capsule_wallets")
     .select("balance")
