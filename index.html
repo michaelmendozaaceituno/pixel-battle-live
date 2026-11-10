@@ -511,22 +511,7 @@ async function cargarSaldoCapsulas() {
 
   saldo.textContent = data ? data.balance : 0;
 }
-  const saldo = document.getElementById("saldoCapsulas");
-
-  const { data, error } = await supabaseClient
-    .from("power_capsule_wallets")
-    .select("balance")
-    .maybeSingle();
-
-  if (error) {
-    saldo.textContent = "Error";
-    console.error("Error cargando cápsulas:", error);
-    return;
-  }
-
-  saldo.textContent = data ? data.balance : 0;
-}
-
+  
 async function abrirGacha(cantidad) {
   const resultado = document.getElementById("resultadoGacha");
 
