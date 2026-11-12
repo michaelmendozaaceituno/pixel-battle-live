@@ -407,6 +407,7 @@ async function iniciarSesion() {
   document.getElementById("perfilVictorias").textContent = perfil.victories;
   document.getElementById("perfilDerrotas").textContent = perfil.defeats;
 await cargarSaldoCapsulas();
+await cargarProgresoTap();
   document.getElementById("login").style.display = "none";
 
   const pantallaPerfil = document.getElementById("perfilJugador");
