@@ -540,11 +540,13 @@ async function enviarToquesTap() {
       }
 
       if (!data || data.success !== true) {
-        tapPendientes += cantidad;
-        huboError = true;
-        mensaje.textContent = "Supabase no confirmó el registro. Intenta nuevamente.";
-        console.error("Respuesta TAP TAP:",data);
-        break;
+  console.log("RESPUESTA COMPLETA TAP TAP:", data);
+  console.log("TIPO DE RESPUESTA:", typeof data);
+
+  tapPendientes += cantidad;
+  huboError = true;
+  mensaje.textContent = "Respuesta de Supabase: " + JSON.stringify(data);
+  break;
       }
 
       tapConfirmados = Number(data.remaining_taps ?? 0);
