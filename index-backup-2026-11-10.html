@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,359 +6,238 @@
 <title>PIXEL BATTLE LIVE</title>
 <style>
 *{box-sizing:border-box}
-  /* ANIMACION POKEBOLA */
-.pokebola-animada {
-  animation: captura 2s ease-in-out infinite;
-  transform-origin: center;
-  filter: drop-shadow(0 0 12px #ff304b);
+.pokebola-animada{
+  animation:captura 2s ease-in-out infinite;
+  transform-origin:center;
+  filter:drop-shadow(0 0 12px #ff304b);
 }
-
-@keyframes captura {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  15% { transform: rotate(-20deg) scale(1.08); }
-  30% { transform: rotate(20deg) scale(1.08); }
-  45% { transform: rotate(-18deg); }
-  60% { transform: rotate(18deg); }
-  75% { transform: rotate(0deg) scale(1.12); }
+@keyframes captura{
+  0%,100%{transform:rotate(0deg) scale(1)}
+  15%{transform:rotate(-20deg) scale(1.08)}
+  30%{transform:rotate(20deg) scale(1.08)}
+  45%{transform:rotate(-18deg)}
+  60%{transform:rotate(18deg)}
+  75%{transform:rotate(0deg) scale(1.12)}
 }
 body{
-margin:0;
-font-family:Arial,sans-serif;
-color:white;
-background:linear-gradient(145deg,#100b30,#17134b,#071d35);
-min-height:100vh;
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:white;
+  background:linear-gradient(145deg,#100b30,#17134b,#071d35);
+  min-height:100vh;
 }
 header{
-padding:22px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ffffff20;
+  padding:18px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  border-bottom:1px solid #ffffff20;
 }
 .logo{font-size:22px;font-weight:900;color:#50eaff}
 .logo span{color:#ff55c8}
-nav a{color:white;text-decoration:none;margin-left:12px;font-size:13px}
-.hero{text-align:center;padding:75px 20px 45px}
-.hero h1{font-size:clamp(38px,9vw,65px);margin:10px 0;text-shadow:0 0 25px #36dfff}
+nav{display:flex;gap:12px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-size:13px}
+.hero{text-align:center;padding:65px 20px 40px}
+.hero h1{
+  font-size:clamp(38px,9vw,65px);
+  margin:10px 0;
+  text-shadow:0 0 25px #36dfff;
+}
 .hero h1 span{color:#ff58ce}
 .hero p{color:#c9c6e9;line-height:1.7}
 .button{
-display:inline-block;padding:14px 25px;border-radius:12px;
-background:linear-gradient(90deg,#19d8ed,#9b55ff);
-color:white;font-weight:bold;text-decoration:none;margin:12px 5px;
+  display:inline-block;
+  padding:14px 25px;
+  border-radius:12px;
+  background:linear-gradient(90deg,#19d8ed,#9b55ff);
+  color:white;
+  font-weight:bold;
+  text-decoration:none;
+  margin:12px 5px;
+  border:0;
 }
 .cards{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-gap:15px;padding:20px;max-width:900px;margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:15px;
+  padding:20px;
+  max-width:900px;
+  margin:auto;
 }
 .card{
-background:#ffffff10;border:1px solid #ffffff25;
-border-radius:18px;padding:25px 12px;text-align:center;
+  background:#ffffff10;
+  border:1px solid #ffffff25;
+  border-radius:18px;
+  padding:25px 12px;
+  text-align:center;
 }
 .card .emoji{font-size:38px}
 .card h3{color:#54eaff}
+button{
+  cursor:pointer;
+  padding:12px 18px;
+  margin:5px;
+  border:0;
+  border-radius:12px;
+  color:white;
+  font-weight:bold;
+  background:linear-gradient(90deg,#19aeca,#7950d9);
+}
+button:disabled{opacity:.55;cursor:not-allowed}
+input{
+  border:1px solid #ffffff40;
+  border-radius:9px;
+  background:#fff;
+  color:#17172b;
+  font-size:15px;
+}
+.panel{
+  max-width:450px;
+  margin:30px auto;
+  padding:22px;
+  background:linear-gradient(145deg,#17172b,#292052);
+  border:2px solid #36dfff;
+  border-radius:20px;
+  color:white;
+  text-align:center;
+  width:calc(100% - 28px);
+}
 footer{text-align:center;padding:35px;color:#aaa;font-size:12px}
+@media(max-width:480px){
+  header{justify-content:center}
+  nav{justify-content:center}
+  .hero{padding-top:45px}
+}
 </style>
 </head>
 <body>
 <header>
-<div class="logo">PIXEL <span>BATTLE</span></div>
-<nav>
-  <a href="#inicio">Inicio</a>
-  <a href="#juego">Jugar</a>
-  <a href="#login" onclick="mostrarLogin(); return false;">Entrar</a>
-  <a href="#registro" onclick="mostrarRegistro(); return false;">Registrar</a>
-</nav>
+  <div class="logo">PIXEL <span>BATTLE</span></div>
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#juego">Jugar</a>
+    <a href="#login" onclick="mostrarLogin();return false;">Entrar</a>
+    <a href="#registro" onclick="mostrarRegistro();return false;">Registrar</a>
+  </nav>
 </header>
+
 <main id="inicio">
-<section class="hero">
-<div style="font-size:45px">🎮</div>
-  <svg class="pokebola-animada" viewBox="0 0 100 100" width="55" height="55" aria-label="Pokébola">
-  <circle cx="50" cy="50" r="44" fill="white" stroke="#111" stroke-width="6"/>
-  <path d="M6 50 A44 44 0 0 1 94 50 Z" fill="#ef3038"/>
-  <path d="M6 50 H94" stroke="#111" stroke-width="7"/>
-  <circle cx="50" cy="50" r="14" fill="white" stroke="#111" stroke-width="6"/>
-  <circle cx="50" cy="50" r="6" fill="#ddd"/>
-  </svg>
-<h1> PIXEL BATTLE <span>LIVE</span></h1>
-<p>¡Tu aventura comienza aquí!<br>
-Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.</p>
-<a class="button" href="#juego">COMENZAR AVENTURA</a>
-</section>
-<section class="cards" id="juego">
-<div class="card">
-<div class="emoji">👤</div>
-<h3>JUGADORES</h3>
-<p>Crea tu perfil gamer.</p>
-</div>
-<div class="card">
-<div class="emoji">⭐</div>
-<h3>EXPERIENCIA</h3>
-<p>Consigue XP y sube niveles.</p>
-</div>
-<div class="card">
-<div class="emoji">🪙</div>
-<h3>MONEDAS</h3>
-<p>Prepara tus recompensas.</p>
-</div>
-<div class="card">
-<div class="emoji">🏆</div>
-<h3>LOGROS</h3>
-<p>Demuestra tus habilidades.</p>
-</div>
-</section>
-</main>
-  <section id="perfilJugador" style="
-display:none;
-max-width:450px;
-margin:30px auto;
-padding:25px;
-background:linear-gradient(145deg,#17172b,#292052);
-border:2px solid #36dfff;
-border-radius:20px;
-color:white;
-text-align:center;
-">
-
-<h2>🎮 MI PERFIL GAMER</h2>
-
-<div style="font-size:55px">👾</div>
-
-<h3 id="perfilNombre">Jugador</h3>
-
-<p>🏆 Nivel: <span id="perfilNivel">1</span></p>
-
-<p>⭐ Experiencia: <span id="perfilXP">0</span> XP</p>
-
-<p>🪙 Monedas: <span id="perfilMonedas">100</span></p>
-
-<p>⚔️ Victorias: <span id="perfilVictorias">0</span></p>
-
-<p>💀 Derrotas: <span id="perfilDerrotas">0</span></p>
-
-<!-- PANEL TAP TAP -->
-<div id="panelTapTap" style="
-margin-top:25px;
-padding:20px;
-background:linear-gradient(145deg,#102c48,#182052);
-border:2px solid #36dfff;
-border-radius:18px;
-text-align:center;
-">
-
-<h2 style="color:#50eaff;">👆 TAP TAP BATTLE</h2>
-
-<p>¡Toca para conseguir Cápsulas del Poder!</p>
-
-<div style="font-size:55px;margin:15px;">⚡</div>
-
-<h2 style="color:#ffd700;">
-<span id="contadorTap">0</span> / 200
-</h2>
-
-<div style="
-height:12px;
-background:#ffffff20;
-border-radius:20px;
-overflow:hidden;
-margin:15px 0;
-">
-<div id="barraTap" style="
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#36dfff,#a855f7);
-transition:width .15s;
-"></div>
-</div>
-
-<button onclick="registrarToque()" style="
-padding:18px 35px;
-font-size:20px;
-font-weight:bold;
-border:0;
-border-radius:15px;
-background:linear-gradient(90deg,#19d8ed,#9b55ff);
-color:white;
-">
-⚡ ¡TOCAR!
-</button>
-
-<p id="mensajeTap" style="color:#c9c6e9;">
-Cada 200 toques consigues 1 Cápsula del Poder.
-</p>
-
-</div>
-    
-<!-- CAPSULA DEL PODER -->
-<div id="panelGacha" style="
-margin-top:25px;
-padding:20px;
-background:linear-gradient(145deg,#101b40,#292052);
-border:2px solid #a855f7;
-border-radius:18px;
-">
-
-<h2 style="color:#50eaff;">🔮 CÁPSULA DEL PODER</h2>
-
-<div style="font-size:65px;margin:15px;">
-💠
-</div>
-
-<p>Tu energía disponible:</p>
-
-<h2 style="color:#ffd700;">
-<span id="saldoCapsulas">0</span>
-</h2>
-
-<p style="color:#c9c6e9;">
-100 Cápsulas de Poder = 1 tirada
-</p>
-
-<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-
-<button onclick="abrirGacha(1)">
-ABRIR x1
-</button>
-
-<button onclick="abrirGacha(5)">
-ABRIR x5
-</button>
-
-<button onclick="abrirGacha(10)">
-ABRIR x10
-</button>
-
-</div>
-
-<div id="resultadoGacha" style="
-margin-top:20px;
-color:white;
-line-height:1.8;
-"></div>
-
-<p style="font-size:12px;color:#aaa;">
-⭐ Protección legendaria: 50 tiradas consecutivas.
-</p>
-
-</div>
-<button onclick="cerrarSesion()">
-CERRAR SESIÓN
-</button>
-
+  <section class="hero">
+    <div style="font-size:45px">🎮</div>
+    <svg class="pokebola-animada" viewBox="0 0 100 100" width="55" height="55" aria-label="Pokébola">
+      <circle cx="50" cy="50" r="44" fill="white" stroke="#111" stroke-width="6"/>
+      <path d="M6 50 A44 44 0 0 1 94 50 Z" fill="#ef3038"/>
+      <path d="M6 50 H94" stroke="#111" stroke-width="7"/>
+      <circle cx="50" cy="50" r="14" fill="white" stroke="#111" stroke-width="6"/>
+      <circle cx="50" cy="50" r="6" fill="#ddd"/>
+    </svg>
+    <h1>PIXEL BATTLE <span>LIVE</span></h1>
+    <p>¡Tu aventura comienza aquí!<br>
+    Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.</p>
+    <a class="button" href="#juego">COMENZAR AVENTURA</a>
   </section>
-<footer>
-PIXEL BATTLE LIVE © 2026<br>
-Tu aventura, tus reglas.
-</footer>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  const SUPABASE_URL = "https://xqgxiomyxkybbqnqjore.supabase.co";
+  <section class="cards" id="juego">
+    <div class="card"><div class="emoji">👤</div><h3>JUGADORES</h3><p>Crea tu perfil gamer.</p></div>
+    <div class="card"><div class="emoji">⭐</div><h3>EXPERIENCIA</h3><p>Consigue XP y sube niveles.</p></div>
+    <div class="card"><div class="emoji">🪙</div><h3>MONEDAS</h3><p>Prepara tus recompensas.</p></div>
+    <div class="card"><div class="emoji">🏆</div><h3>LOGROS</h3><p>Demuestra tus habilidades.</p></div>
+  </section>
+</main>
 
-  const SUPABASE_KEY = "sb_publishable_bPK-l_HqxtkheMFM59Ksqg_dhG5zPJs";
+<section id="perfilJugador" class="panel" style="display:none">
+  <h2>🎮 MI PERFIL GAMER</h2>
+  <div style="font-size:55px">👾</div>
+  <h3 id="perfilNombre">Jugador</h3>
+  <p>🏆 Nivel: <span id="perfilNivel">1</span></p>
+  <p>⭐ Experiencia: <span id="perfilXP">0</span> XP</p>
+  <p>🪙 Monedas: <span id="perfilMonedas">100</span></p>
+  <p>⚔️ Victorias: <span id="perfilVictorias">0</span></p>
+  <p>💀 Derrotas: <span id="perfilDerrotas">0</span></p>
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+  <div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px">
+    <h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2>
+    <p>¡Toca para conseguir Cápsulas del Poder!</p>
+    <div style="font-size:55px;margin:15px">⚡</div>
+    <h2 style="color:#ffd700"><span id="contadorTap">0</span> / 200</h2>
+    <div style="height:12px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:15px 0">
+      <div id="barraTap" style="height:100%;width:0%;background:linear-gradient(90deg,#36dfff,#a855f7);transition:width .15s"></div>
+    </div>
+    <button id="botonTap" onclick="registrarToque()" style="padding:18px 35px;font-size:20px">⚡ ¡TOCAR!</button>
+    <p id="mensajeTap" style="color:#c9c6e9">Cada 200 toques consigues 1 Cápsula del Poder.</p>
+  </div>
 
-  console.log("PIXEL BATTLE LIVE conectado a Supabase");
-</script>
-  
-<section id="login" style="display:none; max-width:420px; margin:30px auto; padding:25px; background:linear-gradient(145deg,#17172b,#292052); border:2px solid #36dfff; border-radius:18px; color:white; text-align:center;">
+  <div id="panelGacha" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#101b40,#292052);border:2px solid #a855f7;border-radius:18px">
+    <h2 style="color:#50eaff">🔮 CÁPSULA DEL PODER</h2>
+    <div style="font-size:65px;margin:15px">💠</div>
+    <p>Tu energía disponible:</p>
+    <h2 style="color:#ffd700"><span id="saldoCapsulas">0</span></h2>
+    <p style="color:#c9c6e9">100 Cápsulas del Poder = 1 tirada</p>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button onclick="abrirGacha(1)">ABRIR x1</button>
+      <button onclick="abrirGacha(5)">ABRIR x5</button>
+      <button onclick="abrirGacha(10)">ABRIR x10</button>
+    </div>
+    <div id="resultadoGacha" style="margin-top:20px;color:white;line-height:1.8;white-space:pre-wrap"></div>
+    <p style="font-size:12px;color:#aaa">⭐ Protección legendaria: 50 tiradas consecutivas.</p>
+  </div>
+  <button onclick="cerrarSesion()">CERRAR SESIÓN</button>
+</section>
 
+<section id="login" class="panel" style="display:none">
   <h2>⚡ ENTRAR A LA ARENA</h2>
   <p>Bienvenido de nuevo, entrenador.</p>
-
-  <input id="loginEmail" placeholder="Usuario o correo electrónico"
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
-
-  <input id="loginPassword" type="password" placeholder="Contraseña"
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
-
-  <button onclick="iniciarSesion()" style="padding:12px 22px;margin-top:12px;">
-    INICIAR SESIÓN
-  </button>
-
-  <p>
-    <a href="#" onclick="recuperarPassword(); return false;" style="color:#50eaff;">
-      ¿Olvidaste tu contraseña?
-    </a>
-  </p>
-
-  <p id="mensajeLogin"></p>
+  <input id="loginEmail" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0">
+  <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0">
+  <button onclick="iniciarSesion()">INICIAR SESIÓN</button>
+  <p><a href="#" onclick="recuperarPassword();return false;" style="color:#50eaff">¿Olvidaste tu contraseña?</a></p>
+  <p id="mensajeLogin" aria-live="polite"></p>
 </section>
-  <section id="nuevaPassword" style="display:none; max-width:420px; margin:30px auto; padding:25px; background:#17172b; border:2px solid #ff55c8; border-radius:18px; color:white; text-align:center;">
 
+<section id="nuevaPassword" class="panel" style="display:none;border-color:#ff55c8">
   <h2>🔐 NUEVA CONTRASEÑA</h2>
   <p>Escribe tu nueva contraseña.</p>
-
-  <input id="passwordNueva" type="password"
-    placeholder="Nueva contraseña"
-    style="width:100%;padding:12px;margin:8px 0;">
-
-  <input id="passwordNuevaConfirmar" type="password"
-    placeholder="Confirmar nueva contraseña"
-    style="width:100%;padding:12px;margin:8px 0;">
-
-  <button onclick="guardarNuevaPassword()">
-    GUARDAR CONTRASEÑA
-  </button>
-
-  <p id="mensajeNuevaPassword"></p>
-  </section>
-  <section id="registro" style="display:none; max-width:420px; margin:30px auto; padding:25px; background:#17172b; border:2px solid #7c3aed; border-radius:18px; color:white; text-align:center;">
-  <h2>🎮 Crear cuenta</h2>
-
-  <input id="username" placeholder="Nombre de jugador" required
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
-
-  <input id="email" type="email" placeholder="Correo electrónico" required
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
-
-  <input id="password" type="password" placeholder="Contraseña" required
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
-
-  <input id="confirmPassword" type="password" placeholder="Confirmar contraseña" required
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
-
-  <button onclick="registrarJugador()" style="padding:12px 22px;margin-top:12px;">
-    Crear cuenta
-  </button>
-
-  <p id="mensajeRegistro"></p>
+  <input id="passwordNueva" type="password" autocomplete="new-password" placeholder="Nueva contraseña" style="width:100%;padding:12px;margin:8px 0">
+  <input id="passwordNuevaConfirmar" type="password" autocomplete="new-password" placeholder="Confirmar nueva contraseña" style="width:100%;padding:12px;margin:8px 0">
+  <button onclick="guardarNuevaPassword()">GUARDAR CONTRASEÑA</button>
+  <p id="mensajeNuevaPassword" aria-live="polite"></p>
 </section>
 
+<section id="registro" class="panel" style="display:none;border-color:#7c3aed">
+  <h2>🎮 Crear cuenta</h2>
+  <input id="username" autocomplete="username" placeholder="Nombre de jugador" style="width:100%;padding:12px;margin:8px 0">
+  <input id="email" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0">
+  <input id="password" type="password" autocomplete="new-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0">
+  <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirmar contraseña" style="width:100%;padding:12px;margin:8px 0">
+  <button onclick="registrarJugador()">CREAR CUENTA</button>
+  <p id="mensajeRegistro" aria-live="polite"></p>
+</section>
+
+<footer>PIXEL BATTLE LIVE © 2026<br>Tu aventura, tus reglas.</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  supabaseClient.auth.onAuthStateChange((event, session) => {
-  if (event === "PASSWORD_RECOVERY" && session) {
-    const formulario = document.getElementById("nuevaPassword");
-    formulario.style.display = "block";
-    formulario.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  }
-});
-function mostrarRegistro() {
-  const formulario = document.getElementById("registro");
+"use strict";
 
-  formulario.style.display = "block";
+const SUPABASE_URL = "https://xqgxiomyxkybbqnqjore.supabase.co";
+const SUPABASE_KEY = "sb_publishable_bPK-l_HqxtkheMFM59Ksqg_dhG5zPJs";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  formulario.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
+let tapConfirmados = 0;
+let tapPendientes = 0;
+let tapEnviando = false;
+let tapTemporizador = null;
+
+function mostrarSeccion(id) {
+  const elemento = document.getElementById(id);
+  elemento.style.display = "block";
+  elemento.scrollIntoView({behavior:"smooth",block:"center"});
 }
-function mostrarLogin() {
-  const formulario = document.getElementById("login");
-  formulario.style.display = "block";
+function mostrarRegistro(){mostrarSeccion("registro");}
+function mostrarLogin(){mostrarSeccion("login");}
 
-  formulario.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-}
 async function iniciarSesion() {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
@@ -369,95 +247,87 @@ async function iniciarSesion() {
     mensaje.textContent = "Completa tu correo y contraseña.";
     return;
   }
-
   if (!email.includes("@")) {
     mensaje.textContent = "Por ahora utiliza tu correo electrónico.";
     return;
   }
 
   mensaje.textContent = "Entrando a la arena...";
-
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
+  const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
   if (error) {
     mensaje.textContent = "No se pudo iniciar sesión. Revisa tus datos.";
+    console.error("Error de inicio de sesión:",error);
     return;
   }
 
-  const { data: perfil, error: errorPerfil } = await supabaseClient
-    .from("player_profiles")
-    .select("*")
-    .eq("id", data.user.id)
-    .single();
-
-  if (errorPerfil) {
-    mensaje.textContent = "No se pudo cargar tu perfil. Revisa los permisos.";
+  await cargarPerfil(data.user.id);
+  if (document.getElementById("perfilNombre").textContent === "Jugador") {
+    mensaje.textContent = "La sesión inició, pero no se pudo cargar tu perfil. Revisa los permisos de player_profiles.";
     return;
   }
 
-  document.getElementById("perfilNombre").textContent =
-    perfil.display_name || perfil.username;
-
-  document.getElementById("perfilNivel").textContent = perfil.level;
-  document.getElementById("perfilXP").textContent = perfil.xp;
-  document.getElementById("perfilMonedas").textContent = perfil.coins;
-  document.getElementById("perfilVictorias").textContent = perfil.victories;
-  document.getElementById("perfilDerrotas").textContent = perfil.defeats;
-await cargarSaldoCapsulas();
-await cargarProgresoTap();
   document.getElementById("login").style.display = "none";
-
-  const pantallaPerfil = document.getElementById("perfilJugador");
-  pantallaPerfil.style.display = "block";
-  pantallaPerfil.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-
+  mostrarSeccion("perfilJugador");
   mensaje.textContent = "";
 }
-async function cerrarSesion() {
-  const { error } = await supabaseClient.auth.signOut();
 
-  if (error) {
-    alert("No se pudo cerrar sesión.");
-    return;
+async function cargarPerfil(userId) {
+  const {data:perfil,error} = await supabaseClient
+    .from("player_profiles")
+    .select("*")
+    .eq("id",userId)
+    .single();
+
+  if (error || !perfil) {
+    console.error("Error cargando perfil:",error);
+    return false;
   }
 
+  document.getElementById("perfilNombre").textContent = perfil.display_name || perfil.username || "Jugador";
+  document.getElementById("perfilNivel").textContent = perfil.level ?? 1;
+  document.getElementById("perfilXP").textContent = perfil.xp ?? 0;
+  document.getElementById("perfilMonedas").textContent = perfil.coins ?? 0;
+  document.getElementById("perfilVictorias").textContent = perfil.victories ?? 0;
+  document.getElementById("perfilDerrotas").textContent = perfil.defeats ?? 0;
+
+  await Promise.all([cargarSaldoCapsulas(),cargarProgresoTap()]);
+  return true;
+}
+
+async function cerrarSesion() {
+  const {error} = await supabaseClient.auth.signOut();
+  if (error) {
+    alert("No se pudo cerrar sesión.");
+    console.error(error);
+    return;
+  }
   document.getElementById("perfilJugador").style.display = "none";
   document.getElementById("login").style.display = "block";
-
-  document.getElementById("login").scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
+  document.getElementById("login").scrollIntoView({behavior:"smooth",block:"center"});
+  tapConfirmados = 0;
+  tapPendientes = 0;
+  actualizarTapUI();
 }
 
 async function recuperarPassword() {
   const email = document.getElementById("loginEmail").value.trim();
   const mensaje = document.getElementById("mensajeLogin");
-
   if (!email || !email.includes("@")) {
     mensaje.textContent = "Escribe primero tu correo electrónico.";
     return;
   }
-
   mensaje.textContent = "Enviando enlace de recuperación...";
-
-  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://michaelmendozaaceituno.github.io/pixel-battle-live/"
+  const {error} = await supabaseClient.auth.resetPasswordForEmail(email,{
+    redirectTo:"https://michaelmendozaaceituno.github.io/pixel-battle-live/"
   });
-
   if (error) {
     mensaje.textContent = "No se pudo enviar el correo. Revisa la configuración.";
+    console.error(error);
     return;
   }
-
   mensaje.textContent = "¡Enlace enviado! Revisa tu correo. 📩";
 }
+
 async function guardarNuevaPassword() {
   const password = document.getElementById("passwordNueva").value;
   const confirmar = document.getElementById("passwordNuevaConfirmar").value;
@@ -467,247 +337,187 @@ async function guardarNuevaPassword() {
     mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
     return;
   }
+  if (password !== confirmar) {
+    mensaje.textContent = "Las contraseñas no coinciden.";
+    return;
+  }
+  mensaje.textContent = "Actualizando contraseña...";
+  const {error} = await supabaseClient.auth.updateUser({password});
+  if (error) {
+    mensaje.textContent = "No se pudo actualizar. Intenta nuevamente.";
+    console.error(error);
+    return;
+  }
+  mensaje.textContent = "¡Contraseña actualizada correctamente! 🎮";
+  document.getElementById("passwordNueva").value = "";
+  document.getElementById("passwordNuevaConfirmar").value = "";
+  setTimeout(() => {
+    document.getElementById("nuevaPassword").style.display = "none";
+  },1500);
+}
 
+async function registrarJugador() {
+  const username = document.getElementById("username").value.trim().toLowerCase();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmar = document.getElementById("confirmPassword").value;
+  const mensaje = document.getElementById("mensajeRegistro");
+
+  if (!username || !email || !password || !confirmar) {
+    mensaje.textContent = "Completa todos los campos.";
+    return;
+  }
+  if (!/^[a-z0-9_]{3,20}$/.test(username)) {
+    mensaje.textContent = "Usa 3 a 20 caracteres: letras, números o guion bajo.";
+    return;
+  }
+  if (password.length < 8) {
+    mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
+    return;
+  }
   if (password !== confirmar) {
     mensaje.textContent = "Las contraseñas no coinciden.";
     return;
   }
 
-  mensaje.textContent = "Actualizando contraseña...";
-
-  const { error } = await supabaseClient.auth.updateUser({
-    password: password
-  });
-
-  if (error) {
-    mensaje.textContent = "No se pudo actualizar. Intenta nuevamente.";
-    return;
-  }
-
-  mensaje.textContent = "¡Contraseña actualizada correctamente! 🎮";
-
-  document.getElementById("nuevaPassword").style.display = "none";
-}
-async function registrarJugador() {
-  const username = document.getElementById("username").value.trim().toLowerCase();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-  const mensaje = document.getElementById("mensajeRegistro");
-
-  if (!username || !email || !password || !confirmPassword) {
-    mensaje.textContent = "Completa todos los campos.";
-    return;
-  }
-
-  if (!/^[a-z0-9_]{3,20}$/.test(username)) {
-    mensaje.textContent = "Usa 3 a 20 caracteres: letras, números o guion bajo.";
-    return;
-  }
-
-  if (password.length < 8) {
-    mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    mensaje.textContent = "Las contraseñas no coinciden.";
-    return;
-  }
-
   mensaje.textContent = "Creando tu cuenta...";
-
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        username: username,
-        display_name: username
-      }
-    }
+  const {error} = await supabaseClient.auth.signUp({
+    email,password,
+    options:{data:{username,display_name:username}}
   });
-
   if (error) {
     mensaje.textContent = error.message;
     return;
   }
-
   mensaje.textContent = "¡Cuenta creada! Revisa tu correo para verificarla.";
 }
-  
-// ==================================
-// PIXEL BATTLE LIVE - SISTEMA TAP TAP
-// ==================================
-
-let tapConfirmados = 0;
-let tapPendientes = 0;
-let tapEnviando = false;
-let tapTemporizador = null;
 
 function actualizarTapUI() {
-  const total = tapConfirmados + tapPendientes;
-  const avance = total % 200;
-
+  const avance = (tapConfirmados + tapPendientes) % 200;
   document.getElementById("contadorTap").textContent = avance;
-  document.getElementById("barraTap").style.width =
-    (avance / 200 * 100) + "%";
+  document.getElementById("barraTap").style.width = (avance/200*100) + "%";
 }
 
 async function cargarProgresoTap() {
-  const { data: sesion } =
-    await supabaseClient.auth.getSession();
-
+  const {data:sesion} = await supabaseClient.auth.getSession();
   const usuario = sesion.session?.user;
-
   if (!usuario) return;
 
-  const { data, error } = await supabaseClient
+  const {data,error} = await supabaseClient
     .from("tap_tap_progress")
     .select("tap_count")
-    .eq("user_id", usuario.id)
+    .eq("user_id",usuario.id)
     .maybeSingle();
 
   if (error) {
-    console.error("Error cargando TAP TAP:", error);
+    console.error("Error cargando TAP TAP:",error);
+    document.getElementById("mensajeTap").textContent = "No se pudo cargar tu progreso TAP TAP.";
     return;
   }
-
   tapConfirmados = data ? data.tap_count : 0;
   actualizarTapUI();
 }
 
 function registrarToque() {
-  if (
-    document.getElementById("perfilJugador").style.display === "none"
-  ) {
-    return;
-  }
+  if (document.getElementById("perfilJugador").style.display === "none") return;
 
   tapPendientes++;
-
   actualizarTapUI();
-
-  document.getElementById("mensajeTap").textContent =
-    "¡Sigue tocando! ⚡";
-
+  document.getElementById("mensajeTap").textContent = "¡Sigue tocando! ⚡";
   clearTimeout(tapTemporizador);
 
   if (tapPendientes >= 10) {
     enviarToquesTap();
   } else {
-    tapTemporizador = setTimeout(() => {
-      enviarToquesTap();
-    }, 800);
+    tapTemporizador = setTimeout(enviarToquesTap,800);
   }
 }
 
 async function enviarToquesTap() {
   if (tapEnviando || tapPendientes === 0) return;
-
   clearTimeout(tapTemporizador);
-
   tapEnviando = true;
 
-  const cantidad = Math.min(tapPendientes, 200);
+  const cantidad = Math.min(tapPendientes,200);
   tapPendientes -= cantidad;
-
   const mensaje = document.getElementById("mensajeTap");
-
   mensaje.textContent = "Guardando tus toques...";
 
-  const { data, error } = await supabaseClient.rpc(
-    "register_tap_batch",
-    { p_taps: cantidad }
-  );
+  try {
+    const {data,error} = await supabaseClient.rpc("register_tap_batch",{p_taps:cantidad});
+    if (error) throw error;
 
-  if (error) {
-    tapPendientes += cantidad;
-    mensaje.textContent =
-      "No se pudieron guardar los toques. Intenta nuevamente.";
-    console.error("Error TAP TAP:", error);
-  } else {
     tapConfirmados = data.remaining_taps;
-
     if (data.capsules_earned > 0) {
-      mensaje.textContent =
-        "🎉 ¡Ganaste " + data.capsules_earned +
-        " Cápsula(s) del Poder!";
+      mensaje.textContent = "🎉 ¡Ganaste " + data.capsules_earned + " Cápsula(s) del Poder!";
       await cargarSaldoCapsulas();
     } else {
       mensaje.textContent = "¡Toques guardados correctamente! ⚡";
     }
-  }
-
-  tapEnviando = false;
-  actualizarTapUI();
-
-  if (tapPendientes > 0 && !error) {
-    enviarToquesTap();
+  } catch(error) {
+    tapPendientes += cantidad;
+    mensaje.textContent = "No se pudieron guardar los toques. Pulsa de nuevo para reintentar.";
+    console.error("Error TAP TAP:",error);
+  } finally {
+    tapEnviando = false;
+    actualizarTapUI();
+    if (tapPendientes > 0) {
+      clearTimeout(tapTemporizador);
+      tapTemporizador = setTimeout(enviarToquesTap,800);
+    }
   }
 }
-  
- // ==================================
-// PIXEL BATTLE LIVE - SISTEMA GACHA
-// ==================================
 
 async function cargarSaldoCapsulas() {
   const saldo = document.getElementById("saldoCapsulas");
-
-  if (!saldo) return;
-
-  const { data: sesion } = await supabaseClient.auth.getSession();
+  const {data:sesion} = await supabaseClient.auth.getSession();
   const usuario = sesion.session?.user;
-
   if (!usuario) {
     saldo.textContent = "0";
     return;
   }
 
-  const { data, error } = await supabaseClient
+  const {data,error} = await supabaseClient
     .from("power_capsule_wallets")
     .select("balance")
-    .eq("user_id", usuario.id)
+    .eq("user_id",usuario.id)
     .maybeSingle();
 
   if (error) {
     saldo.textContent = "Error";
-    console.error("Error cargando cápsulas:", error);
+    console.error("Error cargando cápsulas:",error);
     return;
   }
-
   saldo.textContent = data ? data.balance : 0;
 }
-  
+
 async function abrirGacha(cantidad) {
   const resultado = document.getElementById("resultadoGacha");
+  if (![1,5,10].includes(cantidad)) return;
 
-  if (![1, 5, 10].includes(cantidad)) return;
-
-  const { data: sesion } = await supabaseClient.auth.getSession();
-
+  const {data:sesion} = await supabaseClient.auth.getSession();
   if (!sesion.session) {
     resultado.textContent = "Debes iniciar sesión para jugar.";
     return;
   }
 
   resultado.textContent = "🔮 Abriendo cápsulas...";
-
-  const { data, error } = await supabaseClient.rpc("open_gacha", {
-    p_pulls: cantidad
-  });
-
+  const {data,error} = await supabaseClient.rpc("open_gacha",{p_pulls:cantidad});
   if (error) {
     resultado.textContent = "❌ " + error.message;
+    console.error("Error Gacha:",error);
     return;
   }
 
-  resultado.textContent =
-    "🎉 ¡Tirada completada!\n" +
-    JSON.stringify(data, null, 2);
-
+  resultado.textContent = "🎉 ¡Tirada completada!\n" + JSON.stringify(data,null,2);
   await cargarSaldoCapsulas();
-    } 
+}
+
+supabaseClient.auth.onAuthStateChange((event,session) => {
+  if (event === "PASSWORD_RECOVERY" && session) {
+    mostrarSeccion("nuevaPassword");
+  }
+});
 </script>
 </body>
 </html>
