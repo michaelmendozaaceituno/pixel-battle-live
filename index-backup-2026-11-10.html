@@ -136,6 +136,60 @@ text-align:center;
 <p>⚔️ Victorias: <span id="perfilVictorias">0</span></p>
 
 <p>💀 Derrotas: <span id="perfilDerrotas">0</span></p>
+
+<!-- PANEL TAP TAP -->
+<div id="panelTapTap" style="
+margin-top:25px;
+padding:20px;
+background:linear-gradient(145deg,#102c48,#182052);
+border:2px solid #36dfff;
+border-radius:18px;
+text-align:center;
+">
+
+<h2 style="color:#50eaff;">👆 TAP TAP BATTLE</h2>
+
+<p>¡Toca para conseguir Cápsulas del Poder!</p>
+
+<div style="font-size:55px;margin:15px;">⚡</div>
+
+<h2 style="color:#ffd700;">
+<span id="contadorTap">0</span> / 200
+</h2>
+
+<div style="
+height:12px;
+background:#ffffff20;
+border-radius:20px;
+overflow:hidden;
+margin:15px 0;
+">
+<div id="barraTap" style="
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#36dfff,#a855f7);
+transition:width .15s;
+"></div>
+</div>
+
+<button onclick="registrarToque()" style="
+padding:18px 35px;
+font-size:20px;
+font-weight:bold;
+border:0;
+border-radius:15px;
+background:linear-gradient(90deg,#19d8ed,#9b55ff);
+color:white;
+">
+⚡ ¡TOCAR!
+</button>
+
+<p id="mensajeTap" style="color:#c9c6e9;">
+Cada 200 toques consigues 1 Cápsula del Poder.
+</p>
+
+</div>
+    
 <!-- CAPSULA DEL PODER -->
 <div id="panelGacha" style="
 margin-top:25px;
@@ -480,6 +534,118 @@ async function registrarJugador() {
 
   mensaje.textContent = "¡Cuenta creada! Revisa tu correo para verificarla.";
 }
+  
+// ==================================
+// PIXEL BATTLE LIVE - SISTEMA TAP TAP
+// ==================================
+
+let tapConfirmados = 0;
+let tapPendientes = 0;
+let tapEnviando = false;
+let tapTemporizador = null;
+
+function actualizarTapUI() {
+  const total = tapConfirmados + tapPendientes;
+  const avance = total % 200;
+
+  document.getElementById("contadorTap").textContent = avance;
+  document.getElementById("barraTap").style.width =
+    (avance / 200 * 100) + "%";
+}
+
+async function cargarProgresoTap() {
+  const { data: sesion } =
+    await supabaseClient.auth.getSession();
+
+  const usuario = sesion.session?.user;
+
+  if (!usuario) return;
+
+  const { data, error } = await supabaseClient
+    .from("tap_tap_progress")
+    .select("tap_count")
+    .eq("user_id", usuario.id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error cargando TAP TAP:", error);
+    return;
+  }
+
+  tapConfirmados = data ? data.tap_count : 0;
+  actualizarTapUI();
+}
+
+function registrarToque() {
+  if (
+    document.getElementById("perfilJugador").style.display === "none"
+  ) {
+    return;
+  }
+
+  tapPendientes++;
+
+  actualizarTapUI();
+
+  document.getElementById("mensajeTap").textContent =
+    "¡Sigue tocando! ⚡";
+
+  clearTimeout(tapTemporizador);
+
+  if (tapPendientes >= 10) {
+    enviarToquesTap();
+  } else {
+    tapTemporizador = setTimeout(() => {
+      enviarToquesTap();
+    }, 800);
+  }
+}
+
+async function enviarToquesTap() {
+  if (tapEnviando || tapPendientes === 0) return;
+
+  clearTimeout(tapTemporizador);
+
+  tapEnviando = true;
+
+  const cantidad = Math.min(tapPendientes, 200);
+  tapPendientes -= cantidad;
+
+  const mensaje = document.getElementById("mensajeTap");
+
+  mensaje.textContent = "Guardando tus toques...";
+
+  const { data, error } = await supabaseClient.rpc(
+    "register_tap_batch",
+    { p_taps: cantidad }
+  );
+
+  if (error) {
+    tapPendientes += cantidad;
+    mensaje.textContent =
+      "No se pudieron guardar los toques. Intenta nuevamente.";
+    console.error("Error TAP TAP:", error);
+  } else {
+    tapConfirmados = data.remaining_taps;
+
+    if (data.capsules_earned > 0) {
+      mensaje.textContent =
+        "🎉 ¡Ganaste " + data.capsules_earned +
+        " Cápsula(s) del Poder!";
+      await cargarSaldoCapsulas();
+    } else {
+      mensaje.textContent = "¡Toques guardados correctamente! ⚡";
+    }
+  }
+
+  tapEnviando = false;
+  actualizarTapUI();
+
+  if (tapPendientes > 0 && !error) {
+    enviarToquesTap();
+  }
+}
+  
  // ==================================
 // PIXEL BATTLE LIVE - SISTEMA GACHA
 // ==================================
