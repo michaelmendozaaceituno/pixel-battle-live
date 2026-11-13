@@ -551,6 +551,22 @@ async function enviarToquesTap() {
 
       tapConfirmados = Number(data.remaining_taps ?? 0);
 
+      // REGALO DE PERSONAJE INICIAL
+      const { data: regalo, error: errorRegalo } =
+        await supabaseClient.rpc("claim_starter_character");
+
+      if (errorRegalo) {
+        console.error("Error al entregar personaje inicial:", errorRegalo);
+      } else if (regalo && regalo.success && !regalo.already_claimed) {
+        mensaje.textContent =
+          console.log(
+  "🎁 ¡Personaje inicial entregado!",
+  regalo.character_key
+);
+
+        console.log("PERSONAJE INICIAL ENTREGADO:", regalo);
+      }
+      
       if (Number(data.capsules_earned) > 0) {
         mensaje.textContent = "🎉 ¡Ganaste " + data.capsules_earned + " Cápsula(s) del Poder!";
         await cargarSaldoCapsulas();
