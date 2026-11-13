@@ -478,7 +478,7 @@ async function cargarProgresoTap() {
 
   const {data,error} = await supabaseClient
     .from("tap_tap_progress")
-    .select("tap_count")
+    .select("tap_tokens")
     .eq("user_id",usuario.id)
     .maybeSingle();
 
@@ -488,7 +488,7 @@ async function cargarProgresoTap() {
     return;
   }
 
-  tapConfirmados = data ? Number(data.tap_count) : 0;
+  tapConfirmados = data ? Number(data.tap_tokens) : 0;
   actualizarTapUI();
 }
 
