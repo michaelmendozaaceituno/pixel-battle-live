@@ -581,6 +581,8 @@ async function enviarToquesTap() {
 
       
 // ENTREGA DEL PERSONAJE INICIAL
+      mensaje.textContent = "🎁 Intentando reclamar tu personaje...";
+alert("EL JUEGO LLEGÓ AL BLOQUE DE PERSONAJE");
 const {data:regalo,error:errorRegalo} =
   await supabaseClient.rpc("claim_starter_character");
 console.log("RESULTADO PERSONAJE:", regalo);
