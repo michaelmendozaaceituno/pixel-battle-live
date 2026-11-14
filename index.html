@@ -336,12 +336,11 @@ async function cargarPerfil(userId) {
     return false;
   }
 }
-
 async function cargarPersonajeInicial() {
   const panel = document.getElementById("panelPersonaje");
 
   if (!panel) {
-    console.error("No se encontró el panelPersonaje en el HTML.");
+    console.error("No se encontró panelPersonaje");
     return;
   }
 
@@ -353,7 +352,6 @@ async function cargarPersonajeInicial() {
   document.getElementById("rarezaPersonaje").textContent = "";
 
   try {
-    // Reclamar o recuperar el personaje del jugador
     const { data: regalo, error: errorRegalo } =
       await supabaseClient.rpc("claim_starter_character");
 
@@ -362,29 +360,17 @@ async function cargarPersonajeInicial() {
 
     if (errorRegalo) {
       console.error("Error al reclamar personaje:", errorRegalo);
-
-      document.getElementById("nombrePersonaje").textContent =
-        "No se pudo cargar el personaje";
-
-      document.getElementById("rarezaPersonaje").textContent =
-        errorRegalo.message;
-
+      document.getElementById("nombrePersonaje").textContent = "No se pudo cargar el personaje";
+      document.getElementById("rarezaPersonaje").textContent = errorRegalo.message;
       return;
     }
 
     if (!regalo || regalo.success !== true || !regalo.character_key) {
-      console.error("Respuesta inesperada del personaje:", regalo);
-
-      document.getElementById("nombrePersonaje").textContent =
-        "No se encontró tu personaje";
-
-      document.getElementById("rarezaPersonaje").textContent =
-        "Revisaremos la respuesta de Supabase.";
-
+      document.getElementById("nombrePersonaje").textContent = "No se encontró tu personaje";
+      document.getElementById("rarezaPersonaje").textContent = "Respuesta inesperada de Supabase.";
       return;
     }
 
-    // Buscar los datos del personaje en el catálogo
     const { data: personaje, error: errorCatalogo } =
       await supabaseClient
         .from("game_characters")
@@ -394,44 +380,35 @@ async function cargarPersonajeInicial() {
 
     if (errorCatalogo) {
       console.error("Error consultando catálogo:", errorCatalogo);
-
-      document.getElementById("nombrePersonaje").textContent =
-        regalo.character_key;
-
-      document.getElementById("clavePersonaje").textContent =
-        regalo.character_key;
-
-      document.getElementById("rarezaPersonaje").textContent =
-        "No se pudo consultar el catálogo.";
-
+      document.getElementById("nombrePersonaje").textContent = regalo.character_key;
+      document.getElementById("clavePersonaje").textContent = regalo.character_key;
+      document.getElementById("rarezaPersonaje").textContent = "No se pudo consultar el catálogo.";
       return;
     }
 
     if (!personaje) {
-      document.getElementById("nombrePersonaje").textContent =
-        regalo.character_key;
-
-      document.getElementById("clavePersonaje").textContent =
-        regalo.character_key;
-
-      document.getElementById("rarezaPersonaje").textContent =
-        "Personaje no encontrado en el catálogo.";
-
+      document.getElementById("nombrePersonaje").textContent = regalo.character_key;
+      document.getElementById("clavePersonaje").textContent = regalo.character_key;
+      document.getElementById("rarezaPersonaje").textContent = "Personaje no encontrado en el catálogo.";
       return;
     }
 
-    // Mostrar el personaje encontrado
     mostrarPersonajeInicial(personaje);
 
   } catch (error) {
     console.error("Error inesperado cargando personaje:", error);
-
-    document.getElementById("nombrePersonaje").textContent =
-      "Error al cargar personaje";
-
-    document.getElementById("rarezaPersonaje").textContent =
-      error.message || "Error inesperado";
+    document.getElementById("nombrePersonaje").textContent = "Error al cargar personaje";
+    document.getElementById("rarezaPersonaje").textContent = error.message || "Error inesperado";
   }
+}
+
+function mostrarPersonajeInicial(personaje) {
+  document.getElementById("panelPersonaje").style.display = "block";
+  document.getElementById("clavePersonaje").textContent = personaje.character_key || "---";
+  document.getElementById("nombrePersonaje").textContent = personaje.display_name || personaje.character_key || "Personaje";
+  document.getElementById("franquiciaPersonaje").textContent = personaje.franchise || "Personaje desbloqueado";
+  document.getElementById("rarezaPersonaje").textContent = personaje.rarity || "Rareza pendiente de identificar";
+  document.getElementById("imagenPersonaje").textContent = "🎮";
 }
 
 async function cerrarSesion() {
