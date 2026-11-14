@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -540,37 +539,38 @@ async function enviarToquesTap() {
       }
 
       if (!data || data.success !== true) {
-  console.log("RESPUESTA COMPLETA TAP TAP:", data);
-  console.log("TIPO DE RESPUESTA:", typeof data);
+        console.log("RESPUESTA COMPLETA TAP TAP:",data);
+        console.log("TIPO DE RESPUESTA:",typeof data);
 
-  tapPendientes += cantidad;
-  huboError = true;
-  mensaje.textContent = "Respuesta de Supabase: " + JSON.stringify(data);
-  break;
+        tapPendientes += cantidad;
+        huboError = true;
+        mensaje.textContent = "Respuesta de Supabase: " + JSON.stringify(data);
+        break;
       }
 
       tapConfirmados = Number(data.remaining_taps ?? 0);
 
-      // REGALO DE PERSONAJE INICIAL
-      const { data: regalo, error: errorRegalo } =
+      // ENTREGA DEL PERSONAJE INICIAL
+      const {data:regalo,error:errorRegalo} =
         await supabaseClient.rpc("claim_starter_character");
 
       if (errorRegalo) {
-        console.error("Error al entregar personaje inicial:", errorRegalo);
+        console.error("Error al entregar personaje inicial:",errorRegalo);
       } else if (regalo && regalo.success && !regalo.already_claimed) {
         mensaje.textContent =
-          console.log(
-  "🎁 ¡Personaje inicial entregado!",
-  regalo.character_key
-);
+          "🎁 ¡Personaje inicial entregado! " +
+          (regalo.character_key || "");
 
-        console.log("PERSONAJE INICIAL ENTREGADO:", regalo);
+        console.log("PERSONAJE INICIAL ENTREGADO:",regalo);
       }
-      
+
       if (Number(data.capsules_earned) > 0) {
-        mensaje.textContent = "🎉 ¡Ganaste " + data.capsules_earned + " Cápsula(s) del Poder!";
+        mensaje.textContent =
+          "🎉 ¡Ganaste " + data.capsules_earned +
+          " Cápsula(s) del Poder!";
+
         await cargarSaldoCapsulas();
-      } else {
+      } else if (!regalo || regalo.already_claimed) {
         mensaje.textContent = "¡Toques guardados correctamente! ⚡";
       }
 
@@ -654,5 +654,4 @@ supabaseClient.auth.onAuthStateChange((event,session) => {
 });
 
 </script>
-</body>
-</html>
+</body
