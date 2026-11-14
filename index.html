@@ -244,43 +244,43 @@ function mostrarRegistro() {
 function mostrarLogin() {
   mostrarSeccion("login");
 }
-
 async function iniciarSesion() {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
-  const mensaje = document.getElementById("mensajeLogin");
 
-  if (!email || !password) {
-    mensaje.textContent = "Completa tu correo y contraseña.";
-    return;
+  const mensaje = document.getElementById("loginMensaje");
+  mensaje.textContent = "Iniciando sesión...";
+
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      mensaje.textContent = error.message;
+      return;
+    }
+
+    document.getElementById("login").style.display = "none";
+
+    mostrarSeccion("perfilJugador");
+
+    const perfilCargado = await cargarPerfil(data.user.id);
+
+    if (!perfilCargado) {
+      mensaje.textContent = "No se pudo cargar el perfil.";
+      return;
+    }
+
+    mensaje.textContent = "";
+
+  } catch (error) {
+    console.error("ERROR AL INICIAR SESIÓN:", error);
+    mensaje.textContent = "Error al iniciar sesión: " + error.message;
   }
-
-  if (!email.includes("@")) {
-    mensaje.textContent = "Por ahora utiliza tu correo electrónico.";
-    return;
-  }
-
-  mensaje.textContent = "Entrando a la arena...";
-
-  const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
-
-  if (error) {
-    mensaje.textContent = "No se pudo iniciar sesión. Revisa tus datos.";
-    console.error("Error de inicio de sesión:",error);
-    return;
-  }
-
-  const perfilCargado = await cargarPerfil(data.user.id);
-
-  if (!perfilCargado) {
-    mensaje.textContent = "La sesión inició, pero no se pudo cargar tu perfil. Revisa los permisos de player_profiles.";
-    return;
-  }
-
-  document.getElementById("login").style.display = "none";
-  mostrarSeccion("perfilJugador");
-  mensaje.textContent = "";
 }
+
 
 async function cargarPerfil(userId) {
   const {data:perfil,error} = await supabaseClient
