@@ -517,6 +517,26 @@ function registrarToque() {
   }
 }
 
+function mostrarPersonajeInicial(personaje) {
+  if (!personaje || !personaje.character_key) return;
+
+  document.getElementById("panelPersonaje").style.display = "block";
+
+  document.getElementById("clavePersonaje").textContent =
+    personaje.character_key;
+
+  document.getElementById("nombrePersonaje").textContent =
+    personaje.character_name || personaje.character_key;
+
+  document.getElementById("rarezaPersonaje").textContent =
+    personaje.rarity || "Rareza pendiente de identificar";
+
+  document.getElementById("panelPersonaje").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+                          }
+
 async function enviarToquesTap() {
   if (tapEnviando || tapPendientes === 0) return;
 
@@ -559,19 +579,19 @@ async function enviarToquesTap() {
 
       tapConfirmados = Number(data.remaining_taps ?? 0);
 
-      // ENTREGA DEL PERSONAJE INICIAL
-      const {data:regalo,error:errorRegalo} =
-        await supabaseClient.rpc("claim_starter_character");
+      
+// ENTREGA DEL PERSONAJE INICIAL
+const {data:regalo,error:errorRegalo} =
+  await supabaseClient.rpc("claim_starter_character");
 
-      if (errorRegalo) {
-        console.error("Error al entregar personaje inicial:",errorRegalo);
-      } else if (regalo && regalo.success && !regalo.already_claimed) {
-        mensaje.textContent =
-          "🎁 ¡Personaje inicial entregado! " +
-          (regalo.character_key || "");
+if (errorRegalo) {
+  console.error("Error al entregar personaje inicial:",errorRegalo);
+} else if (regalo && regalo.success && !regalo.already_claimed) {
+  mostrarPersonajeInicial(regalo);
 
-        console.log("PERSONAJE INICIAL ENTREGADO:",regalo);
-      }
+  mensaje.textContent = "🎁 ¡Tu personaje inicial fue desbloqueado!";
+  console.log("PERSONAJE INICIAL ENTREGADO:",regalo);
+}
 
       if (Number(data.capsules_earned) > 0) {
         mensaje.textContent =
