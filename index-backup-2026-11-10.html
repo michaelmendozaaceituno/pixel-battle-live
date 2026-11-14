@@ -585,6 +585,13 @@ const {data:regalo,error:errorRegalo} =
   await supabaseClient.rpc("claim_starter_character");
 console.log("RESULTADO PERSONAJE:", regalo);
 console.log("ERROR PERSONAJE:", errorRegalo);
+      alert(
+  "RESULTADO DEL PERSONAJE:\n" +
+  JSON.stringify({
+    regalo: regalo,
+    error: errorRegalo
+  })
+);
 if (errorRegalo) {
   console.error("Error al entregar personaje inicial:",errorRegalo);
 } else if (regalo && regalo.success && !regalo.already_claimed) {
