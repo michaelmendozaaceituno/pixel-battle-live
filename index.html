@@ -248,8 +248,7 @@ async function iniciarSesion() {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
 
-  const mensaje = document.getElementById("loginMensaje");
-  mensaje.textContent = "Iniciando sesión...";
+  const mensaje = document.getElementById("mensajeLogin");
 
   try {
     const { data, error } = await supabaseClient.auth.signInWithPassword({
