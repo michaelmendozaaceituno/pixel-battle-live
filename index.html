@@ -281,36 +281,60 @@ async function iniciarSesion() {
   }
 }
 
-
 async function cargarPerfil(userId) {
-  const {data:perfil,error} = await supabaseClient
-    .from("player_profiles")
-    .select("*")
-    .eq("id",userId)
-    .single();
+  try {
+    // Mostrar el panel del personaje inmediatamente
+    const panelPersonaje = document.getElementById("panelPersonaje");
 
-  if (error || !perfil) {
-    console.error("Error cargando perfil:",error);
+    if (panelPersonaje) {
+      panelPersonaje.style.display = "block";
+    }
+
+    // Cargar información del jugador
+    const { data: perfil, error } = await supabaseClient
+      .from("player_profiles")
+      .select("*")
+      .eq("id", userId)
+      .single();
+
+    if (error || !perfil) {
+      console.error("Error cargando perfil:", error);
+      return false;
+    }
+
+    document.getElementById("perfilNombre").textContent =
+      perfil.display_name || perfil.username || "Jugador";
+
+    document.getElementById("perfilNivel").textContent =
+      perfil.level ?? 1;
+
+    document.getElementById("perfilXP").textContent =
+      perfil.xp ?? 0;
+
+    document.getElementById("perfilMonedas").textContent =
+      perfil.coins ?? 0;
+
+    document.getElementById("perfilVictorias").textContent =
+      perfil.victories ?? 0;
+
+    document.getElementById("perfilDerrotas").textContent =
+      perfil.defeats ?? 0;
+
+    // Cargar saldo y progreso sin bloquear el perfil
+    await Promise.allSettled([
+      cargarSaldoCapsulas(),
+      cargarProgresoTap()
+    ]);
+
+    // Reclamar o recuperar el personaje inicial
+    await cargarPersonajeInicial();
+
+    return true;
+
+  } catch (error) {
+    console.error("ERROR GENERAL AL CARGAR PERFIL:", error);
     return false;
   }
-
-  document.getElementById("perfilNombre").textContent = perfil.display_name || perfil.username || "Jugador";
-  document.getElementById("perfilNivel").textContent = perfil.level ?? 1;
-  document.getElementById("perfilXP").textContent = perfil.xp ?? 0;
-  document.getElementById("perfilMonedas").textContent = perfil.coins ?? 0;
-  document.getElementById("perfilVictorias").textContent = perfil.victories ?? 0;
-  document.getElementById("perfilDerrotas").textContent = perfil.defeats ?? 0;
-
-  await Promise.all([
-    cargarSaldoCapsulas(),
-    cargarProgresoTap()
-  ]);
-
-  // El personaje se reclama o recupera al entrar al perfil.
-  // No depende de realizar nuevos Tap Tap.
-  await cargarPersonajeInicial();
-
-  return true;
 }
 
 async function cargarPersonajeInicial() {
