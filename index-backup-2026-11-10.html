@@ -501,7 +501,11 @@ async function cargarPerfil(userId) {
 
   if (errorPersonaje) {
     console.error("Error consultando personaje inicial:",errorPersonaje);
-  } else if (personaje && personaje.character_key) {
+  } else if (personaje && (
+  personaje.character_key ||
+  personaje.success ||
+  personaje.already_claimed
+)) {
     mostrarPersonajeInicial(personaje);
   }
 
@@ -747,7 +751,11 @@ async function enviarToquesTap() {
 
       if (errorRegalo) {
         console.error("Error al entregar personaje inicial:",errorRegalo);
-      } else if (regalo && regalo.character_key) {
+      } else if (regalo && (
+  regalo.character_key ||
+  regalo.success ||
+  regalo.already_claimed
+)) {
         mostrarPersonajeInicial(regalo);
         mensaje.textContent = "🎁 ¡Tu personaje inicial está disponible!";
       }
