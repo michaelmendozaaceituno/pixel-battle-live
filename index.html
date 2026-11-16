@@ -766,7 +766,9 @@ if(fighter.attackCooldown<=0){
 rival.hp -= fighter.damage;
 rival.hitFlash = .18;
 fighter.attackAnimation = .56;
-fighter.attackType = fighter.attackType ? 0 : 1;
+fighter.attackType = fighter.id===6
+  ? (Math.random()<0.30?2:(fighter.attackType===1?0:1))
+  : (fighter.attackType ? 0 : 1);
 // El impacto se registra en la posición real del rival.
 rival.hitFlash = .24;
 rival.hitEffect = .22;
@@ -1040,12 +1042,19 @@ vegetaImage.src="assets/characters/vegeta-common-sprite.png?v=1";
 vegetaImage.onerror=()=>console.error(
  "No se pudo cargar el sprite: assets/characters/vegeta-common-sprite.png"
 );
+
+const lucarioImage = new Image();
+lucarioImage.src="assets/characters/lucario-common-sprite.png?v=1";
+lucarioImage.onerror=()=>console.error(
+ "No se pudo cargar el sprite: assets/characters/lucario-common-sprite.png"
+);
 function dibujarPersonaje(f){
 const x=f.x;
 const y=f.y;
 const isGoku=f.id===0;
 const isVegeta=f.id===1;
-const spriteImage=isGoku?gokuImage:(isVegeta?vegetaImage:null);
+const isLucario=f.id===6;
+const spriteImage=isGoku?gokuImage:(isVegeta?vegetaImage:(isLucario?lucarioImage:null));
 const t=f.animTime||0;
 const moving=!!f.moving;
 const attacking=f.attackAnimation>0;
@@ -1056,39 +1065,65 @@ ctx.ellipse(x,y+19,23,9,0,0,Math.PI*2);
 ctx.fill();
 
 if(spriteImage && spriteImage.complete && spriteImage.naturalWidth){
-  // Sprite sheet: 8 columnas x 7 filas.
-  // Filas: quieto, caminar, correr, puñetazo,
-  // patada, energía/Kamehameha y recibir daño.
-  const frameW=spriteImage.naturalWidth/8;
-  const uniformFrameH=spriteImage.naturalHeight/7;
-  const rowEdges=isVegeta
-    ? Array.from({length:8},(_,i)=>i*uniformFrameH)
-    : [0,133,259,383,500,620,739,887];
-  const rowHeights=rowEdges.slice(1).map((v,i)=>v-rowEdges[i]);
+  let frameW,sourceX,sourceY,sourceH,frameCount;
+  let row=0,frame=0;
 
-  let row=0;
-  let frame=0;
-  const frameCount=8;
-  const sourceYForRow=rowEdges;
-
-  if(f.hitFlash>0){
-    row=6;
-    frame=Math.min(7,Math.floor((.24-f.hitFlash)/.24*8));
-  }else if(attacking){
-    row=f.attackType?4:3;
-    const progress=Math.max(0,Math.min(1,1-(f.attackAnimation/.56)));
-    frame=Math.min(7,Math.floor(progress*8));
-  }else if(moving){
-    row=2;
-    frame=Math.floor(t*13)%8;
+  if(isLucario){
+    // Lucario: lámina de 1536x1024 con rótulos a la izquierda.
+    // Filas: reposo, caminar, correr, golpe, patada,
+    // Esfera Aural, daño y derrota.
+    const lucarioRows=[0,180,303,427,535,646,761,879,1024];
+    const lucarioCounts=[6,8,8,6,6,8,5,7];
+    const lucarioContentX=220;
+    const lucarioContentW=spriteImage.naturalWidth-lucarioContentX;
+    if(f.hitFlash>0){
+      row=6;
+      frame=Math.min(lucarioCounts[row]-1,
+        Math.floor((.24-f.hitFlash)/.24*lucarioCounts[row]));
+    }else if(attacking){
+      row=f.attackType===2?5:(f.attackType===1?4:3);
+      const progress=Math.max(0,Math.min(1,1-(f.attackAnimation/.56)));
+      frame=Math.min(lucarioCounts[row]-1,
+        Math.floor(progress*lucarioCounts[row]));
+    }else if(moving){
+      row=f.speed>96?2:1;
+      frame=Math.floor(t*(row===2?13:9))%lucarioCounts[row];
+    }else{
+      row=0;
+      frame=Math.floor(t*5)%lucarioCounts[row];
+    }
+    frameCount=lucarioCounts[row];
+    frameW=lucarioContentW/frameCount;
+    sourceX=lucarioContentX+frame*frameW;
+    sourceY=lucarioRows[row];
+    sourceH=lucarioRows[row+1]-lucarioRows[row];
   }else{
-    row=0;
-    frame=Math.floor(t*5)%8;
+    // Goku y Vegeta conservan sus recortes originales.
+    frameW=spriteImage.naturalWidth/8;
+    const uniformFrameH=spriteImage.naturalHeight/7;
+    const rowEdges=isVegeta
+      ? Array.from({length:8},(_,i)=>i*uniformFrameH)
+      : [0,133,259,383,500,620,739,887];
+    const rowHeights=rowEdges.slice(1).map((v,i)=>v-rowEdges[i]);
+    frameCount=8;
+    if(f.hitFlash>0){
+      row=6;
+      frame=Math.min(7,Math.floor((.24-f.hitFlash)/.24*8));
+    }else if(attacking){
+      row=f.attackType?4:3;
+      const progress=Math.max(0,Math.min(1,1-(f.attackAnimation/.56)));
+      frame=Math.min(7,Math.floor(progress*8));
+    }else if(moving){
+      row=2;
+      frame=Math.floor(t*13)%8;
+    }else{
+      row=0;
+      frame=Math.floor(t*5)%8;
+    }
+    sourceX=frame*frameW;
+    sourceY=rowEdges[row];
+    sourceH=rowHeights[row];
   }
-
-  const sourceY=sourceYForRow[row];
-  const sourceH=rowHeights[row];
-  const sourceX=frame*frameW;
 
   // El sprite base mira a la derecha: invertirlo si el rival está a la izquierda.
   const facing=Math.cos(f.direction||0)>=0?1:-1;
@@ -1103,9 +1138,9 @@ if(spriteImage && spriteImage.complete && spriteImage.naturalWidth){
 
   if(moving || attacking || ((isGoku || isVegeta) && Math.sin(t*3)>0.75)){
     ctx.globalAlpha=.45+Math.sin(t*15)*.18;
-    ctx.strokeStyle=attacking?"#fff16a":(isVegeta?"#4d9dff":"#55dfff");
+    ctx.strokeStyle=attacking?"#fff16a":(isLucario?"#27bfff":(isVegeta?"#4d9dff":"#55dfff"));
     ctx.lineWidth=3;
-    ctx.shadowColor=attacking?"#fff16a":(isVegeta?"#267bff":"#39cfff");
+    ctx.shadowColor=attacking?"#fff16a":(isLucario?"#087dff":(isVegeta?"#267bff":"#39cfff"));
     ctx.shadowBlur=attacking?18:10;
     ctx.beginPath();
     ctx.ellipse(0,-42,39+Math.sin(t*12)*3,61+Math.cos(t*10)*3,0,0,Math.PI*2);
