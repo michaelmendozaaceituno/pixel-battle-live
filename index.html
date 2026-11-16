@@ -455,10 +455,13 @@ direction:0,
 alive:true,
 attacking:false,
 attackAnimation:0,
+attackType:0,
 hitFlash:0,
+hitEffect:0,
+hitX:0,
+hitY:0,
 animTime:random(0,6),
-walkPhase:random(0,6),
-attackType:0
+walkPhase:random(0,6)
 });
 }
 battleFinished = false;
@@ -521,19 +524,18 @@ fighter.attackAnimation = Math.max(
 0,
 fighter.attackAnimation-dt
 );
-fighter.hitFlash = Math.max(
-0,
-fighter.hitFlash-dt
-);
+fighter.hitFlash = Math.max(0,fighter.hitFlash-dt);
+fighter.hitEffect = Math.max(0,(fighter.hitEffect||0)-dt);
 const rival = buscarRival(fighter);
 if(!rival) continue;
 const dx = rival.x-fighter.x;
 const dy = rival.y-fighter.y;
 const distance = Math.hypot(dx,dy);
 fighter.direction = Math.atan2(dy,dx);
-fighter.moving = distance > fighter.attackRange;
+const contactRange = 76;
+fighter.moving = distance > contactRange;
 if(fighter.moving) fighter.walkPhase += dt*12;
-if(distance > fighter.attackRange){
+if(distance > contactRange){
 const moveX = dx/(distance || 1);
 const moveY = dy/(distance || 1);
 const nextX = fighter.x + moveX*fighter.speed*dt;
@@ -544,9 +546,18 @@ fighter.attacking = true;
 if(fighter.attackCooldown<=0){
 rival.hp -= fighter.damage;
 rival.hitFlash = .18;
-fighter.attackAnimation = .48;
+fighter.attackAnimation = .56;
 fighter.attackType = fighter.attackType ? 0 : 1;
-fighter.attackCooldown = random(.7,1.15);
+// El impacto se registra en la posición real del rival.
+rival.hitFlash = .24;
+rival.hitEffect = .22;
+rival.hitX = rival.x;
+rival.hitY = rival.y-35;
+// Pequeño retroceso para que el golpe se sienta conectado.
+const knockback = 18;
+rival.x = clamp(rival.x + Math.cos(fighter.direction)*knockback,30,WORLD_W-30);
+rival.y = clamp(rival.y + Math.sin(fighter.direction)*knockback,30,WORLD_H-30);
+fighter.attackCooldown = random(.7,1.0);
 if(rival.hp<=0){
 rival.hp=0;
 rival.alive=false;
@@ -827,33 +838,38 @@ if(isGoku && gokuImage.complete && gokuImage.naturalWidth){
   const rowHeights=rowEdges.slice(1).map((v,i)=>v-rowEdges[i]);
 
   let row=0;
-  let fps=5;
+  let frame=0;
+  const frameCount=8;
+  const sourceYForRow=rowEdges;
 
   if(f.hitFlash>0){
-    row=6; fps=12;
+    row=6;
+    frame=Math.min(7,Math.floor((.24-f.hitFlash)/.24*8));
   }else if(attacking){
     row=f.attackType?4:3;
-    fps=16;
+    const progress=Math.max(0,Math.min(1,1-(f.attackAnimation/.56)));
+    frame=Math.min(7,Math.floor(progress*8));
   }else if(moving){
-    row=2; fps=13;
+    row=2;
+    frame=Math.floor(t*13)%8;
   }else{
-    row=0; fps=5;
+    row=0;
+    frame=Math.floor(t*5)%8;
   }
 
-  const frameCount=8;
-  const frame=Math.floor(t*fps)%frameCount;
-  const sourceY=rowEdges[row];
+  const sourceY=sourceYForRow[row];
   const sourceH=rowHeights[row];
   const sourceX=frame*frameW;
 
-  // El sprite sheet se dibuja desde un solo cuadro,
-  // no como una imagen completa.
+  // El sprite base mira a la derecha: invertirlo si el rival está a la izquierda.
+  const facing=Math.cos(f.direction||0)>=0?1:-1;
   ctx.save();
   ctx.translate(x,y);
+  ctx.scale(facing,1);
   if(attacking){
-    const progress=1-(f.attackAnimation/.48);
-    const lunge=Math.sin(progress*Math.PI)*7;
-    ctx.translate(Math.cos(f.direction)*lunge,Math.sin(f.direction)*lunge);
+    const progress=Math.max(0,Math.min(1,1-(f.attackAnimation/.56)));
+    const lunge=Math.sin(progress*Math.PI)*10;
+    ctx.translate(lunge,0);
   }
 
   if(moving || attacking || (isGoku && Math.sin(t*3)>0.75)){
@@ -894,13 +910,30 @@ if(isGoku && gokuImage.complete && gokuImage.naturalWidth){
 }
 
 if(attacking){
-  const attackX=x+Math.cos(f.direction)*38;
-  const attackY=y+Math.sin(f.direction)*38;
+  // Destello delante de Goku, orientado hacia el rival.
+  const attackX=x+Math.cos(f.direction)*48;
+  const attackY=y+Math.sin(f.direction)*18-35;
+  ctx.save();
+  ctx.globalAlpha=.8;
   ctx.strokeStyle="#fff16a";
   ctx.lineWidth=5;
   ctx.beginPath();
-  ctx.arc(attackX,attackY,13,0,Math.PI*1.5);
+  ctx.arc(attackX,attackY,15,Math.PI*.15,Math.PI*1.45);
   ctx.stroke();
+  ctx.restore();
+}
+if(f.hitEffect>0){
+  ctx.save();
+  ctx.globalAlpha=Math.min(1,f.hitEffect/.22);
+  ctx.strokeStyle="#fff6a0";
+  ctx.lineWidth=5;
+  ctx.beginPath();
+  ctx.moveTo(f.hitX-13,f.hitY-13);
+  ctx.lineTo(f.hitX+13,f.hitY+13);
+  ctx.moveTo(f.hitX+13,f.hitY-13);
+  ctx.lineTo(f.hitX-13,f.hitY+13);
+  ctx.stroke();
+  ctx.restore();
 }
 ctx.fillStyle="#ffffff";
 ctx.font="bold 12px Arial";
