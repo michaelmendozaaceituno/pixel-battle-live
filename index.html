@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PIXEL BATTLE LIVE</title><style>*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:white;background:linear-gradient(145deg,#100b30,#17134b,#071d35);min-height:100vh;}.character-card{position:relative;width:100%;max-width:340px;margin:20px auto;padding:18px;border-radius:20px;background:linear-gradient(145deg,#172c55,#10152f);border:2px solid #d9a832;box-shadow:0 0 18px rgba(255,190,45,.25);text-align:center;overflow:hidden;}.character-card h3{color:#ffd76a;font-size:25px;margin:12px 0 5px;font-weight:900;}.character-sprite-container{width:100%;height:260px;display:flex;justify-content:center;align-items:center;}.character-sprite{display:block;width:160px;height:220px;max-width:100%;object-fit:contain;image-rendering:pixelated;overflow:visible;flex-shrink:0;}.character-rarity{display:inline-block;padding:6px 18px;margin-top:8px;border-radius:20px;background:linear-gradient(90deg,#168d50,#27c879);color:white;font-size:12px;font-weight:bold;letter-spacing:1px;}.character-franchise{color:#b9c9ed;font-size:13px;margin-top:5px;}.pokebola-animada{animation:captura 2s ease-in-out infinite;transform-origin:center;filter:drop-shadow(0 0 12px #ff304b);}@keyframes captura{0%,100%{transform:rotate(0deg) scale(1)}15%{transform:rotate(-20deg) scale(1.08)}30%{transform:rotate(20deg) scale(1.08)}45%{transform:rotate(-18deg)}60%{transform:rotate(18deg)}75%{transform:rotate(0deg) scale(1.12)}}header{padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid #ffffff20;}.logo-link{display:flex;align-items:center;flex:0 1 auto;text-decoration:none;line-height:0;}.logo-image{display:block;width:190px;max-width:42vw;height:auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(54,223,255,.28));}nav{display:flex;gap:12px;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-size:13px}.hero{text-align:center;padding:65px 20px 40px}.hero h1{font-size:clamp(38px,9vw,65px);margin:10px 0;text-shadow:0 0 25px #36dfff;}.hero h1 span{color:#ff58ce}.hero p{color:#c9c6e9;line-height:1.7}.button{display:inline-block;padding:14px 25px;border-radius:12px;background:linear-gradient(90deg,#19d8ed,#9b55ff);color:white;font-weight:bold;text-decoration:none;margin:12px 5px;border:0;}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:15px;padding:20px;max-width:900px;margin:auto;}.card{background:#ffffff10;border:1px solid #ffffff25;border-radius:18px;padding:25px 12px;text-align:center;}.card .emoji{font-size:38px}.card h3{color:#54eaff}button{cursor:pointer;padding:12px 18px;margin:5px;border:0;border-radius:12px;color:white;font-weight:bold;background:linear-gradient(90deg,#19aeca,#7950d9);}button:disabled{opacity:.55;cursor:not-allowed}input{border:1px solid #ffffff40;border-radius:9px;background:#fff;color:#17172b;font-size:15px;}.panel{max-width:450px;margin:30px auto;padding:22px;background:linear-gradient(145deg,#17172b,#292052);border:2px solid #36dfff;border-radius:20px;color:white;text-align:center;width:calc(100% - 28px);}footer{text-align:center;padding:35px;color:#aaa;font-size:12px}.arena-panel{width:min(1100px,calc(100% - 24px));margin:28px auto;padding:16px;background:linear-gradient(145deg,#101d3c,#1c2451);border:2px solid #36dfff;border-radius:20px;box-shadow:0 0 25px #36dfff22;}.arena-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}.arena-top h2{color:#65eaff}.arena-help{color:#c8d8f5;font-size:13px;line-height:1.6;}.arena-viewport{position:relative;width:100%;height:min(65vh,560px);min-height:320px;overflow:hidden;border:2px solid #6deaff;border-radius:14px;background:#315d3c;}#arenaCanvas{display:block;width:100%;height:100%;}.arena-hud{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:12px 0;color:#ffe27a;font-weight:bold;}.arena-bar{height:10px;background:#ffffff25;border-radius:20px;overflow:hidden;}.arena-bar-fill{height:100%;background:linear-gradient(90deg,#35e879,#ffe34d);transition:width .2s;}.arena-legend{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#d5e5ff;font-size:12px;margin-top:12px;}@media(max-width:480px){header{justify-content:center;padding:10px 14px}.logo-image{width:155px;max-width:48vw}nav{justify-content:center}.hero{padding-top:45px}.arena-panel{padding:11px}.arena-viewport{height:55vh;min-height:300px}}</style></head><body><header><a class="logo-link" href="#inicio" aria-label="PIXEL BATTLE LIVE - Inicio"><img class="logo-image" src="assets/pixel-battle-live-logo.png" alt="PIXEL BATTLE LIVE - Dragon Ball y Pokémon"></a><nav><a href="#inicio">Inicio</a><a href="#juego">Jugar</a><a href="#arena">Arena</a><a href="#login" onclick="mostrarLogin();return false;">Entrar</a><a href="#registro" onclick="mostrarRegistro();return false;">Registrar</a></nav></header><main id="inicio"><section class="hero"><div style="font-size:45px">🎮</div><svg class="pokebola-animada" viewBox="0 0 100 100" width="55" height="55" aria-label="Pokébola"><circle cx="50" cy="50" r="44" fill="white" stroke="#111" stroke-width="6"/><path d="M6 50 A44 44 0 0 1 94 50 Z" fill="#ef3038"/><path d="M6 50 H94" stroke="#111" stroke-width="7"/><circle cx="50" cy="50" r="14" fill="white" stroke="#111" stroke-width="6"/><circle cx="50" cy="50" r="6" fill="#ddd"/></svg><h1>PIXEL BATTLE <span>LIVE</span></h1><p>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PIXEL BATTLE LIVE</title><style>*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:white;background:linear-gradient(145deg,#100b30,#17134b,#071d35);min-height:100vh;}.character-card{position:relative;width:100%;max-width:340px;margin:20px auto;padding:18px;border-radius:20px;background:linear-gradient(145deg,#172c55,#10152f);border:2px solid #d9a832;box-shadow:0 0 18px rgba(255,190,45,.25);text-align:center;overflow:hidden;}.character-card h3{color:#ffd76a;font-size:25px;margin:12px 0 5px;font-weight:900;}.character-sprite-container{width:100%;height:260px;display:flex;justify-content:center;align-items:center;}.character-sprite{display:block;width:160px;height:220px;max-width:100%;object-fit:contain;image-rendering:pixelated;overflow:visible;flex-shrink:0;}.character-rarity{display:inline-block;padding:6px 18px;margin-top:8px;border-radius:20px;background:linear-gradient(90deg,#168d50,#27c879);color:white;font-size:12px;font-weight:bold;letter-spacing:1px;}.character-franchise{color:#b9c9ed;font-size:13px;margin-top:5px;}.pokebola-animada{animation:captura 2s ease-in-out infinite;transform-origin:center;filter:drop-shadow(0 0 12px #ff304b);}@keyframes captura{0%,100%{transform:rotate(0deg) scale(1)}15%{transform:rotate(-20deg) scale(1.08)}30%{transform:rotate(20deg) scale(1.08)}45%{transform:rotate(-18deg)}60%{transform:rotate(18deg)}75%{transform:rotate(0deg) scale(1.12)}}header{padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid #ffffff20;}.logo-link{display:flex;align-items:center;flex:0 1 auto;text-decoration:none;line-height:0;}.logo-image{display:block;width:190px;max-width:42vw;height:auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(54,223,255,.28));}nav{display:flex;gap:12px;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-size:13px}.hero{text-align:center;padding:75px 20px 40px}.hero-spacer{height:24px}.hero h1{font-size:clamp(38px,9vw,65px);margin:10px 0;text-shadow:0 0 25px #36dfff;}.hero h1 span{color:#ff58ce}.hero p{color:#c9c6e9;line-height:1.7}.button{display:inline-block;padding:14px 25px;border-radius:12px;background:linear-gradient(90deg,#19d8ed,#9b55ff);color:white;font-weight:bold;text-decoration:none;margin:12px 5px;border:0;}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:15px;padding:20px;max-width:900px;margin:auto;}.card{background:#ffffff10;border:1px solid #ffffff25;border-radius:18px;padding:25px 12px;text-align:center;}.card .emoji{font-size:38px}.card h3{color:#54eaff}button{cursor:pointer;padding:12px 18px;margin:5px;border:0;border-radius:12px;color:white;font-weight:bold;background:linear-gradient(90deg,#19aeca,#7950d9);}button:disabled{opacity:.55;cursor:not-allowed}input{border:1px solid #ffffff40;border-radius:9px;background:#fff;color:#17172b;font-size:15px;}.panel{max-width:450px;margin:30px auto;padding:22px;background:linear-gradient(145deg,#17172b,#292052);border:2px solid #36dfff;border-radius:20px;color:white;text-align:center;width:calc(100% - 28px);}footer{text-align:center;padding:35px;color:#aaa;font-size:12px}.arena-panel{width:min(1100px,calc(100% - 24px));margin:28px auto;padding:16px;background:linear-gradient(145deg,#101d3c,#1c2451);border:2px solid #36dfff;border-radius:20px;box-shadow:0 0 25px #36dfff22;}.arena-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}.arena-top h2{color:#65eaff}.arena-help{color:#c8d8f5;font-size:13px;line-height:1.6;}.arena-viewport{position:relative;width:100%;height:min(65vh,560px);min-height:320px;overflow:hidden;border:2px solid #6deaff;border-radius:14px;background:#315d3c;}#arenaCanvas{display:block;width:100%;height:100%;}.arena-hud{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:12px 0;color:#ffe27a;font-weight:bold;}.arena-bar{height:10px;background:#ffffff25;border-radius:20px;overflow:hidden;}.arena-bar-fill{height:100%;background:linear-gradient(90deg,#35e879,#ffe34d);transition:width .2s;}.arena-legend{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#d5e5ff;font-size:12px;margin-top:12px;}@media(max-width:480px){header{justify-content:center;padding:10px 14px}.logo-image{width:155px;max-width:48vw}nav{justify-content:center}.hero{padding-top:55px}.arena-panel{padding:11px}.arena-viewport{height:55vh;min-height:300px}}</style></head><body><header><a class="logo-link" href="#inicio" aria-label="PIXEL BATTLE LIVE - Inicio"><img class="logo-image" src="assets/pixel-battle-live-logo.png" alt="PIXEL BATTLE LIVE - Dragon Ball y Pokémon"></a><nav><a href="#inicio">Inicio</a><a href="#juego">Jugar</a><a href="#arena">Arena</a><a href="#login" onclick="mostrarLogin();return false;">Entrar</a><a href="#registro" onclick="mostrarRegistro();return false;">Registrar</a></nav></header><main id="inicio"><section class="hero"><div class="hero-spacer" aria-hidden="true"></div><p>
 ¡Tu aventura comienza aquí!<br>
 Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.
 </p><a class="button" href="#juego">COMENZAR AVENTURA</a></section><section class="cards" id="juego"><div class="card"><div class="emoji">👤</div><h3>JUGADORES</h3><p>Crea tu perfil gamer.</p></div><div class="card"><div class="emoji">⭐</div><h3>EXPERIENCIA</h3><p>Consigue XP y sube niveles.</p></div><div class="card"><div class="emoji">🪙</div><h3>MONEDAS</h3><p>Prepara tus recompensas.</p></div><div class="card"><div class="emoji">🏆</div><h3>LOGROS</h3><p>Demuestra tus habilidades.</p></div></section></main><section id="arena" class="arena-panel"><div class="arena-top"><h2>⚔️ ARENA BATTLE ROYALE</h2><span class="character-rarity">MODO AUTOMÁTICO</span></div><p class="arena-help">
@@ -380,8 +380,20 @@ const canvas = document.getElementById("arenaCanvas");
 if (!canvas) return;
 const ctx = canvas.getContext("2d");
 const WORLD_W = 2400;
-const WORLD_H = 1800;
+const WORLD_H = 1350;
 const fighters = [];
+const arenaMap = new Image();
+arenaMap.src = "assets/maps/torneo-artes-marciales.png";
+const MAP_OBSTACLES = [
+  // Dojo principal: se bloquea el edificio, dejando libre el patio frontal.
+  {x:700,y:135,w:1050,h:455},
+  // Gradas laterales.
+  {x:0,y:360,w:300,h:620},
+  {x:2100,y:360,w:300,h:620},
+  // Muro inferior: dejamos libre la entrada central.
+  {x:0,y:1175,w:1020,h:105},
+  {x:1380,y:1175,w:1020,h:105}
+];
 let cameraX = WORLD_W / 2;
 let cameraY = WORLD_H / 2;
 let cameraZoom = 0.4;
@@ -464,6 +476,38 @@ nearest=other;
 }
 return nearest;
 }
+function moverConColisiones(fighter,nextX,nextY){
+  const radius = 24;
+  let x = clamp(nextX,radius,WORLD_W-radius);
+  let y = clamp(nextY,radius,WORLD_H-radius);
+
+  // Resolver por eje permite deslizarse junto a edificios y gradas.
+  for(const obstacle of MAP_OBSTACLES){
+    const insideX = x+radius>obstacle.x && x-radius<obstacle.x+obstacle.w;
+    const insideY = y+radius>obstacle.y && y-radius<obstacle.y+obstacle.h;
+    if(insideX && insideY){
+      const oldInsideY = fighter.y+radius>obstacle.y && fighter.y-radius<obstacle.y+obstacle.h;
+      const oldInsideX = fighter.x+radius>obstacle.x && fighter.x-radius<obstacle.x+obstacle.w;
+      if(oldInsideY && !oldInsideX){
+        x = fighter.x;
+      }else if(oldInsideX && !oldInsideY){
+        y = fighter.y;
+      }else{
+        const pushLeft = Math.abs((x+radius)-obstacle.x);
+        const pushRight = Math.abs((obstacle.x+obstacle.w)-(x-radius));
+        const pushTop = Math.abs((y+radius)-obstacle.y);
+        const pushBottom = Math.abs((obstacle.y+obstacle.h)-(y-radius));
+        const smallest = Math.min(pushLeft,pushRight,pushTop,pushBottom);
+        if(smallest===pushLeft) x=obstacle.x-radius;
+        else if(smallest===pushRight) x=obstacle.x+obstacle.w+radius;
+        else if(smallest===pushTop) y=obstacle.y-radius;
+        else y=obstacle.y+obstacle.h+radius;
+      }
+    }
+  }
+  fighter.x=clamp(x,radius,WORLD_W-radius);
+  fighter.y=clamp(y,radius,WORLD_H-radius);
+}
 function actualizarCombate(dt){
 if(battleFinished) return;
 for(const fighter of fighters){
@@ -486,8 +530,9 @@ fighter.direction = Math.atan2(dy,dx);
 if(distance > fighter.attackRange){
 const moveX = dx/(distance || 1);
 const moveY = dy/(distance || 1);
-fighter.x += moveX*fighter.speed*dt;
-fighter.y += moveY*fighter.speed*dt;
+const nextX = fighter.x + moveX*fighter.speed*dt;
+const nextY = fighter.y + moveY*fighter.speed*dt;
+moverConColisiones(fighter,nextX,nextY);
 }else{
 fighter.attacking = true;
 if(fighter.attackCooldown<=0){
@@ -851,7 +896,13 @@ ctx.save();
 ctx.translate(width/2,height/2);
 ctx.scale(cameraZoom,cameraZoom);
 ctx.translate(-cameraX,-cameraY);
-dibujarTerreno();
+if(arenaMap.complete && arenaMap.naturalWidth){
+  ctx.imageSmoothingEnabled=false;
+  ctx.drawImage(arenaMap,0,0,WORLD_W,WORLD_H);
+}else{
+  ctx.fillStyle="#8b9b82";
+  ctx.fillRect(0,0,WORLD_W,WORLD_H);
+}
 for(const fighter of fighters){
 if(fighter.alive){
 dibujarPersonaje(fighter);
