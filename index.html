@@ -1242,71 +1242,346 @@ supabaseClient.auth.onAuthStateChange((event,session) => {
     actualizarHUD();
   }
 
+  /* =====================================
+     NUEVO MAPA ORIGINAL:
+     TORNEO DE ARTES MARCIALES
+     MONTAÑAS, CASCADAS, DOJO Y PLATAFORMAS
+  ===================================== */
+
+  function dibujarMontana(x,y,ancho,alto,colorBase,colorLuz){
+
+    ctx.fillStyle=colorBase;
+
+    ctx.beginPath();
+    ctx.moveTo(x-ancho/2,y);
+    ctx.lineTo(x,y-alto);
+    ctx.lineTo(x+ancho/2,y);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle=colorLuz;
+
+    ctx.beginPath();
+    ctx.moveTo(x,y-alto);
+    ctx.lineTo(x-ancho*.16,y-alto*.48);
+    ctx.lineTo(x-ancho*.04,y-alto*.55);
+    ctx.lineTo(x+ancho*.12,y-alto*.35);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle="#40566d";
+
+    ctx.beginPath();
+    ctx.moveTo(x-ancho*.16,y-alto*.48);
+    ctx.lineTo(x,y-alto);
+    ctx.lineTo(x+ancho*.12,y-alto*.35);
+    ctx.lineTo(x+ancho*.03,y-alto*.42);
+    ctx.lineTo(x-ancho*.03,y-alto*.45);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function dibujarCascada(x,y,ancho,alto){
+
+    // Acantilado
+    ctx.fillStyle="#596b77";
+    ctx.fillRect(x-18,y,ancho+36,alto);
+
+    ctx.fillStyle="#758c99";
+    ctx.fillRect(x-18,y,12,alto);
+
+    // Agua
+    const gradiente=ctx.createLinearGradient(x,y,x+ancho,y);
+
+    gradiente.addColorStop(0,"#65dff2");
+    gradiente.addColorStop(.5,"#c5f8ff");
+    gradiente.addColorStop(1,"#319bc9");
+
+    ctx.fillStyle=gradiente;
+    ctx.fillRect(x,y,ancho,alto);
+
+    // Líneas de movimiento del agua
+    ctx.strokeStyle="#e0ffff";
+    ctx.lineWidth=5;
+
+    for(let i=0;i<5;i++){
+
+      const xx=x+10+i*(ancho-20)/5;
+
+      ctx.beginPath();
+      ctx.moveTo(xx,y+12);
+      ctx.lineTo(xx+random(-5,5),y+alto-8);
+      ctx.stroke();
+    }
+
+    // Espuma inferior
+    ctx.fillStyle="#b9faff";
+    ctx.beginPath();
+    ctx.ellipse(x+ancho/2,y+alto,ancho*.9,22,0,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  function dibujarDojo(x,y){
+
+    // Sombra del edificio
+    ctx.fillStyle="#24364b";
+    ctx.fillRect(x-110,y+75,220,20);
+
+    // Base
+    ctx.fillStyle="#d4b27b";
+    ctx.fillRect(x-100,y+30,200,55);
+
+    // Paredes
+    ctx.fillStyle="#eee0b5";
+    ctx.fillRect(x-90,y-45,180,80);
+
+    // Puerta central
+    ctx.fillStyle="#583b31";
+    ctx.fillRect(x-25,y-15,50,60);
+
+    // Ventanas
+    ctx.fillStyle="#6da4a9";
+    ctx.fillRect(x-75,y-25,35,30);
+    ctx.fillRect(x+40,y-25,35,30);
+
+    // Techo principal
+    ctx.fillStyle="#9b393b";
+
+    ctx.beginPath();
+    ctx.moveTo(x-125,y-45);
+    ctx.lineTo(x,y-115);
+    ctx.lineTo(x+125,y-45);
+    ctx.lineTo(x+100,y-30);
+    ctx.lineTo(x,y-85);
+    ctx.lineTo(x-100,y-30);
+    ctx.closePath();
+    ctx.fill();
+
+    // Borde del techo
+    ctx.strokeStyle="#f2c56d";
+    ctx.lineWidth=8;
+    ctx.beginPath();
+    ctx.moveTo(x-125,y-45);
+    ctx.lineTo(x,y-115);
+    ctx.lineTo(x+125,y-45);
+    ctx.stroke();
+
+    // Letrero original
+    ctx.fillStyle="#382c36";
+    ctx.fillRect(x-38,y-5,76,22);
+
+    ctx.fillStyle="#ffe28a";
+    ctx.font="bold 12px Arial";
+    ctx.textAlign="center";
+    ctx.fillText("DOJO",x,y+11);
+  }
+
+  function dibujarPlataforma(x,y,ancho,alto){
+
+    // Base de piedra
+    ctx.fillStyle="#665a51";
+    ctx.fillRect(x-ancho/2,y,ancho,alto);
+
+    ctx.fillStyle="#968477";
+    ctx.fillRect(x-ancho/2,y,ancho,9);
+
+    // Superficie de combate
+    ctx.fillStyle="#d9bd83";
+    ctx.fillRect(x-ancho/2+8,y+9,ancho-16,alto-12);
+
+    // Líneas de la plataforma
+    ctx.strokeStyle="#80684d";
+    ctx.lineWidth=3;
+    ctx.strokeRect(x-ancho/2+8,y+9,ancho-16,alto-12);
+
+    ctx.beginPath();
+    ctx.moveTo(x,y+10);
+    ctx.lineTo(x,y+alto-4);
+    ctx.stroke();
+  }
+
+  function dibujarRoca(x,y,tamano){
+
+    ctx.fillStyle="#465766";
+
+    ctx.beginPath();
+    ctx.moveTo(x-tamano,y+tamano*.4);
+    ctx.lineTo(x-tamano*.5,y-tamano*.65);
+    ctx.lineTo(x+tamano*.25,y-tamano);
+    ctx.lineTo(x+tamano,y+tamano*.4);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle="#73818b";
+
+    ctx.beginPath();
+    ctx.moveTo(x-tamano*.5,y-tamano*.65);
+    ctx.lineTo(x+tamano*.25,y-tamano);
+    ctx.lineTo(x+tamano*.15,y-tamano*.2);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function dibujarArbol(x,y){
+
+    ctx.fillStyle="#694a32";
+    ctx.fillRect(x-8,y,16,30);
+
+    ctx.fillStyle="#235d42";
+    ctx.beginPath();
+    ctx.arc(x,y-8,25,0,Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle="#398b55";
+    ctx.beginPath();
+    ctx.arc(x-9,y-17,14,0,Math.PI*2);
+    ctx.fill();
+  }
+
   function dibujarTerreno(){
 
-    ctx.fillStyle="#568d4e";
+    // Suelo principal
+    const fondo=ctx.createLinearGradient(0,0,WORLD_W,WORLD_H);
+    fondo.addColorStop(0,"#789c55");
+    fondo.addColorStop(.5,"#638b4b");
+    fondo.addColorStop(1,"#456f43");
+
+    ctx.fillStyle=fondo;
     ctx.fillRect(0,0,WORLD_W,WORLD_H);
 
-    // Variaciones del terreno
+    // Textura pixelada del terreno
     for(let i=0;i<500;i++){
 
       const x=(i*137)%WORLD_W;
       const y=(i*251)%WORLD_H;
 
-      ctx.fillStyle=i%2===0?"#619b55":"#4f8548";
-
+      ctx.fillStyle=i%2===0?"#82a95b":"#527d45";
       ctx.fillRect(x,y,35,25);
     }
 
-    // Sendero principal
-    ctx.strokeStyle="#b49a65";
-    ctx.lineWidth=75;
+    // Montañas del fondo
+    dibujarMontana(250,480,550,430,"#465b70","#9baab0");
+    dibujarMontana(700,430,650,500,"#52677a","#c0c8c3");
+    dibujarMontana(1220,460,700,480,"#40576b","#a9b8bd");
+    dibujarMontana(1780,450,650,470,"#52677a","#c2c9c1");
+    dibujarMontana(2200,470,500,390,"#40566b","#a5b5b9");
+
+    // Nubes pixeladas
+    ctx.fillStyle="#d9edf0";
+
+    for(let i=0;i<12;i++){
+
+      const x=(i*213+80)%WORLD_W;
+      const y=100+(i%3)*75;
+
+      ctx.fillRect(x,y,75,18);
+      ctx.fillRect(x+18,y-12,38,18);
+      ctx.fillRect(x+55,y+5,35,13);
+    }
+
+    // Cascadas laterales
+    dibujarCascada(90,420,75,430);
+    dibujarCascada(2220,410,80,470);
+
+    // Río que conecta las cascadas
+    ctx.fillStyle="#369dc0";
+    ctx.beginPath();
+    ctx.moveTo(0,870);
+    ctx.bezierCurveTo(350,800,400,1080,700,1030);
+    ctx.bezierCurveTo(1000,980,1200,1120,1500,1050);
+    ctx.bezierCurveTo(1850,970,2050,1110,2400,980);
+    ctx.lineTo(2400,1130);
+    ctx.bezierCurveTo(2050,1250,1850,1110,1500,1190);
+    ctx.bezierCurveTo(1200,1260,1000,1120,700,1170);
+    ctx.bezierCurveTo(400,1220,350,940,0,1020);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle="#a6edee";
+    ctx.lineWidth=8;
+    ctx.stroke();
+
+    // Puentes de piedra
+    ctx.fillStyle="#a68c69";
+    ctx.fillRect(420,970,210,45);
+    ctx.fillRect(1690,1060,220,45);
+
+    // Gran plataforma central
+    dibujarPlataforma(1200,850,430,145);
+
+    // Plataformas secundarias
+    dibujarPlataforma(680,650,210,80);
+    dibujarPlataforma(1740,690,210,80);
+    dibujarPlataforma(700,1300,240,85);
+    dibujarPlataforma(1700,1320,240,85);
+
+    // Dojo principal
+    dibujarDojo(1200,440);
+
+    // Camino hacia el dojo
+    ctx.strokeStyle="#bba477";
+    ctx.lineWidth=55;
     ctx.lineCap="round";
 
     ctx.beginPath();
-    ctx.moveTo(250,1250);
-    ctx.bezierCurveTo(700,900,1050,1150,1450,650);
+    ctx.moveTo(1200,540);
+    ctx.lineTo(1200,700);
     ctx.stroke();
 
-    ctx.strokeStyle="#d1b77d";
-    ctx.lineWidth=45;
+    ctx.strokeStyle="#ddc89b";
+    ctx.lineWidth=35;
     ctx.stroke();
 
-    // Lago
-    ctx.fillStyle="#277fa0";
+    // Zonas rocosas
+    for(let i=0;i<32;i++){
 
-    ctx.beginPath();
-    ctx.ellipse(1840,420,270,170,-.25,0,Math.PI*2);
-    ctx.fill();
+      const x=(i*283+120)%WORLD_W;
+      const y=(i*197+700)%WORLD_H;
 
-    ctx.strokeStyle="#73d7df";
-    ctx.lineWidth=9;
-    ctx.stroke();
+      if(
+        (x>950 && x<1450 && y>700 && y<1050) ||
+        (x>100 && x<300) ||
+        (x>2100 && x<2300)
+      ) continue;
 
-    // Árboles
-    for(let i=0;i<65;i++){
+      dibujarRoca(x,y,random(12,25));
+    }
+
+    // Vegetación alrededor del torneo
+    for(let i=0;i<55;i++){
 
       const x=(i*317+150)%WORLD_W;
       const y=(i*197+100)%WORLD_H;
 
-      ctx.fillStyle="#23452c";
-      ctx.fillRect(x-8,y+8,16,25);
+      if(
+        (x>900 && x<1500 && y>350 && y<1100) ||
+        (x>350 && x<750 && y>600 && y<1100) ||
+        (x>1600 && x<2000 && y>600 && y<1150)
+      ) continue;
 
-      ctx.fillStyle="#17633c";
-      ctx.beginPath();
-      ctx.arc(x,y,25,0,Math.PI*2);
-      ctx.fill();
-
-      ctx.fillStyle="#328b4d";
-      ctx.beginPath();
-      ctx.arc(x-8,y-8,14,0,Math.PI*2);
-      ctx.fill();
+      dibujarArbol(x,y);
     }
 
-    // Límite de la arena
-    ctx.strokeStyle="#d9e9a2";
-    ctx.lineWidth=12;
+    // Borde de la arena
+    ctx.strokeStyle="#e4d59b";
+    ctx.lineWidth=14;
     ctx.strokeRect(0,0,WORLD_W,WORLD_H);
+
+    // Decoración de esquinas
+    const esquinas=[
+      [55,55],[WORLD_W-55,55],
+      [55,WORLD_H-55],[WORLD_W-55,WORLD_H-55]
+    ];
+
+    for(const [x,y] of esquinas){
+
+      ctx.fillStyle="#f2d078";
+      ctx.fillRect(x-14,y-14,28,28);
+
+      ctx.strokeStyle="#754c37";
+      ctx.lineWidth=4;
+      ctx.strokeRect(x-14,y-14,28,28);
+    }
   }
 
   const gokuImage = new Image();
@@ -1343,7 +1618,6 @@ supabaseClient.auth.onAuthStateChange((event,session) => {
 
       // Personajes provisionales
       ctx.fillStyle=f.color;
-
       ctx.fillRect(x-13,y-15,26,31);
 
       ctx.fillStyle="#f0c29b";
