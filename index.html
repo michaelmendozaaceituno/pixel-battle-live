@@ -1,1783 +1,1287 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PIXEL BATTLE LIVE</title>
-
 <style>
 *{box-sizing:border-box}
-
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  color:white;
-  background:linear-gradient(145deg,#100b30,#17134b,#071d35);
-  min-height:100vh;
+margin:0;
+font-family:Arial,sans-serif;
+color:white;
+background:linear-gradient(145deg,#100b30,#17134b,#071d35);
+min-height:100vh;
 }
-
-/* TARJETA DEL PERSONAJE */
 .character-card{
-  position:relative;
-  width:100%;
-  max-width:340px;
-  margin:20px auto;
-  padding:18px;
-  border-radius:20px;
-  background:linear-gradient(145deg,#172c55,#10152f);
-  border:2px solid #d9a832;
-  box-shadow:0 0 18px rgba(255,190,45,.25);
-  text-align:center;
-  overflow:hidden;
+position:relative;
+width:100%;
+max-width:340px;
+margin:20px auto;
+padding:18px;
+border-radius:20px;
+background:linear-gradient(145deg,#172c55,#10152f);
+border:2px solid #d9a832;
+box-shadow:0 0 18px rgba(255,190,45,.25);
+text-align:center;
+overflow:hidden;
 }
-
 .character-card h3{
-  color:#ffd76a;
-  font-size:25px;
-  margin:12px 0 5px;
-  font-weight:900;
+color:#ffd76a;
+font-size:25px;
+margin:12px 0 5px;
+font-weight:900;
 }
-
 .character-sprite-container{
-  width:100%;
-  height:260px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+width:100%;
+height:260px;
+display:flex;
+justify-content:center;
+align-items:center;
 }
-
 .character-sprite{
-  display:block;
-  width:160px;
-  height:220px;
-  max-width:100%;
-  object-fit:contain;
-  image-rendering:pixelated;
-  overflow:visible;
-  flex-shrink:0;
+display:block;
+width:160px;
+height:220px;
+max-width:100%;
+object-fit:contain;
+image-rendering:pixelated;
+overflow:visible;
+flex-shrink:0;
 }
-
 .character-rarity{
-  display:inline-block;
-  padding:6px 18px;
-  margin-top:8px;
-  border-radius:20px;
-  background:linear-gradient(90deg,#168d50,#27c879);
-  color:white;
-  font-size:12px;
-  font-weight:bold;
-  letter-spacing:1px;
+display:inline-block;
+padding:6px 18px;
+margin-top:8px;
+border-radius:20px;
+background:linear-gradient(90deg,#168d50,#27c879);
+color:white;
+font-size:12px;
+font-weight:bold;
+letter-spacing:1px;
 }
-
 .character-franchise{
-  color:#b9c9ed;
-  font-size:13px;
-  margin-top:5px;
+color:#b9c9ed;
+font-size:13px;
+margin-top:5px;
 }
-
 .pokebola-animada{
-  animation:captura 2s ease-in-out infinite;
-  transform-origin:center;
-  filter:drop-shadow(0 0 12px #ff304b);
+animation:captura 2s ease-in-out infinite;
+transform-origin:center;
+filter:drop-shadow(0 0 12px #ff304b);
 }
-
 @keyframes captura{
-  0%,100%{transform:rotate(0deg) scale(1)}
-  15%{transform:rotate(-20deg) scale(1.08)}
-  30%{transform:rotate(20deg) scale(1.08)}
-  45%{transform:rotate(-18deg)}
-  60%{transform:rotate(18deg)}
-  75%{transform:rotate(0deg) scale(1.12)}
+0%,100%{transform:rotate(0deg) scale(1)}
+15%{transform:rotate(-20deg) scale(1.08)}
+30%{transform:rotate(20deg) scale(1.08)}
+45%{transform:rotate(-18deg)}
+60%{transform:rotate(18deg)}
+75%{transform:rotate(0deg) scale(1.12)}
 }
-
 header{
-  padding:12px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-  border-bottom:1px solid #ffffff20;
+padding:12px 22px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+border-bottom:1px solid #ffffff20;
 }
-
 .logo-link{
-  display:flex;
-  align-items:center;
-  flex:0 1 auto;
-  text-decoration:none;
-  line-height:0;
+display:flex;
+align-items:center;
+flex:0 1 auto;
+text-decoration:none;
+line-height:0;
 }
-
 .logo-image{
-  display:block;
-  width:190px;
-  max-width:42vw;
-  height:auto;
-  object-fit:contain;
-  filter:drop-shadow(0 0 10px rgba(54,223,255,.28));
+display:block;
+width:190px;
+max-width:42vw;
+height:auto;
+object-fit:contain;
+filter:drop-shadow(0 0 10px rgba(54,223,255,.28));
 }
-
 nav{display:flex;gap:12px;flex-wrap:wrap}
 nav a{color:white;text-decoration:none;font-size:13px}
-
 .hero{text-align:center;padding:65px 20px 40px}
-
 .hero h1{
-  font-size:clamp(38px,9vw,65px);
-  margin:10px 0;
-  text-shadow:0 0 25px #36dfff;
+font-size:clamp(38px,9vw,65px);
+margin:10px 0;
+text-shadow:0 0 25px #36dfff;
 }
-
 .hero h1 span{color:#ff58ce}
 .hero p{color:#c9c6e9;line-height:1.7}
-
 .button{
-  display:inline-block;
-  padding:14px 25px;
-  border-radius:12px;
-  background:linear-gradient(90deg,#19d8ed,#9b55ff);
-  color:white;
-  font-weight:bold;
-  text-decoration:none;
-  margin:12px 5px;
-  border:0;
+display:inline-block;
+padding:14px 25px;
+border-radius:12px;
+background:linear-gradient(90deg,#19d8ed,#9b55ff);
+color:white;
+font-weight:bold;
+text-decoration:none;
+margin:12px 5px;
+border:0;
 }
-
 .cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-  gap:15px;
-  padding:20px;
-  max-width:900px;
-  margin:auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+gap:15px;
+padding:20px;
+max-width:900px;
+margin:auto;
 }
-
 .card{
-  background:#ffffff10;
-  border:1px solid #ffffff25;
-  border-radius:18px;
-  padding:25px 12px;
-  text-align:center;
+background:#ffffff10;
+border:1px solid #ffffff25;
+border-radius:18px;
+padding:25px 12px;
+text-align:center;
 }
-
 .card .emoji{font-size:38px}
 .card h3{color:#54eaff}
-
 button{
-  cursor:pointer;
-  padding:12px 18px;
-  margin:5px;
-  border:0;
-  border-radius:12px;
-  color:white;
-  font-weight:bold;
-  background:linear-gradient(90deg,#19aeca,#7950d9);
+cursor:pointer;
+padding:12px 18px;
+margin:5px;
+border:0;
+border-radius:12px;
+color:white;
+font-weight:bold;
+background:linear-gradient(90deg,#19aeca,#7950d9);
 }
-
 button:disabled{opacity:.55;cursor:not-allowed}
-
 input{
-  border:1px solid #ffffff40;
-  border-radius:9px;
-  background:#fff;
-  color:#17172b;
-  font-size:15px;
+border:1px solid #ffffff40;
+border-radius:9px;
+background:#fff;
+color:#17172b;
+font-size:15px;
 }
-
 .panel{
-  max-width:450px;
-  margin:30px auto;
-  padding:22px;
-  background:linear-gradient(145deg,#17172b,#292052);
-  border:2px solid #36dfff;
-  border-radius:20px;
-  color:white;
-  text-align:center;
-  width:calc(100% - 28px);
+max-width:450px;
+margin:30px auto;
+padding:22px;
+background:linear-gradient(145deg,#17172b,#292052);
+border:2px solid #36dfff;
+border-radius:20px;
+color:white;
+text-align:center;
+width:calc(100% - 28px);
 }
-
 footer{text-align:center;padding:35px;color:#aaa;font-size:12px}
-
-/* ARENA AUTOMATICA BATTLE ROYALE */
 .arena-panel{
-  width:min(1100px,calc(100% - 24px));
-  margin:28px auto;
-  padding:16px;
-  background:linear-gradient(145deg,#101d3c,#1c2451);
-  border:2px solid #36dfff;
-  border-radius:20px;
-  box-shadow:0 0 25px #36dfff22;
+width:min(1100px,calc(100% - 24px));
+margin:28px auto;
+padding:16px;
+background:linear-gradient(145deg,#101d3c,#1c2451);
+border:2px solid #36dfff;
+border-radius:20px;
+box-shadow:0 0 25px #36dfff22;
 }
-
 .arena-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
 }
-
 .arena-top h2{color:#65eaff}
-
 .arena-help{
-  color:#c8d8f5;
-  font-size:13px;
-  line-height:1.6;
+color:#c8d8f5;
+font-size:13px;
+line-height:1.6;
 }
-
 .arena-viewport{
-  position:relative;
-  width:100%;
-  height:min(65vh,560px);
-  min-height:320px;
-  overflow:hidden;
-  border:2px solid #6deaff;
-  border-radius:14px;
-  background:#315d3c;
+position:relative;
+width:100%;
+height:min(65vh,560px);
+min-height:320px;
+overflow:hidden;
+border:2px solid #6deaff;
+border-radius:14px;
+background:#315d3c;
 }
-
 #arenaCanvas{
-  display:block;
-  width:100%;
-  height:100%;
+display:block;
+width:100%;
+height:100%;
 }
-
 .arena-hud{
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:10px;
-  margin:12px 0;
-  color:#ffe27a;
-  font-weight:bold;
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:10px;
+margin:12px 0;
+color:#ffe27a;
+font-weight:bold;
 }
-
 .arena-bar{
-  height:10px;
-  background:#ffffff25;
-  border-radius:20px;
-  overflow:hidden;
+height:10px;
+background:#ffffff25;
+border-radius:20px;
+overflow:hidden;
 }
-
 .arena-bar-fill{
-  height:100%;
-  background:linear-gradient(90deg,#35e879,#ffe34d);
-  transition:width .2s;
+height:100%;
+background:linear-gradient(90deg,#35e879,#ffe34d);
+transition:width .2s;
 }
-
 .arena-legend{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  flex-wrap:wrap;
-  color:#d5e5ff;
-  font-size:12px;
-  margin-top:12px;
+display:flex;
+justify-content:center;
+gap:15px;
+flex-wrap:wrap;
+color:#d5e5ff;
+font-size:12px;
+margin-top:12px;
 }
-
 @media(max-width:480px){
-  header{justify-content:center;padding:10px 14px}
-  .logo-image{width:155px;max-width:48vw}
-  nav{justify-content:center}
-  .hero{padding-top:45px}
-  .arena-panel{padding:11px}
-  .arena-viewport{height:55vh;min-height:300px}
+header{justify-content:center;padding:10px 14px}
+.logo-image{width:155px;max-width:48vw}
+nav{justify-content:center}
+.hero{padding-top:45px}
+.arena-panel{padding:11px}
+.arena-viewport{height:55vh;min-height:300px}
 }
 </style>
 </head>
-
 <body>
-
 <header>
-  <a class="logo-link" href="#inicio" aria-label="PIXEL BATTLE LIVE - Inicio">
-    <img class="logo-image" src="assets/pixel-battle-live-logo.png" alt="PIXEL BATTLE LIVE - Dragon Ball y Pokémon">
-  </a>
-
-  <nav>
-    <a href="#inicio">Inicio</a>
-    <a href="#juego">Jugar</a>
-    <a href="#arena">Arena</a>
-    <a href="#login" onclick="mostrarLogin();return false;">Entrar</a>
-    <a href="#registro" onclick="mostrarRegistro();return false;">Registrar</a>
-  </nav>
+<a class="logo-link" href="#inicio" aria-label="PIXEL BATTLE LIVE - Inicio">
+<img class="logo-image" src="assets/pixel-battle-live-logo.png" alt="PIXEL BATTLE LIVE - Dragon Ball y Pokémon">
+</a>
+<nav>
+<a href="#inicio">Inicio</a>
+<a href="#juego">Jugar</a>
+<a href="#arena">Arena</a>
+<a href="#login" onclick="mostrarLogin();return false;">Entrar</a>
+<a href="#registro" onclick="mostrarRegistro();return false;">Registrar</a>
+</nav>
 </header>
-
 <main id="inicio">
-
-  <section class="hero">
-    <div style="font-size:45px">🎮</div>
-
-    <svg class="pokebola-animada" viewBox="0 0 100 100" width="55" height="55" aria-label="Pokébola">
-      <circle cx="50" cy="50" r="44" fill="white" stroke="#111" stroke-width="6"/>
-      <path d="M6 50 A44 44 0 0 1 94 50 Z" fill="#ef3038"/>
-      <path d="M6 50 H94" stroke="#111" stroke-width="7"/>
-      <circle cx="50" cy="50" r="14" fill="white" stroke="#111" stroke-width="6"/>
-      <circle cx="50" cy="50" r="6" fill="#ddd"/>
-    </svg>
-
-    <h1>PIXEL BATTLE <span>LIVE</span></h1>
-
-    <p>
-      ¡Tu aventura comienza aquí!<br>
-      Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.
-    </p>
-
-    <a class="button" href="#juego">COMENZAR AVENTURA</a>
-  </section>
-
-  <section class="cards" id="juego">
-
-    <div class="card">
-      <div class="emoji">👤</div>
-      <h3>JUGADORES</h3>
-      <p>Crea tu perfil gamer.</p>
-    </div>
-
-    <div class="card">
-      <div class="emoji">⭐</div>
-      <h3>EXPERIENCIA</h3>
-      <p>Consigue XP y sube niveles.</p>
-    </div>
-
-    <div class="card">
-      <div class="emoji">🪙</div>
-      <h3>MONEDAS</h3>
-      <p>Prepara tus recompensas.</p>
-    </div>
-
-    <div class="card">
-      <div class="emoji">🏆</div>
-      <h3>LOGROS</h3>
-      <p>Demuestra tus habilidades.</p>
-    </div>
-
-  </section>
+<section class="hero">
+<div style="font-size:45px">🎮</div>
+<svg class="pokebola-animada" viewBox="0 0 100 100" width="55" height="55" aria-label="Pokébola">
+<circle cx="50" cy="50" r="44" fill="white" stroke="#111" stroke-width="6"/>
+<path d="M6 50 A44 44 0 0 1 94 50 Z" fill="#ef3038"/>
+<path d="M6 50 H94" stroke="#111" stroke-width="7"/>
+<circle cx="50" cy="50" r="14" fill="white" stroke="#111" stroke-width="6"/>
+<circle cx="50" cy="50" r="6" fill="#ddd"/>
+</svg>
+<h1>PIXEL BATTLE <span>LIVE</span></h1>
+<p>
+¡Tu aventura comienza aquí!<br>
+Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.
+</p>
+<a class="button" href="#juego">COMENZAR AVENTURA</a>
+</section>
+<section class="cards" id="juego">
+<div class="card">
+<div class="emoji">👤</div>
+<h3>JUGADORES</h3>
+<p>Crea tu perfil gamer.</p>
+</div>
+<div class="card">
+<div class="emoji">⭐</div>
+<h3>EXPERIENCIA</h3>
+<p>Consigue XP y sube niveles.</p>
+</div>
+<div class="card">
+<div class="emoji">🪙</div>
+<h3>MONEDAS</h3>
+<p>Prepara tus recompensas.</p>
+</div>
+<div class="card">
+<div class="emoji">🏆</div>
+<h3>LOGROS</h3>
+<p>Demuestra tus habilidades.</p>
+</div>
+</section>
 </main>
-
-<!-- ARENA AUTOMATICA BATTLE ROYALE -->
 <section id="arena" class="arena-panel">
-
-  <div class="arena-top">
-    <h2>⚔️ ARENA BATTLE ROYALE</h2>
-    <span class="character-rarity">MODO AUTOMÁTICO</span>
-  </div>
-
-  <p class="arena-help">
-    Los personajes se desplazan, buscan rivales y combaten automáticamente.
-    ¡El último sobreviviente será el ganador!
-  </p>
-
-  <div class="arena-viewport">
-    <canvas id="arenaCanvas" aria-label="Arena automática de combate"></canvas>
-  </div>
-
-  <div class="arena-hud">
-    <span id="arenaEstado">Preparando combate...</span>
-    <span>👥 Vivos: <b id="arenaVivos">8</b></span>
-    <span>💀 Eliminados: <b id="arenaEliminados">0</b></span>
-  </div>
-
-  <div class="arena-bar">
-    <div id="arenaProgreso" class="arena-bar-fill" style="width:100%"></div>
-  </div>
-
-  <div class="arena-legend">
-    <span>🟢 Personaje con vida</span>
-    <span>⚡ Ataque automático</span>
-    <span>🏆 Último sobreviviente</span>
-  </div>
-
+<div class="arena-top">
+<h2>⚔️ ARENA BATTLE ROYALE</h2>
+<span class="character-rarity">MODO AUTOMÁTICO</span>
+</div>
+<p class="arena-help">
+Los personajes se desplazan, buscan rivales y combaten automáticamente.
+¡El último sobreviviente será el ganador!
+</p>
+<div class="arena-viewport">
+<canvas id="arenaCanvas" aria-label="Arena automática de combate"></canvas>
+</div>
+<div class="arena-hud">
+<span id="arenaEstado">Preparando combate...</span>
+<span>👥 Vivos: <b id="arenaVivos">8</b></span>
+<span>💀 Eliminados: <b id="arenaEliminados">0</b></span>
+</div>
+<div class="arena-bar">
+<div id="arenaProgreso" class="arena-bar-fill" style="width:100%"></div>
+</div>
+<div class="arena-legend">
+<span>🟢 Personaje con vida</span>
+<span>⚡ Ataque automático</span>
+<span>🏆 Último sobreviviente</span>
+</div>
 </section>
-
-<!-- PERFIL GAMER -->
 <section id="perfilJugador" class="panel" style="display:none">
-
-  <h2>🎮 MI PERFIL GAMER</h2>
-  <div style="font-size:55px">👾</div>
-
-  <h3 id="perfilNombre">Jugador</h3>
-
-  <p>🏆 Nivel: <span id="perfilNivel">1</span></p>
-  <p>⭐ Experiencia: <span id="perfilXP">0</span> XP</p>
-  <p>🪙 Monedas: <span id="perfilMonedas">100</span></p>
-  <p>⚔️ Victorias: <span id="perfilVictorias">0</span></p>
-  <p>💀 Derrotas: <span id="perfilDerrotas">0</span></p>
-
-  <!-- PERSONAJE INICIAL -->
-  <div id="panelPersonaje" style="display:none;text-align:center;margin:20px auto">
-    <img
-      src="assets/characters/goku-common.png"
-      alt="Mi primer personaje: Goku"
-      style="display:block;width:100%;max-width:360px;height:auto;margin:0 auto;border-radius:18px"
-    >
-  </div>
-
-  <!-- TAP TAP -->
-  <div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px">
-
-    <h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2>
-    <p>¡Toca para conseguir Cápsulas del Poder!</p>
-
-    <div style="font-size:55px;margin:15px">⚡</div>
-
-    <h2 style="color:#ffd700">
-      <span id="contadorTap">0</span> / 200
-    </h2>
-
-    <div style="height:12px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:15px 0">
-      <div id="barraTap" style="height:100%;width:0%;background:linear-gradient(90deg,#36dfff,#a855f7);transition:width .15s"></div>
-    </div>
-
-    <button id="botonTap" onclick="registrarToque()" style="padding:18px 35px;font-size:20px">
-      ⚡ ¡TOCAR!
-    </button>
-
-    <p id="mensajeTap" style="color:#c9c6e9">
-      Cada 200 toques consigues 1 Cápsula del Poder.
-    </p>
-
-  </div>
-
-  <!-- GACHA -->
-  <div id="panelGacha" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#101b40,#292052);border:2px solid #a855f7;border-radius:18px">
-
-    <h2 style="color:#50eaff">🔮 CÁPSULA DEL PODER</h2>
-
-    <div style="font-size:65px;margin:15px">💠</div>
-
-    <p>Tu energía disponible:</p>
-
-    <h2 style="color:#ffd700">
-      <span id="saldoCapsulas">0</span>
-    </h2>
-
-    <p style="color:#c9c6e9">100 Cápsulas del Poder = 1 tirada</p>
-
-    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-      <button onclick="abrirGacha(1)">ABRIR x1</button>
-      <button onclick="abrirGacha(5)">ABRIR x5</button>
-      <button onclick="abrirGacha(10)">ABRIR x10</button>
-    </div>
-
-    <div id="resultadoGacha" style="margin-top:20px;color:white;line-height:1.8;white-space:pre-wrap"></div>
-
-    <p style="font-size:12px;color:#aaa">
-      ⭐ Protección legendaria: 50 tiradas consecutivas.
-    </p>
-
-  </div>
-
-  <button onclick="cerrarSesion()">CERRAR SESIÓN</button>
-
+<h2>🎮 MI PERFIL GAMER</h2>
+<div style="font-size:55px">👾</div>
+<h3 id="perfilNombre">Jugador</h3>
+<p>🏆 Nivel: <span id="perfilNivel">1</span></p>
+<p>⭐ Experiencia: <span id="perfilXP">0</span> XP</p>
+<p>🪙 Monedas: <span id="perfilMonedas">100</span></p>
+<p>⚔️ Victorias: <span id="perfilVictorias">0</span></p>
+<p>💀 Derrotas: <span id="perfilDerrotas">0</span></p>
+<div id="panelPersonaje" style="display:none;text-align:center;margin:20px auto">
+<img
+src="assets/characters/goku-common.png"
+alt="Mi primer personaje: Goku"
+style="display:block;width:100%;max-width:360px;height:auto;margin:0 auto;border-radius:18px"
+>
+</div>
+<div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px">
+<h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2>
+<p>¡Toca para conseguir Cápsulas del Poder!</p>
+<div style="font-size:55px;margin:15px">⚡</div>
+<h2 style="color:#ffd700">
+<span id="contadorTap">0</span> / 200
+</h2>
+<div style="height:12px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:15px 0">
+<div id="barraTap" style="height:100%;width:0%;background:linear-gradient(90deg,#36dfff,#a855f7);transition:width .15s"></div>
+</div>
+<button id="botonTap" onclick="registrarToque()" style="padding:18px 35px;font-size:20px">
+⚡ ¡TOCAR!
+</button>
+<p id="mensajeTap" style="color:#c9c6e9">
+Cada 200 toques consigues 1 Cápsula del Poder.
+</p>
+</div>
+<div id="panelGacha" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#101b40,#292052);border:2px solid #a855f7;border-radius:18px">
+<h2 style="color:#50eaff">🔮 CÁPSULA DEL PODER</h2>
+<div style="font-size:65px;margin:15px">💠</div>
+<p>Tu energía disponible:</p>
+<h2 style="color:#ffd700">
+<span id="saldoCapsulas">0</span>
+</h2>
+<p style="color:#c9c6e9">100 Cápsulas del Poder = 1 tirada</p>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+<button onclick="abrirGacha(1)">ABRIR x1</button>
+<button onclick="abrirGacha(5)">ABRIR x5</button>
+<button onclick="abrirGacha(10)">ABRIR x10</button>
+</div>
+<div id="resultadoGacha" style="margin-top:20px;color:white;line-height:1.8;white-space:pre-wrap"></div>
+<p style="font-size:12px;color:#aaa">
+⭐ Protección legendaria: 50 tiradas consecutivas.
+</p>
+</div>
+<button onclick="cerrarSesion()">CERRAR SESIÓN</button>
 </section>
-
-<!-- LOGIN -->
 <section id="login" class="panel" style="display:none">
-
-  <h2>⚡ ENTRAR A LA ARENA</h2>
-  <p>Bienvenido de nuevo, entrenador.</p>
-
-  <input id="loginEmail" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0">
-
-  <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0">
-
-  <button onclick="iniciarSesion()">INICIAR SESIÓN</button>
-
-  <p>
-    <a href="#" onclick="recuperarPassword();return false;" style="color:#50eaff">
-      ¿Olvidaste tu contraseña?
-    </a>
-  </p>
-
-  <p id="mensajeLogin" aria-live="polite"></p>
-
+<h2>⚡ ENTRAR A LA ARENA</h2>
+<p>Bienvenido de nuevo, entrenador.</p>
+<input id="loginEmail" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0">
+<input id="loginPassword" type="password" autocomplete="current-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0">
+<button onclick="iniciarSesion()">INICIAR SESIÓN</button>
+<p>
+<a href="#" onclick="recuperarPassword();return false;" style="color:#50eaff">
+¿Olvidaste tu contraseña?
+</a>
+</p>
+<p id="mensajeLogin" aria-live="polite"></p>
 </section>
-
-<!-- NUEVA CONTRASEÑA -->
 <section id="nuevaPassword" class="panel" style="display:none;border-color:#ff55c8">
-
-  <h2>🔐 NUEVA CONTRASEÑA</h2>
-  <p>Escribe tu nueva contraseña.</p>
-
-  <input id="passwordNueva" type="password" autocomplete="new-password" placeholder="Nueva contraseña" style="width:100%;padding:12px;margin:8px 0">
-
-  <input id="passwordNuevaConfirmar" type="password" autocomplete="new-password" placeholder="Confirmar nueva contraseña" style="width:100%;padding:12px;margin:8px 0">
-
-  <button onclick="guardarNuevaPassword()">GUARDAR CONTRASEÑA</button>
-
-  <p id="mensajeNuevaPassword" aria-live="polite"></p>
-
+<h2>🔐 NUEVA CONTRASEÑA</h2>
+<p>Escribe tu nueva contraseña.</p>
+<input id="passwordNueva" type="password" autocomplete="new-password" placeholder="Nueva contraseña" style="width:100%;padding:12px;margin:8px 0">
+<input id="passwordNuevaConfirmar" type="password" autocomplete="new-password" placeholder="Confirmar nueva contraseña" style="width:100%;padding:12px;margin:8px 0">
+<button onclick="guardarNuevaPassword()">GUARDAR CONTRASEÑA</button>
+<p id="mensajeNuevaPassword" aria-live="polite"></p>
 </section>
-
-<!-- REGISTRO -->
 <section id="registro" class="panel" style="display:none;border-color:#7c3aed">
-
-  <h2>🎮 Crear cuenta</h2>
-
-  <input id="username" autocomplete="username" placeholder="Nombre de jugador" style="width:100%;padding:12px;margin:8px 0">
-
-  <input id="email" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0">
-
-  <input id="password" type="password" autocomplete="new-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0">
-
-  <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirmar contraseña" style="width:100%;padding:12px;margin:8px 0">
-
-  <button onclick="registrarJugador()">CREAR CUENTA</button>
-
-  <p id="mensajeRegistro" aria-live="polite"></p>
-
+<h2>🎮 Crear cuenta</h2>
+<input id="username" autocomplete="username" placeholder="Nombre de jugador" style="width:100%;padding:12px;margin:8px 0">
+<input id="email" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0">
+<input id="password" type="password" autocomplete="new-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0">
+<input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirmar contraseña" style="width:100%;padding:12px;margin:8px 0">
+<button onclick="registrarJugador()">CREAR CUENTA</button>
+<p id="mensajeRegistro" aria-live="polite"></p>
 </section>
-
 <footer>
-  PIXEL BATTLE LIVE © 2026<br>
-  Tu aventura, tus reglas.
+PIXEL BATTLE LIVE © 2026<br>
+Tu aventura, tus reglas.
 </footer>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 "use strict";
-
 const SUPABASE_URL = "https://xqgxiomyxkybbqnqjore.supabase.co";
 const SUPABASE_KEY = "sb_publishable_bPK-l_HqxtkheMFM59Ksqg_dhG5zPJs";
-
 const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
-
 let tapConfirmados = 0;
 let tapPendientes = 0;
 let tapEnviando = false;
 let tapTemporizador = null;
-
 function mostrarSeccion(id) {
-  const elemento = document.getElementById(id);
-  elemento.style.display = "block";
-  elemento.scrollIntoView({behavior:"smooth",block:"center"});
+const elemento = document.getElementById(id);
+elemento.style.display = "block";
+elemento.scrollIntoView({behavior:"smooth",block:"center"});
 }
-
 function mostrarRegistro() {
-  mostrarSeccion("registro");
+mostrarSeccion("registro");
 }
-
 function mostrarLogin() {
-  mostrarSeccion("login");
+mostrarSeccion("login");
 }
-
 async function iniciarSesion() {
-
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
-  const mensaje = document.getElementById("mensajeLogin");
-
-  if (!email || !password) {
-    mensaje.textContent = "Completa tu correo y contraseña.";
-    return;
-  }
-
-  if (!email.includes("@")) {
-    mensaje.textContent = "Por ahora utiliza tu correo electrónico.";
-    return;
-  }
-
-  mensaje.textContent = "Entrando a la arena...";
-
-  const {data,error} = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    mensaje.textContent = "No se pudo iniciar sesión. Revisa tus datos.";
-    console.error("Error de inicio de sesión:",error);
-    return;
-  }
-
-  const perfilCargado = await cargarPerfil(data.user.id);
-
-  if (!perfilCargado) {
-    mensaje.textContent = "La sesión inició, pero no se pudo cargar tu perfil. Revisa los permisos de player_profiles.";
-    return;
-  }
-
-  document.getElementById("login").style.display = "none";
-  mostrarSeccion("perfilJugador");
-  mensaje.textContent = "";
+const email = document.getElementById("loginEmail").value.trim();
+const password = document.getElementById("loginPassword").value;
+const mensaje = document.getElementById("mensajeLogin");
+if (!email || !password) {
+mensaje.textContent = "Completa tu correo y contraseña.";
+return;
 }
-
-async function cargarPerfil(userId) {
-
-  const {data:perfil,error} = await supabaseClient
-    .from("player_profiles")
-    .select("*")
-    .eq("id",userId)
-    .single();
-
-  if (error || !perfil) {
-    console.error("Error cargando perfil:",error);
-    return false;
-  }
-
-  document.getElementById("perfilNombre").textContent =
-    perfil.display_name || perfil.username || "Jugador";
-
-  document.getElementById("perfilNivel").textContent = perfil.level ?? 1;
-  document.getElementById("perfilXP").textContent = perfil.xp ?? 0;
-  document.getElementById("perfilMonedas").textContent = perfil.coins ?? 0;
-  document.getElementById("perfilVictorias").textContent = perfil.victories ?? 0;
-  document.getElementById("perfilDerrotas").textContent = perfil.defeats ?? 0;
-
-  await Promise.all([
-    cargarSaldoCapsulas(),
-    cargarProgresoTap()
-  ]);
-
-  const {data:personaje,error:errorPersonaje} =
-    await supabaseClient.rpc("claim_starter_character");
-
-  if (errorPersonaje) {
-    console.error("Error consultando personaje inicial:",errorPersonaje);
-  } else if (personaje && (
-    personaje.character_key ||
-    personaje.success ||
-    personaje.already_claimed
-  )) {
-    mostrarPersonajeInicial(personaje);
-  }
-
-  return true;
+if (!email.includes("@")) {
+mensaje.textContent = "Por ahora utiliza tu correo electrónico.";
+return;
 }
-
-async function cerrarSesion() {
-
-  if (tapPendientes > 0 || tapEnviando) {
-    alert("Espera a que se guarden tus toques antes de cerrar sesión.");
-    return;
-  }
-
-  const {error} = await supabaseClient.auth.signOut();
-
-  if (error) {
-    alert("No se pudo cerrar sesión.");
-    console.error(error);
-    return;
-  }
-
-  document.getElementById("perfilJugador").style.display = "none";
-  document.getElementById("login").style.display = "block";
-  document.getElementById("login").scrollIntoView({
-    behavior:"smooth",
-    block:"center"
-  });
-
-  tapConfirmados = 0;
-  tapPendientes = 0;
-  actualizarTapUI();
-}
-
-async function recuperarPassword() {
-
-  const email = document.getElementById("loginEmail").value.trim();
-  const mensaje = document.getElementById("mensajeLogin");
-
-  if (!email || !email.includes("@")) {
-    mensaje.textContent = "Escribe primero tu correo electrónico.";
-    return;
-  }
-
-  mensaje.textContent = "Enviando enlace de recuperación...";
-
-  const {error} = await supabaseClient.auth.resetPasswordForEmail(email,{
-    redirectTo:"https://michaelmendozaaceituno.github.io/pixel-battle-live/"
-  });
-
-  if (error) {
-    mensaje.textContent = "No se pudo enviar el correo. Revisa la configuración.";
-    console.error(error);
-    return;
-  }
-
-  mensaje.textContent = "¡Enlace enviado! Revisa tu correo. 📩";
-}
-
-async function guardarNuevaPassword() {
-
-  const password = document.getElementById("passwordNueva").value;
-  const confirmar = document.getElementById("passwordNuevaConfirmar").value;
-  const mensaje = document.getElementById("mensajeNuevaPassword");
-
-  if (password.length < 8) {
-    mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
-    return;
-  }
-
-  if (password !== confirmar) {
-    mensaje.textContent = "Las contraseñas no coinciden.";
-    return;
-  }
-
-  mensaje.textContent = "Actualizando contraseña...";
-
-  const {error} = await supabaseClient.auth.updateUser({password});
-
-  if (error) {
-    mensaje.textContent = "No se pudo actualizar. Intenta nuevamente.";
-    console.error(error);
-    return;
-  }
-
-  mensaje.textContent = "¡Contraseña actualizada correctamente! 🎮";
-
-  document.getElementById("passwordNueva").value = "";
-  document.getElementById("passwordNuevaConfirmar").value = "";
-
-  setTimeout(() => {
-    document.getElementById("nuevaPassword").style.display = "none";
-  },1500);
-}
-
-async function registrarJugador() {
-
-  const username = document.getElementById("username").value.trim().toLowerCase();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const confirmar = document.getElementById("confirmPassword").value;
-  const mensaje = document.getElementById("mensajeRegistro");
-
-  if (!username || !email || !password || !confirmar) {
-    mensaje.textContent = "Completa todos los campos.";
-    return;
-  }
-
-  if (!/^[a-z0-9_]{3,20}$/.test(username)) {
-    mensaje.textContent = "Usa 3 a 20 caracteres: letras, números o guion bajo.";
-    return;
-  }
-
-  if (password.length < 8) {
-    mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
-    return;
-  }
-
-  if (password !== confirmar) {
-    mensaje.textContent = "Las contraseñas no coinciden.";
-    return;
-  }
-
-  mensaje.textContent = "Creando tu cuenta...";
-
-  const {error} = await supabaseClient.auth.signUp({
-    email,
-    password,
-    options:{
-      data:{
-        username,
-        display_name:username
-      }
-    }
-  });
-
-  if (error) {
-    mensaje.textContent = error.message;
-    return;
-  }
-
-  mensaje.textContent = "¡Cuenta creada! Revisa tu correo para verificarla.";
-}
-
-function actualizarTapUI() {
-
-  const avance = (tapConfirmados + tapPendientes) % 200;
-
-  document.getElementById("contadorTap").textContent = avance;
-  document.getElementById("barraTap").style.width =
-    (avance / 200 * 100) + "%";
-}
-
-async function cargarProgresoTap() {
-
-  const {data:sesion} = await supabaseClient.auth.getSession();
-  const usuario = sesion.session?.user;
-
-  if (!usuario) return;
-
-  const {data,error} = await supabaseClient
-    .from("tap_tap_progress")
-    .select("tap_tokens")
-    .eq("user_id",usuario.id)
-    .maybeSingle();
-
-  if (error) {
-    console.error("Error cargando TAP TAP:",error);
-    document.getElementById("mensajeTap").textContent =
-      "No se pudo cargar tu progreso TAP TAP.";
-    return;
-  }
-
-  tapConfirmados = data ? Number(data.tap_tokens) : 0;
-  actualizarTapUI();
-}
-
-function registrarToque() {
-
-  if (document.getElementById("perfilJugador").style.display === "none") return;
-
-  tapPendientes++;
-  actualizarTapUI();
-
-  document.getElementById("mensajeTap").textContent = "¡Sigue tocando! ⚡";
-
-  clearTimeout(tapTemporizador);
-
-  if (tapPendientes >= 10) {
-    enviarToquesTap();
-  } else {
-    tapTemporizador = setTimeout(enviarToquesTap,800);
-  }
-}
-
-/* MOSTRAR PERSONAJE INICIAL */
-function mostrarPersonajeInicial(personaje) {
-
-  if (!personaje) return;
-
-  const panel = document.getElementById("panelPersonaje");
-
-  if (!panel) return;
-
-  panel.style.display = "block";
-
-  panel.scrollIntoView({
-    behavior:"smooth",
-    block:"center"
-  });
-}
-
-async function enviarToquesTap() {
-
-  if (tapEnviando || tapPendientes === 0) return;
-
-  clearTimeout(tapTemporizador);
-  tapEnviando = true;
-
-  const mensaje = document.getElementById("mensajeTap");
-  let huboError = false;
-
-  try {
-
-    while (tapPendientes > 0) {
-
-      const cantidad = Math.min(tapPendientes,200);
-      tapPendientes -= cantidad;
-      actualizarTapUI();
-
-      mensaje.textContent = "Guardando " + cantidad + " toques...";
-
-      const {data,error} = await supabaseClient.rpc(
-        "register_tap_batch",
-        {p_taps:cantidad}
-      );
-
-      if (error) {
-        tapPendientes += cantidad;
-        huboError = true;
-        mensaje.textContent = "Error al guardar: " + error.message;
-        console.error("Error TAP TAP:",error);
-        break;
-      }
-
-      if (!data || data.success !== true) {
-
-        console.log("RESPUESTA COMPLETA TAP TAP:",data);
-        console.log("TIPO DE RESPUESTA:",typeof data);
-
-        tapPendientes += cantidad;
-        huboError = true;
-
-        mensaje.textContent =
-          "Respuesta de Supabase: " + JSON.stringify(data);
-
-        break;
-      }
-
-      tapConfirmados = Number(data.remaining_taps ?? 0);
-
-      const {data:regalo,error:errorRegalo} =
-        await supabaseClient.rpc("claim_starter_character");
-
-      console.log("RESULTADO PERSONAJE:",regalo);
-      console.log("ERROR PERSONAJE:",errorRegalo);
-
-      if (errorRegalo) {
-        console.error("Error al entregar personaje inicial:",errorRegalo);
-      } else if (regalo && (
-        regalo.character_key ||
-        regalo.success ||
-        regalo.already_claimed
-      )) {
-        mostrarPersonajeInicial(regalo);
-        mensaje.textContent = "🎁 ¡Tu personaje inicial está disponible!";
-      }
-
-      if (Number(data.capsules_earned) > 0) {
-
-        mensaje.textContent =
-          "🎉 ¡Ganaste " + data.capsules_earned +
-          " Cápsula(s) del Poder!";
-
-        await cargarSaldoCapsulas();
-
-      } else {
-
-        mensaje.textContent = "¡Toques guardados correctamente! ⚡";
-      }
-
-      actualizarTapUI();
-    }
-
-  } catch(error) {
-
-    huboError = true;
-    mensaje.textContent = "Error inesperado: " + (error.message || error);
-    console.error("Error inesperado TAP TAP:",error);
-
-  } finally {
-
-    tapEnviando = false;
-    actualizarTapUI();
-
-    if (tapPendientes > 0 && !huboError) {
-      tapTemporizador = setTimeout(enviarToquesTap,300);
-    }
-  }
-}
-
-async function cargarSaldoCapsulas() {
-
-  const saldo = document.getElementById("saldoCapsulas");
-
-  if (!saldo) return;
-
-  const {data:sesion} = await supabaseClient.auth.getSession();
-  const usuario = sesion.session?.user;
-
-  if (!usuario) {
-    saldo.textContent = "0";
-    return;
-  }
-
-  const {data,error} = await supabaseClient
-    .from("power_capsule_wallets")
-    .select("balance")
-    .eq("user_id",usuario.id)
-    .maybeSingle();
-
-  if (error) {
-    saldo.textContent = "Error";
-    console.error("Error cargando cápsulas:",error);
-    return;
-  }
-
-  saldo.textContent = data ? data.balance : 0;
-}
-
-async function abrirGacha(cantidad) {
-
-  const resultado = document.getElementById("resultadoGacha");
-
-  if (![1,5,10].includes(cantidad)) return;
-
-  const {data:sesion} = await supabaseClient.auth.getSession();
-
-  if (!sesion.session) {
-    resultado.textContent = "Debes iniciar sesión para jugar.";
-    return;
-  }
-
-  resultado.textContent = "🔮 Abriendo cápsulas...";
-
-  const {data,error} = await supabaseClient.rpc(
-    "open_gacha",
-    {p_pulls:cantidad}
-  );
-
-  if (error) {
-    resultado.textContent = "❌ " + error.message;
-    console.error("Error Gacha:",error);
-    return;
-  }
-
-  resultado.textContent =
-    "🎉 ¡Tirada completada!\n" + JSON.stringify(data,null,2);
-
-  await cargarSaldoCapsulas();
-}
-
-supabaseClient.auth.onAuthStateChange((event,session) => {
-
-  if (event === "PASSWORD_RECOVERY" && session) {
-    mostrarSeccion("nuevaPassword");
-  }
-
+mensaje.textContent = "Entrando a la arena...";
+const {data,error} = await supabaseClient.auth.signInWithPassword({
+email,
+password
 });
-
-/* ==========================================
-   PIXEL BATTLE LIVE
-   MOTOR DE ARENA AUTOMATICA
-   BATTLE ROYALE - TODOS CONTRA TODOS
-========================================== */
-
+if (error) {
+mensaje.textContent = "No se pudo iniciar sesión. Revisa tus datos.";
+console.error("Error de inicio de sesión:",error);
+return;
+}
+const perfilCargado = await cargarPerfil(data.user.id);
+if (!perfilCargado) {
+mensaje.textContent = "La sesión inició, pero no se pudo cargar tu perfil. Revisa los permisos de player_profiles.";
+return;
+}
+document.getElementById("login").style.display = "none";
+mostrarSeccion("perfilJugador");
+mensaje.textContent = "";
+}
+async function cargarPerfil(userId) {
+const {data:perfil,error} = await supabaseClient
+.from("player_profiles")
+.select("*")
+.eq("id",userId)
+.single();
+if (error || !perfil) {
+console.error("Error cargando perfil:",error);
+return false;
+}
+document.getElementById("perfilNombre").textContent =
+perfil.display_name || perfil.username || "Jugador";
+document.getElementById("perfilNivel").textContent = perfil.level ?? 1;
+document.getElementById("perfilXP").textContent = perfil.xp ?? 0;
+document.getElementById("perfilMonedas").textContent = perfil.coins ?? 0;
+document.getElementById("perfilVictorias").textContent = perfil.victories ?? 0;
+document.getElementById("perfilDerrotas").textContent = perfil.defeats ?? 0;
+await Promise.all([
+cargarSaldoCapsulas(),
+cargarProgresoTap()
+]);
+const {data:personaje,error:errorPersonaje} =
+await supabaseClient.rpc("claim_starter_character");
+if (errorPersonaje) {
+console.error("Error consultando personaje inicial:",errorPersonaje);
+} else if (personaje && (
+personaje.character_key ||
+personaje.success ||
+personaje.already_claimed
+)) {
+mostrarPersonajeInicial(personaje);
+}
+return true;
+}
+async function cerrarSesion() {
+if (tapPendientes > 0 || tapEnviando) {
+alert("Espera a que se guarden tus toques antes de cerrar sesión.");
+return;
+}
+const {error} = await supabaseClient.auth.signOut();
+if (error) {
+alert("No se pudo cerrar sesión.");
+console.error(error);
+return;
+}
+document.getElementById("perfilJugador").style.display = "none";
+document.getElementById("login").style.display = "block";
+document.getElementById("login").scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+tapConfirmados = 0;
+tapPendientes = 0;
+actualizarTapUI();
+}
+async function recuperarPassword() {
+const email = document.getElementById("loginEmail").value.trim();
+const mensaje = document.getElementById("mensajeLogin");
+if (!email || !email.includes("@")) {
+mensaje.textContent = "Escribe primero tu correo electrónico.";
+return;
+}
+mensaje.textContent = "Enviando enlace de recuperación...";
+const {error} = await supabaseClient.auth.resetPasswordForEmail(email,{
+redirectTo:"https://michaelmendozaaceituno.github.io/pixel-battle-live/"
+});
+if (error) {
+mensaje.textContent = "No se pudo enviar el correo. Revisa la configuración.";
+console.error(error);
+return;
+}
+mensaje.textContent = "¡Enlace enviado! Revisa tu correo. 📩";
+}
+async function guardarNuevaPassword() {
+const password = document.getElementById("passwordNueva").value;
+const confirmar = document.getElementById("passwordNuevaConfirmar").value;
+const mensaje = document.getElementById("mensajeNuevaPassword");
+if (password.length < 8) {
+mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
+return;
+}
+if (password !== confirmar) {
+mensaje.textContent = "Las contraseñas no coinciden.";
+return;
+}
+mensaje.textContent = "Actualizando contraseña...";
+const {error} = await supabaseClient.auth.updateUser({password});
+if (error) {
+mensaje.textContent = "No se pudo actualizar. Intenta nuevamente.";
+console.error(error);
+return;
+}
+mensaje.textContent = "¡Contraseña actualizada correctamente! 🎮";
+document.getElementById("passwordNueva").value = "";
+document.getElementById("passwordNuevaConfirmar").value = "";
+setTimeout(() => {
+document.getElementById("nuevaPassword").style.display = "none";
+},1500);
+}
+async function registrarJugador() {
+const username = document.getElementById("username").value.trim().toLowerCase();
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value;
+const confirmar = document.getElementById("confirmPassword").value;
+const mensaje = document.getElementById("mensajeRegistro");
+if (!username || !email || !password || !confirmar) {
+mensaje.textContent = "Completa todos los campos.";
+return;
+}
+if (!/^[a-z0-9_]{3,20}$/.test(username)) {
+mensaje.textContent = "Usa 3 a 20 caracteres: letras, números o guion bajo.";
+return;
+}
+if (password.length < 8) {
+mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
+return;
+}
+if (password !== confirmar) {
+mensaje.textContent = "Las contraseñas no coinciden.";
+return;
+}
+mensaje.textContent = "Creando tu cuenta...";
+const {error} = await supabaseClient.auth.signUp({
+email,
+password,
+options:{
+data:{
+username,
+display_name:username
+}
+}
+});
+if (error) {
+mensaje.textContent = error.message;
+return;
+}
+mensaje.textContent = "¡Cuenta creada! Revisa tu correo para verificarla.";
+}
+function actualizarTapUI() {
+const avance = (tapConfirmados + tapPendientes) % 200;
+document.getElementById("contadorTap").textContent = avance;
+document.getElementById("barraTap").style.width =
+(avance / 200 * 100) + "%";
+}
+async function cargarProgresoTap() {
+const {data:sesion} = await supabaseClient.auth.getSession();
+const usuario = sesion.session?.user;
+if (!usuario) return;
+const {data,error} = await supabaseClient
+.from("tap_tap_progress")
+.select("tap_tokens")
+.eq("user_id",usuario.id)
+.maybeSingle();
+if (error) {
+console.error("Error cargando TAP TAP:",error);
+document.getElementById("mensajeTap").textContent =
+"No se pudo cargar tu progreso TAP TAP.";
+return;
+}
+tapConfirmados = data ? Number(data.tap_tokens) : 0;
+actualizarTapUI();
+}
+function registrarToque() {
+if (document.getElementById("perfilJugador").style.display === "none") return;
+tapPendientes++;
+actualizarTapUI();
+document.getElementById("mensajeTap").textContent = "¡Sigue tocando! ⚡";
+clearTimeout(tapTemporizador);
+if (tapPendientes >= 10) {
+enviarToquesTap();
+} else {
+tapTemporizador = setTimeout(enviarToquesTap,800);
+}
+}
+function mostrarPersonajeInicial(personaje) {
+if (!personaje) return;
+const panel = document.getElementById("panelPersonaje");
+if (!panel) return;
+panel.style.display = "block";
+panel.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+}
+async function enviarToquesTap() {
+if (tapEnviando || tapPendientes === 0) return;
+clearTimeout(tapTemporizador);
+tapEnviando = true;
+const mensaje = document.getElementById("mensajeTap");
+let huboError = false;
+try {
+while (tapPendientes > 0) {
+const cantidad = Math.min(tapPendientes,200);
+tapPendientes -= cantidad;
+actualizarTapUI();
+mensaje.textContent = "Guardando " + cantidad + " toques...";
+const {data,error} = await supabaseClient.rpc(
+"register_tap_batch",
+{p_taps:cantidad}
+);
+if (error) {
+tapPendientes += cantidad;
+huboError = true;
+mensaje.textContent = "Error al guardar: " + error.message;
+console.error("Error TAP TAP:",error);
+break;
+}
+if (!data || data.success !== true) {
+console.log("RESPUESTA COMPLETA TAP TAP:",data);
+console.log("TIPO DE RESPUESTA:",typeof data);
+tapPendientes += cantidad;
+huboError = true;
+mensaje.textContent =
+"Respuesta de Supabase: " + JSON.stringify(data);
+break;
+}
+tapConfirmados = Number(data.remaining_taps ?? 0);
+const {data:regalo,error:errorRegalo} =
+await supabaseClient.rpc("claim_starter_character");
+console.log("RESULTADO PERSONAJE:",regalo);
+console.log("ERROR PERSONAJE:",errorRegalo);
+if (errorRegalo) {
+console.error("Error al entregar personaje inicial:",errorRegalo);
+} else if (regalo && (
+regalo.character_key ||
+regalo.success ||
+regalo.already_claimed
+)) {
+mostrarPersonajeInicial(regalo);
+mensaje.textContent = "🎁 ¡Tu personaje inicial está disponible!";
+}
+if (Number(data.capsules_earned) > 0) {
+mensaje.textContent =
+"🎉 ¡Ganaste " + data.capsules_earned +
+" Cápsula(s) del Poder!";
+await cargarSaldoCapsulas();
+} else {
+mensaje.textContent = "¡Toques guardados correctamente! ⚡";
+}
+actualizarTapUI();
+}
+} catch(error) {
+huboError = true;
+mensaje.textContent = "Error inesperado: " + (error.message || error);
+console.error("Error inesperado TAP TAP:",error);
+} finally {
+tapEnviando = false;
+actualizarTapUI();
+if (tapPendientes > 0 && !huboError) {
+tapTemporizador = setTimeout(enviarToquesTap,300);
+}
+}
+}
+async function cargarSaldoCapsulas() {
+const saldo = document.getElementById("saldoCapsulas");
+if (!saldo) return;
+const {data:sesion} = await supabaseClient.auth.getSession();
+const usuario = sesion.session?.user;
+if (!usuario) {
+saldo.textContent = "0";
+return;
+}
+const {data,error} = await supabaseClient
+.from("power_capsule_wallets")
+.select("balance")
+.eq("user_id",usuario.id)
+.maybeSingle();
+if (error) {
+saldo.textContent = "Error";
+console.error("Error cargando cápsulas:",error);
+return;
+}
+saldo.textContent = data ? data.balance : 0;
+}
+async function abrirGacha(cantidad) {
+const resultado = document.getElementById("resultadoGacha");
+if (![1,5,10].includes(cantidad)) return;
+const {data:sesion} = await supabaseClient.auth.getSession();
+if (!sesion.session) {
+resultado.textContent = "Debes iniciar sesión para jugar.";
+return;
+}
+resultado.textContent = "🔮 Abriendo cápsulas...";
+const {data,error} = await supabaseClient.rpc(
+"open_gacha",
+{p_pulls:cantidad}
+);
+if (error) {
+resultado.textContent = "❌ " + error.message;
+console.error("Error Gacha:",error);
+return;
+}
+resultado.textContent =
+"🎉 ¡Tirada completada!\n" + JSON.stringify(data,null,2);
+await cargarSaldoCapsulas();
+}
+supabaseClient.auth.onAuthStateChange((event,session) => {
+if (event === "PASSWORD_RECOVERY" && session) {
+mostrarSeccion("nuevaPassword");
+}
+});
 (()=>{
-
-  const canvas = document.getElementById("arenaCanvas");
-
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-
-  const WORLD_W = 2400;
-  const WORLD_H = 1800;
-
-  const fighters = [];
-
-  let cameraX = 0;
-  let cameraY = 0;
-  let lastTime = 0;
-  let animationFrame = null;
-  let battleFinished = false;
-
-  const names = [
-    "GOKU",
-    "GUERRERO 2",
-    "GUERRERO 3",
-    "GUERRERO 4",
-    "GUERRERO 5",
-    "GUERRERO 6",
-    "GUERRERO 7",
-    "GUERRERO 8"
-  ];
-
-  const colors = [
-    "#f28b20",
-    "#df3949",
-    "#3288e8",
-    "#a34fe0",
-    "#35b96b",
-    "#e6c13b",
-    "#e56eae",
-    "#42c6c9"
-  ];
-
-  const clamp = (v,min,max)=>
-    Math.max(min,Math.min(max,v));
-
-  function resizeArena(){
-
-    const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1,2);
-
-    canvas.width = Math.max(1,Math.floor(rect.width*dpr));
-    canvas.height = Math.max(1,Math.floor(rect.height*dpr));
-
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-
-  window.addEventListener("resize",resizeArena);
-  resizeArena();
-
-  function random(min,max){
-    return min + Math.random()*(max-min);
-  }
-
-  function crearCombatientes(){
-
-    fighters.length = 0;
-
-    for(let i=0;i<8;i++){
-
-      const angle = (Math.PI*2/8)*i;
-
-      fighters.push({
-
-        id:i,
-        name:names[i],
-        color:colors[i],
-
-        x:WORLD_W/2 + Math.cos(angle)*random(250,500),
-        y:WORLD_H/2 + Math.sin(angle)*random(180,400),
-
-        hp:100,
-        maxHp:100,
-
-        speed:random(75,115),
-        damage:random(8,14),
-
-        attackCooldown:random(.2,1.5),
-        attackRange:65,
-
-        direction:0,
-        alive:true,
-        attacking:false,
-        attackAnimation:0,
-        hitFlash:0
-      });
-    }
-
-    battleFinished = false;
-    actualizarHUD();
-  }
-
-  function buscarRival(fighter){
-
-    let nearest = null;
-    let nearestDistance = Infinity;
-
-    for(const other of fighters){
-
-      if(!other.alive || other.id===fighter.id) continue;
-
-      const dx = other.x-fighter.x;
-      const dy = other.y-fighter.y;
-
-      const distance = Math.hypot(dx,dy);
-
-      if(distance<nearestDistance){
-        nearestDistance=distance;
-        nearest=other;
-      }
-    }
-
-    return nearest;
-  }
-
-  function actualizarCombate(dt){
-
-    if(battleFinished) return;
-
-    for(const fighter of fighters){
-
-      if(!fighter.alive) continue;
-
-      fighter.attackCooldown -= dt;
-
-      fighter.attackAnimation = Math.max(
-        0,
-        fighter.attackAnimation-dt
-      );
-
-      fighter.hitFlash = Math.max(
-        0,
-        fighter.hitFlash-dt
-      );
-
-      const rival = buscarRival(fighter);
-
-      if(!rival) continue;
-
-      const dx = rival.x-fighter.x;
-      const dy = rival.y-fighter.y;
-
-      const distance = Math.hypot(dx,dy);
-
-      fighter.direction = Math.atan2(dy,dx);
-
-      if(distance > fighter.attackRange){
-
-        const moveX = dx/(distance || 1);
-        const moveY = dy/(distance || 1);
-
-        fighter.x += moveX*fighter.speed*dt;
-        fighter.y += moveY*fighter.speed*dt;
-
-      }else{
-
-        fighter.attacking = true;
-
-        if(fighter.attackCooldown<=0){
-
-          rival.hp -= fighter.damage;
-
-          rival.hitFlash = .18;
-          fighter.attackAnimation = .25;
-
-          fighter.attackCooldown = random(.7,1.15);
-
-          if(rival.hp<=0){
-
-            rival.hp=0;
-            rival.alive=false;
-
-            fighter.damage += 1;
-
-            document.getElementById("arenaEstado")
-              .textContent = fighter.name+" eliminó a "+rival.name;
-          }
-        }
-      }
-
-      fighter.x=clamp(fighter.x,50,WORLD_W-50);
-      fighter.y=clamp(fighter.y,50,WORLD_H-50);
-    }
-
-    const survivors = fighters.filter(f=>f.alive);
-
-    if(survivors.length<=1){
-
-      battleFinished=true;
-
-      if(survivors.length===1){
-
-        document.getElementById("arenaEstado")
-          .textContent="🏆 ¡"+survivors[0].name+" ES EL GANADOR!";
-
-      }else{
-
-        document.getElementById("arenaEstado")
-          .textContent="Combate terminado";
-      }
-    }
-
-    actualizarHUD();
-  }
-
-  /* =====================================
-     NUEVO MAPA ORIGINAL:
-     TORNEO DE ARTES MARCIALES
-     MONTAÑAS, CASCADAS, DOJO Y PLATAFORMAS
-  ===================================== */
-
-  function dibujarMontana(x,y,ancho,alto,colorBase,colorLuz){
-
-    ctx.fillStyle=colorBase;
-
-    ctx.beginPath();
-    ctx.moveTo(x-ancho/2,y);
-    ctx.lineTo(x,y-alto);
-    ctx.lineTo(x+ancho/2,y);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.fillStyle=colorLuz;
-
-    ctx.beginPath();
-    ctx.moveTo(x,y-alto);
-    ctx.lineTo(x-ancho*.16,y-alto*.48);
-    ctx.lineTo(x-ancho*.04,y-alto*.55);
-    ctx.lineTo(x+ancho*.12,y-alto*.35);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.fillStyle="#40566d";
-
-    ctx.beginPath();
-    ctx.moveTo(x-ancho*.16,y-alto*.48);
-    ctx.lineTo(x,y-alto);
-    ctx.lineTo(x+ancho*.12,y-alto*.35);
-    ctx.lineTo(x+ancho*.03,y-alto*.42);
-    ctx.lineTo(x-ancho*.03,y-alto*.45);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  function dibujarCascada(x,y,ancho,alto){
-
-    // Acantilado
-    ctx.fillStyle="#596b77";
-    ctx.fillRect(x-18,y,ancho+36,alto);
-
-    ctx.fillStyle="#758c99";
-    ctx.fillRect(x-18,y,12,alto);
-
-    // Agua
-    const gradiente=ctx.createLinearGradient(x,y,x+ancho,y);
-
-    gradiente.addColorStop(0,"#65dff2");
-    gradiente.addColorStop(.5,"#c5f8ff");
-    gradiente.addColorStop(1,"#319bc9");
-
-    ctx.fillStyle=gradiente;
-    ctx.fillRect(x,y,ancho,alto);
-
-    // Líneas de movimiento del agua
-    ctx.strokeStyle="#e0ffff";
-    ctx.lineWidth=5;
-
-    for(let i=0;i<5;i++){
-
-      const xx=x+10+i*(ancho-20)/5;
-
-      ctx.beginPath();
-      ctx.moveTo(xx,y+12);
-      ctx.lineTo(xx+random(-5,5),y+alto-8);
-      ctx.stroke();
-    }
-
-    // Espuma inferior
-    ctx.fillStyle="#b9faff";
-    ctx.beginPath();
-    ctx.ellipse(x+ancho/2,y+alto,ancho*.9,22,0,0,Math.PI*2);
-    ctx.fill();
-  }
-
-  function dibujarDojo(x,y){
-
-    // Sombra del edificio
-    ctx.fillStyle="#24364b";
-    ctx.fillRect(x-110,y+75,220,20);
-
-    // Base
-    ctx.fillStyle="#d4b27b";
-    ctx.fillRect(x-100,y+30,200,55);
-
-    // Paredes
-    ctx.fillStyle="#eee0b5";
-    ctx.fillRect(x-90,y-45,180,80);
-
-    // Puerta central
-    ctx.fillStyle="#583b31";
-    ctx.fillRect(x-25,y-15,50,60);
-
-    // Ventanas
-    ctx.fillStyle="#6da4a9";
-    ctx.fillRect(x-75,y-25,35,30);
-    ctx.fillRect(x+40,y-25,35,30);
-
-    // Techo principal
-    ctx.fillStyle="#9b393b";
-
-    ctx.beginPath();
-    ctx.moveTo(x-125,y-45);
-    ctx.lineTo(x,y-115);
-    ctx.lineTo(x+125,y-45);
-    ctx.lineTo(x+100,y-30);
-    ctx.lineTo(x,y-85);
-    ctx.lineTo(x-100,y-30);
-    ctx.closePath();
-    ctx.fill();
-
-    // Borde del techo
-    ctx.strokeStyle="#f2c56d";
-    ctx.lineWidth=8;
-    ctx.beginPath();
-    ctx.moveTo(x-125,y-45);
-    ctx.lineTo(x,y-115);
-    ctx.lineTo(x+125,y-45);
-    ctx.stroke();
-
-    // Letrero original
-    ctx.fillStyle="#382c36";
-    ctx.fillRect(x-38,y-5,76,22);
-
-    ctx.fillStyle="#ffe28a";
-    ctx.font="bold 12px Arial";
-    ctx.textAlign="center";
-    ctx.fillText("DOJO",x,y+11);
-  }
-
-  function dibujarPlataforma(x,y,ancho,alto){
-
-    // Base de piedra
-    ctx.fillStyle="#665a51";
-    ctx.fillRect(x-ancho/2,y,ancho,alto);
-
-    ctx.fillStyle="#968477";
-    ctx.fillRect(x-ancho/2,y,ancho,9);
-
-    // Superficie de combate
-    ctx.fillStyle="#d9bd83";
-    ctx.fillRect(x-ancho/2+8,y+9,ancho-16,alto-12);
-
-    // Líneas de la plataforma
-    ctx.strokeStyle="#80684d";
-    ctx.lineWidth=3;
-    ctx.strokeRect(x-ancho/2+8,y+9,ancho-16,alto-12);
-
-    ctx.beginPath();
-    ctx.moveTo(x,y+10);
-    ctx.lineTo(x,y+alto-4);
-    ctx.stroke();
-  }
-
-  function dibujarRoca(x,y,tamano){
-
-    ctx.fillStyle="#465766";
-
-    ctx.beginPath();
-    ctx.moveTo(x-tamano,y+tamano*.4);
-    ctx.lineTo(x-tamano*.5,y-tamano*.65);
-    ctx.lineTo(x+tamano*.25,y-tamano);
-    ctx.lineTo(x+tamano,y+tamano*.4);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.fillStyle="#73818b";
-
-    ctx.beginPath();
-    ctx.moveTo(x-tamano*.5,y-tamano*.65);
-    ctx.lineTo(x+tamano*.25,y-tamano);
-    ctx.lineTo(x+tamano*.15,y-tamano*.2);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  function dibujarArbol(x,y){
-
-    ctx.fillStyle="#694a32";
-    ctx.fillRect(x-8,y,16,30);
-
-    ctx.fillStyle="#235d42";
-    ctx.beginPath();
-    ctx.arc(x,y-8,25,0,Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle="#398b55";
-    ctx.beginPath();
-    ctx.arc(x-9,y-17,14,0,Math.PI*2);
-    ctx.fill();
-  }
-
-  function dibujarTerreno(){
-
-    // Suelo principal
-    const fondo=ctx.createLinearGradient(0,0,WORLD_W,WORLD_H);
-    fondo.addColorStop(0,"#789c55");
-    fondo.addColorStop(.5,"#638b4b");
-    fondo.addColorStop(1,"#456f43");
-
-    ctx.fillStyle=fondo;
-    ctx.fillRect(0,0,WORLD_W,WORLD_H);
-
-    // Textura pixelada del terreno
-    for(let i=0;i<500;i++){
-
-      const x=(i*137)%WORLD_W;
-      const y=(i*251)%WORLD_H;
-
-      ctx.fillStyle=i%2===0?"#82a95b":"#527d45";
-      ctx.fillRect(x,y,35,25);
-    }
-
-    // Montañas del fondo
-    dibujarMontana(250,480,550,430,"#465b70","#9baab0");
-    dibujarMontana(700,430,650,500,"#52677a","#c0c8c3");
-    dibujarMontana(1220,460,700,480,"#40576b","#a9b8bd");
-    dibujarMontana(1780,450,650,470,"#52677a","#c2c9c1");
-    dibujarMontana(2200,470,500,390,"#40566b","#a5b5b9");
-
-    // Nubes pixeladas
-    ctx.fillStyle="#d9edf0";
-
-    for(let i=0;i<12;i++){
-
-      const x=(i*213+80)%WORLD_W;
-      const y=100+(i%3)*75;
-
-      ctx.fillRect(x,y,75,18);
-      ctx.fillRect(x+18,y-12,38,18);
-      ctx.fillRect(x+55,y+5,35,13);
-    }
-
-    // Cascadas laterales
-    dibujarCascada(90,420,75,430);
-    dibujarCascada(2220,410,80,470);
-
-    // Río que conecta las cascadas
-    ctx.fillStyle="#369dc0";
-    ctx.beginPath();
-    ctx.moveTo(0,870);
-    ctx.bezierCurveTo(350,800,400,1080,700,1030);
-    ctx.bezierCurveTo(1000,980,1200,1120,1500,1050);
-    ctx.bezierCurveTo(1850,970,2050,1110,2400,980);
-    ctx.lineTo(2400,1130);
-    ctx.bezierCurveTo(2050,1250,1850,1110,1500,1190);
-    ctx.bezierCurveTo(1200,1260,1000,1120,700,1170);
-    ctx.bezierCurveTo(400,1220,350,940,0,1020);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.strokeStyle="#a6edee";
-    ctx.lineWidth=8;
-    ctx.stroke();
-
-    // Puentes de piedra
-    ctx.fillStyle="#a68c69";
-    ctx.fillRect(420,970,210,45);
-    ctx.fillRect(1690,1060,220,45);
-
-    // Gran plataforma central
-    dibujarPlataforma(1200,850,430,145);
-
-    // Plataformas secundarias
-    dibujarPlataforma(680,650,210,80);
-    dibujarPlataforma(1740,690,210,80);
-    dibujarPlataforma(700,1300,240,85);
-    dibujarPlataforma(1700,1320,240,85);
-
-    // Dojo principal
-    dibujarDojo(1200,440);
-
-    // Camino hacia el dojo
-    ctx.strokeStyle="#bba477";
-    ctx.lineWidth=55;
-    ctx.lineCap="round";
-
-    ctx.beginPath();
-    ctx.moveTo(1200,540);
-    ctx.lineTo(1200,700);
-    ctx.stroke();
-
-    ctx.strokeStyle="#ddc89b";
-    ctx.lineWidth=35;
-    ctx.stroke();
-
-    // Zonas rocosas
-    for(let i=0;i<32;i++){
-
-      const x=(i*283+120)%WORLD_W;
-      const y=(i*197+700)%WORLD_H;
-
-      if(
-        (x>950 && x<1450 && y>700 && y<1050) ||
-        (x>100 && x<300) ||
-        (x>2100 && x<2300)
-      ) continue;
-
-      dibujarRoca(x,y,random(12,25));
-    }
-
-    // Vegetación alrededor del torneo
-    for(let i=0;i<55;i++){
-
-      const x=(i*317+150)%WORLD_W;
-      const y=(i*197+100)%WORLD_H;
-
-      if(
-        (x>900 && x<1500 && y>350 && y<1100) ||
-        (x>350 && x<750 && y>600 && y<1100) ||
-        (x>1600 && x<2000 && y>600 && y<1150)
-      ) continue;
-
-      dibujarArbol(x,y);
-    }
-
-    // Borde de la arena
-    ctx.strokeStyle="#e4d59b";
-    ctx.lineWidth=14;
-    ctx.strokeRect(0,0,WORLD_W,WORLD_H);
-
-    // Decoración de esquinas
-    const esquinas=[
-      [55,55],[WORLD_W-55,55],
-      [55,WORLD_H-55],[WORLD_W-55,WORLD_H-55]
-    ];
-
-    for(const [x,y] of esquinas){
-
-      ctx.fillStyle="#f2d078";
-      ctx.fillRect(x-14,y-14,28,28);
-
-      ctx.strokeStyle="#754c37";
-      ctx.lineWidth=4;
-      ctx.strokeRect(x-14,y-14,28,28);
-    }
-  }
-
-  const gokuImage = new Image();
-  gokuImage.src="assets/characters/goku-common.png";
-
-  function dibujarPersonaje(f){
-
-    const x=f.x;
-    const y=f.y;
-
-    // Sombra
-    ctx.fillStyle="#15251b88";
-
-    ctx.beginPath();
-    ctx.ellipse(x,y+19,23,9,0,0,Math.PI*2);
-    ctx.fill();
-
-    // Destello de daño
-    if(f.hitFlash>0){
-
-      ctx.fillStyle="#ffffff";
-
-      ctx.beginPath();
-      ctx.arc(x,y,31,0,Math.PI*2);
-      ctx.fill();
-    }
-
-    if(f.id===0 && gokuImage.complete && gokuImage.naturalWidth){
-
-      ctx.imageSmoothingEnabled=false;
-      ctx.drawImage(gokuImage,x-27,y-58,54,65);
-
-    }else{
-
-      // Personajes provisionales
-      ctx.fillStyle=f.color;
-      ctx.fillRect(x-13,y-15,26,31);
-
-      ctx.fillStyle="#f0c29b";
-      ctx.fillRect(x-9,y-32,18,17);
-
-      ctx.fillStyle="#25213a";
-      ctx.fillRect(x-11,y-36,22,7);
-
-      ctx.fillStyle="#202c55";
-      ctx.fillRect(x-12,y+15,10,17);
-      ctx.fillRect(x+2,y+15,10,17);
-    }
-
-    // Animación de ataque
-    if(f.attackAnimation>0){
-
-      const attackX=x+Math.cos(f.direction)*38;
-      const attackY=y+Math.sin(f.direction)*38;
-
-      ctx.strokeStyle="#fff16a";
-      ctx.lineWidth=5;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        attackX,
-        attackY,
-        13,
-        0,
-        Math.PI*1.5
-      );
-
-      ctx.stroke();
-    }
-
-    // Nombre
-    ctx.fillStyle="#ffffff";
-    ctx.font="bold 12px Arial";
-    ctx.textAlign="center";
-
-    ctx.fillText(f.name,x,y-48);
-
-    // Barra de vida
-    ctx.fillStyle="#351c29";
-    ctx.fillRect(x-22,y-43,44,6);
-
-    ctx.fillStyle=f.hp>35?"#42ed75":"#ff4242";
-
-    ctx.fillRect(
-      x-22,
-      y-43,
-      44*(f.hp/f.maxHp),
-      6
-    );
-  }
-
-  function dibujarArena(){
-
-    const rect=canvas.getBoundingClientRect();
-
-    const width=rect.width;
-    const height=rect.height;
-
-    if(!width || !height) return;
-
-    // La cámara sigue a los combatientes vivos
-    const alive=fighters.filter(f=>f.alive);
-
-    let focusX=WORLD_W/2;
-    let focusY=WORLD_H/2;
-
-    if(alive.length){
-
-      focusX=alive.reduce((s,f)=>s+f.x,0)/alive.length;
-      focusY=alive.reduce((s,f)=>s+f.y,0)/alive.length;
-    }
-
-    cameraX=clamp(focusX-width/2,0,WORLD_W-width);
-    cameraY=clamp(focusY-height/2,0,WORLD_H-height);
-
-    ctx.clearRect(0,0,width,height);
-
-    ctx.save();
-
-    ctx.translate(-cameraX,-cameraY);
-
-    dibujarTerreno();
-
-    for(const fighter of fighters){
-
-      if(fighter.alive){
-        dibujarPersonaje(fighter);
-      }
-    }
-
-    ctx.restore();
-  }
-
-  function actualizarHUD(){
-
-    const alive=fighters.filter(f=>f.alive).length;
-    const eliminated=fighters.length-alive;
-
-    document.getElementById("arenaVivos").textContent=alive;
-
-    document.getElementById("arenaEliminados").textContent=eliminated;
-
-    document.getElementById("arenaProgreso").style.width=
-      (alive/fighters.length*100)+"%";
-  }
-
-  function gameLoop(time){
-
-    const dt=Math.min((time-lastTime)/1000 || 0,.04);
-
-    lastTime=time;
-
-    actualizarCombate(dt);
-    dibujarArena();
-
-    animationFrame=requestAnimationFrame(gameLoop);
-  }
-
-  function iniciarArena(){
-
-    if(animationFrame){
-      cancelAnimationFrame(animationFrame);
-    }
-
-    crearCombatientes();
-
-    document.getElementById("arenaEstado")
-      .textContent="⚔️ ¡COMBATE EN CURSO!";
-
-    lastTime=performance.now();
-
-    animationFrame=requestAnimationFrame(gameLoop);
-  }
-
-  iniciarArena();
-
-  // Reinicio automático para pruebas
-  setInterval(()=>{
-
-    if(battleFinished){
-      iniciarArena();
-    }
-
-  },5000);
-
-  window.addEventListener("beforeunload",()=>{
-
-    if(animationFrame){
-      cancelAnimationFrame(animationFrame);
-    }
-
-  });
-
+const canvas = document.getElementById("arenaCanvas");
+if (!canvas) return;
+const ctx = canvas.getContext("2d");
+const WORLD_W = 2400;
+const WORLD_H = 1800;
+const fighters = [];
+let cameraX = WORLD_W / 2;
+let cameraY = WORLD_H / 2;
+let cameraZoom = 0.4;
+let lastTime = 0;
+let animationFrame = null;
+let battleFinished = false;
+const names = [
+"GOKU",
+"GUERRERO 2",
+"GUERRERO 3",
+"GUERRERO 4",
+"GUERRERO 5",
+"GUERRERO 6",
+"GUERRERO 7",
+"GUERRERO 8"
+];
+const colors = [
+"#f28b20",
+"#df3949",
+"#3288e8",
+"#a34fe0",
+"#35b96b",
+"#e6c13b",
+"#e56eae",
+"#42c6c9"
+];
+const clamp = (v,min,max)=>
+Math.max(min,Math.min(max,v));
+function resizeArena(){
+const rect = canvas.getBoundingClientRect();
+const dpr = Math.min(window.devicePixelRatio || 1,2);
+canvas.width = Math.max(1,Math.floor(rect.width*dpr));
+canvas.height = Math.max(1,Math.floor(rect.height*dpr));
+ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener("resize",resizeArena);
+resizeArena();
+function random(min,max){
+return min + Math.random()*(max-min);
+}
+function crearCombatientes(){
+fighters.length = 0;
+for(let i=0;i<8;i++){
+const angle = (Math.PI*2/8)*i;
+fighters.push({
+id:i,
+name:names[i],
+color:colors[i],
+x:WORLD_W/2 + Math.cos(angle)*random(250,500),
+y:WORLD_H/2 + Math.sin(angle)*random(180,400),
+hp:100,
+maxHp:100,
+speed:random(75,115),
+damage:random(8,14),
+attackCooldown:random(.2,1.5),
+attackRange:65,
+direction:0,
+alive:true,
+attacking:false,
+attackAnimation:0,
+hitFlash:0
+});
+}
+battleFinished = false;
+actualizarHUD();
+}
+function buscarRival(fighter){
+let nearest = null;
+let nearestDistance = Infinity;
+for(const other of fighters){
+if(!other.alive || other.id===fighter.id) continue;
+const dx = other.x-fighter.x;
+const dy = other.y-fighter.y;
+const distance = Math.hypot(dx,dy);
+if(distance<nearestDistance){
+nearestDistance=distance;
+nearest=other;
+}
+}
+return nearest;
+}
+function actualizarCombate(dt){
+if(battleFinished) return;
+for(const fighter of fighters){
+if(!fighter.alive) continue;
+fighter.attackCooldown -= dt;
+fighter.attackAnimation = Math.max(
+0,
+fighter.attackAnimation-dt
+);
+fighter.hitFlash = Math.max(
+0,
+fighter.hitFlash-dt
+);
+const rival = buscarRival(fighter);
+if(!rival) continue;
+const dx = rival.x-fighter.x;
+const dy = rival.y-fighter.y;
+const distance = Math.hypot(dx,dy);
+fighter.direction = Math.atan2(dy,dx);
+if(distance > fighter.attackRange){
+const moveX = dx/(distance || 1);
+const moveY = dy/(distance || 1);
+fighter.x += moveX*fighter.speed*dt;
+fighter.y += moveY*fighter.speed*dt;
+}else{
+fighter.attacking = true;
+if(fighter.attackCooldown<=0){
+rival.hp -= fighter.damage;
+rival.hitFlash = .18;
+fighter.attackAnimation = .25;
+fighter.attackCooldown = random(.7,1.15);
+if(rival.hp<=0){
+rival.hp=0;
+rival.alive=false;
+fighter.damage += 1;
+document.getElementById("arenaEstado")
+.textContent = fighter.name+" eliminó a "+rival.name;
+}
+}
+}
+fighter.x=clamp(fighter.x,50,WORLD_W-50);
+fighter.y=clamp(fighter.y,50,WORLD_H-50);
+}
+const survivors = fighters.filter(f=>f.alive);
+if(survivors.length<=1){
+battleFinished=true;
+if(survivors.length===1){
+document.getElementById("arenaEstado")
+.textContent="🏆 ¡"+survivors[0].name+" ES EL GANADOR!";
+}else{
+document.getElementById("arenaEstado")
+.textContent="Combate terminado";
+}
+}
+actualizarHUD();
+}
+function dibujarMontana(x,y,ancho,alto,colorBase,colorLuz){
+ctx.fillStyle=colorBase;
+ctx.beginPath();
+ctx.moveTo(x-ancho/2,y);
+ctx.lineTo(x,y-alto);
+ctx.lineTo(x+ancho/2,y);
+ctx.closePath();
+ctx.fill();
+ctx.fillStyle=colorLuz;
+ctx.beginPath();
+ctx.moveTo(x,y-alto);
+ctx.lineTo(x-ancho*.16,y-alto*.48);
+ctx.lineTo(x-ancho*.04,y-alto*.55);
+ctx.lineTo(x+ancho*.12,y-alto*.35);
+ctx.closePath();
+ctx.fill();
+ctx.fillStyle="#40566d";
+ctx.beginPath();
+ctx.moveTo(x-ancho*.16,y-alto*.48);
+ctx.lineTo(x,y-alto);
+ctx.lineTo(x+ancho*.12,y-alto*.35);
+ctx.lineTo(x+ancho*.03,y-alto*.42);
+ctx.lineTo(x-ancho*.03,y-alto*.45);
+ctx.closePath();
+ctx.fill();
+}
+function dibujarCascada(x,y,ancho,alto){
+ctx.fillStyle="#596b77";
+ctx.fillRect(x-18,y,ancho+36,alto);
+ctx.fillStyle="#758c99";
+ctx.fillRect(x-18,y,12,alto);
+const gradiente=ctx.createLinearGradient(x,y,x+ancho,y);
+gradiente.addColorStop(0,"#65dff2");
+gradiente.addColorStop(.5,"#c5f8ff");
+gradiente.addColorStop(1,"#319bc9");
+ctx.fillStyle=gradiente;
+ctx.fillRect(x,y,ancho,alto);
+ctx.strokeStyle="#e0ffff";
+ctx.lineWidth=5;
+for(let i=0;i<5;i++){
+const xx=x+10+i*(ancho-20)/5;
+ctx.beginPath();
+ctx.moveTo(xx,y+12);
+ctx.lineTo(xx+random(-5,5),y+alto-8);
+ctx.stroke();
+}
+ctx.fillStyle="#b9faff";
+ctx.beginPath();
+ctx.ellipse(x+ancho/2,y+alto,ancho*.9,22,0,0,Math.PI*2);
+ctx.fill();
+}
+function dibujarDojo(x,y){
+ctx.fillStyle="#24364b";
+ctx.fillRect(x-110,y+75,220,20);
+ctx.fillStyle="#d4b27b";
+ctx.fillRect(x-100,y+30,200,55);
+ctx.fillStyle="#eee0b5";
+ctx.fillRect(x-90,y-45,180,80);
+ctx.fillStyle="#583b31";
+ctx.fillRect(x-25,y-15,50,60);
+ctx.fillStyle="#6da4a9";
+ctx.fillRect(x-75,y-25,35,30);
+ctx.fillRect(x+40,y-25,35,30);
+ctx.fillStyle="#9b393b";
+ctx.beginPath();
+ctx.moveTo(x-125,y-45);
+ctx.lineTo(x,y-115);
+ctx.lineTo(x+125,y-45);
+ctx.lineTo(x+100,y-30);
+ctx.lineTo(x,y-85);
+ctx.lineTo(x-100,y-30);
+ctx.closePath();
+ctx.fill();
+ctx.strokeStyle="#f2c56d";
+ctx.lineWidth=8;
+ctx.beginPath();
+ctx.moveTo(x-125,y-45);
+ctx.lineTo(x,y-115);
+ctx.lineTo(x+125,y-45);
+ctx.stroke();
+ctx.fillStyle="#382c36";
+ctx.fillRect(x-38,y-5,76,22);
+ctx.fillStyle="#ffe28a";
+ctx.font="bold 12px Arial";
+ctx.textAlign="center";
+ctx.fillText("DOJO",x,y+11);
+}
+function dibujarPlataforma(x,y,ancho,alto){
+ctx.fillStyle="#665a51";
+ctx.fillRect(x-ancho/2,y,ancho,alto);
+ctx.fillStyle="#968477";
+ctx.fillRect(x-ancho/2,y,ancho,9);
+ctx.fillStyle="#d9bd83";
+ctx.fillRect(x-ancho/2+8,y+9,ancho-16,alto-12);
+ctx.strokeStyle="#80684d";
+ctx.lineWidth=3;
+ctx.strokeRect(x-ancho/2+8,y+9,ancho-16,alto-12);
+ctx.beginPath();
+ctx.moveTo(x,y+10);
+ctx.lineTo(x,y+alto-4);
+ctx.stroke();
+}
+function dibujarRoca(x,y,tamano){
+ctx.fillStyle="#465766";
+ctx.beginPath();
+ctx.moveTo(x-tamano,y+tamano*.4);
+ctx.lineTo(x-tamano*.5,y-tamano*.65);
+ctx.lineTo(x+tamano*.25,y-tamano);
+ctx.lineTo(x+tamano,y+tamano*.4);
+ctx.closePath();
+ctx.fill();
+ctx.fillStyle="#73818b";
+ctx.beginPath();
+ctx.moveTo(x-tamano*.5,y-tamano*.65);
+ctx.lineTo(x+tamano*.25,y-tamano);
+ctx.lineTo(x+tamano*.15,y-tamano*.2);
+ctx.closePath();
+ctx.fill();
+}
+function dibujarArbol(x,y){
+ctx.fillStyle="#694a32";
+ctx.fillRect(x-8,y,16,30);
+ctx.fillStyle="#235d42";
+ctx.beginPath();
+ctx.arc(x,y-8,25,0,Math.PI*2);
+ctx.fill();
+ctx.fillStyle="#398b55";
+ctx.beginPath();
+ctx.arc(x-9,y-17,14,0,Math.PI*2);
+ctx.fill();
+}
+function dibujarTerreno(){
+const fondo=ctx.createLinearGradient(0,0,WORLD_W,WORLD_H);
+fondo.addColorStop(0,"#789c55");
+fondo.addColorStop(.5,"#638b4b");
+fondo.addColorStop(1,"#456f43");
+ctx.fillStyle=fondo;
+ctx.fillRect(0,0,WORLD_W,WORLD_H);
+for(let i=0;i<500;i++){
+const x=(i*137)%WORLD_W;
+const y=(i*251)%WORLD_H;
+ctx.fillStyle=i%2===0?"#82a95b":"#527d45";
+ctx.fillRect(x,y,35,25);
+}
+dibujarMontana(250,480,550,430,"#465b70","#9baab0");
+dibujarMontana(700,430,650,500,"#52677a","#c0c8c3");
+dibujarMontana(1220,460,700,480,"#40576b","#a9b8bd");
+dibujarMontana(1780,450,650,470,"#52677a","#c2c9c1");
+dibujarMontana(2200,470,500,390,"#40566b","#a5b5b9");
+ctx.fillStyle="#d9edf0";
+for(let i=0;i<12;i++){
+const x=(i*213+80)%WORLD_W;
+const y=100+(i%3)*75;
+ctx.fillRect(x,y,75,18);
+ctx.fillRect(x+18,y-12,38,18);
+ctx.fillRect(x+55,y+5,35,13);
+}
+dibujarCascada(90,420,75,430);
+dibujarCascada(2220,410,80,470);
+ctx.fillStyle="#369dc0";
+ctx.beginPath();
+ctx.moveTo(0,870);
+ctx.bezierCurveTo(350,800,400,1080,700,1030);
+ctx.bezierCurveTo(1000,980,1200,1120,1500,1050);
+ctx.bezierCurveTo(1850,970,2050,1110,2400,980);
+ctx.lineTo(2400,1130);
+ctx.bezierCurveTo(2050,1250,1850,1110,1500,1190);
+ctx.bezierCurveTo(1200,1260,1000,1120,700,1170);
+ctx.bezierCurveTo(400,1220,350,940,0,1020);
+ctx.closePath();
+ctx.fill();
+ctx.strokeStyle="#a6edee";
+ctx.lineWidth=8;
+ctx.stroke();
+ctx.fillStyle="#a68c69";
+ctx.fillRect(420,970,210,45);
+ctx.fillRect(1690,1060,220,45);
+dibujarPlataforma(1200,850,430,145);
+dibujarPlataforma(680,650,210,80);
+dibujarPlataforma(1740,690,210,80);
+dibujarPlataforma(700,1300,240,85);
+dibujarPlataforma(1700,1320,240,85);
+dibujarDojo(1200,440);
+ctx.strokeStyle="#bba477";
+ctx.lineWidth=55;
+ctx.lineCap="round";
+ctx.beginPath();
+ctx.moveTo(1200,540);
+ctx.lineTo(1200,700);
+ctx.stroke();
+ctx.strokeStyle="#ddc89b";
+ctx.lineWidth=35;
+ctx.stroke();
+for(let i=0;i<32;i++){
+const x=(i*283+120)%WORLD_W;
+const y=(i*197+700)%WORLD_H;
+if(
+(x>950 && x<1450 && y>700 && y<1050) ||
+(x>100 && x<300) ||
+(x>2100 && x<2300)
+) continue;
+dibujarRoca(x,y,random(12,25));
+}
+for(let i=0;i<55;i++){
+const x=(i*317+150)%WORLD_W;
+const y=(i*197+100)%WORLD_H;
+if(
+(x>900 && x<1500 && y>350 && y<1100) ||
+(x>350 && x<750 && y>600 && y<1100) ||
+(x>1600 && x<2000 && y>600 && y<1150)
+) continue;
+dibujarArbol(x,y);
+}
+ctx.strokeStyle="#e4d59b";
+ctx.lineWidth=14;
+ctx.strokeRect(0,0,WORLD_W,WORLD_H);
+const esquinas=[
+[55,55],[WORLD_W-55,55],
+[55,WORLD_H-55],[WORLD_W-55,WORLD_H-55]
+];
+for(const [x,y] of esquinas){
+ctx.fillStyle="#f2d078";
+ctx.fillRect(x-14,y-14,28,28);
+ctx.strokeStyle="#754c37";
+ctx.lineWidth=4;
+ctx.strokeRect(x-14,y-14,28,28);
+}
+}
+const gokuImage = new Image();
+gokuImage.src="assets/characters/goku-common.png";
+function dibujarPersonaje(f){
+const x=f.x;
+const y=f.y;
+ctx.fillStyle="#15251b88";
+ctx.beginPath();
+ctx.ellipse(x,y+19,23,9,0,0,Math.PI*2);
+ctx.fill();
+if(f.hitFlash>0){
+ctx.fillStyle="#ffffff";
+ctx.beginPath();
+ctx.arc(x,y,31,0,Math.PI*2);
+ctx.fill();
+}
+if(f.id===0 && gokuImage.complete && gokuImage.naturalWidth){
+ctx.imageSmoothingEnabled=false;
+ctx.drawImage(gokuImage,x-27,y-58,54,65);
+}else{
+ctx.fillStyle=f.color;
+ctx.fillRect(x-13,y-15,26,31);
+ctx.fillStyle="#f0c29b";
+ctx.fillRect(x-9,y-32,18,17);
+ctx.fillStyle="#25213a";
+ctx.fillRect(x-11,y-36,22,7);
+ctx.fillStyle="#202c55";
+ctx.fillRect(x-12,y+15,10,17);
+ctx.fillRect(x+2,y+15,10,17);
+}
+if(f.attackAnimation>0){
+const attackX=x+Math.cos(f.direction)*38;
+const attackY=y+Math.sin(f.direction)*38;
+ctx.strokeStyle="#fff16a";
+ctx.lineWidth=5;
+ctx.beginPath();
+ctx.arc(
+attackX,
+attackY,
+13,
+0,
+Math.PI*1.5
+);
+ctx.stroke();
+}
+ctx.fillStyle="#ffffff";
+ctx.font="bold 12px Arial";
+ctx.textAlign="center";
+ctx.fillText(f.name,x,y-48);
+ctx.fillStyle="#351c29";
+ctx.fillRect(x-22,y-43,44,6);
+ctx.fillStyle=f.hp>35?"#42ed75":"#ff4242";
+ctx.fillRect(
+x-22,
+y-43,
+44*(f.hp/f.maxHp),
+6
+);
+}
+function calcularEncuadre(alive,width,height){
+if(!alive.length){
+return {x:WORLD_W/2,y:WORLD_H/2,zoom:0.4};
+}
+let minX=Math.min(...alive.map(f=>f.x));
+let maxX=Math.max(...alive.map(f=>f.x));
+let minY=Math.min(...alive.map(f=>f.y));
+let maxY=Math.max(...alive.map(f=>f.y));
+const centerX=(minX+maxX)/2;
+const centerY=(minY+maxY)/2;
+const paddingX=260;
+const paddingY=260;
+const spanX=Math.max(360,maxX-minX+paddingX);
+const spanY=Math.max(360,maxY-minY+paddingY);
+const fitX=(width-36)/spanX;
+const fitY=(height-36)/spanY;
+const zoom=clamp(Math.min(fitX,fitY),0.30,1.18);
+return {x:centerX,y:centerY,zoom};
+}
+function dibujarArena(){
+const rect=canvas.getBoundingClientRect();
+const width=rect.width;
+const height=rect.height;
+if(!width || !height) return;
+const alive=fighters.filter(f=>f.alive);
+const target=calcularEncuadre(alive,width,height);
+const smooth=1-Math.exp(-Math.min(.05,1/60)*7);
+cameraX+=(target.x-cameraX)*smooth;
+cameraY+=(target.y-cameraY)*smooth;
+cameraZoom+=(target.zoom-cameraZoom)*smooth;
+const halfW=width/(2*cameraZoom);
+const halfH=height/(2*cameraZoom);
+cameraX=clamp(cameraX,Math.min(halfW,WORLD_W/2),Math.max(WORLD_W-halfW,WORLD_W/2));
+cameraY=clamp(cameraY,Math.min(halfH,WORLD_H/2),Math.max(WORLD_H-halfH,WORLD_H/2));
+ctx.clearRect(0,0,width,height);
+ctx.save();
+ctx.translate(width/2,height/2);
+ctx.scale(cameraZoom,cameraZoom);
+ctx.translate(-cameraX,-cameraY);
+dibujarTerreno();
+for(const fighter of fighters){
+if(fighter.alive){
+dibujarPersonaje(fighter);
+}
+}
+ctx.restore();
+}
+function actualizarHUD(){
+const alive=fighters.filter(f=>f.alive).length;
+const eliminated=fighters.length-alive;
+document.getElementById("arenaVivos").textContent=alive;
+document.getElementById("arenaEliminados").textContent=eliminated;
+document.getElementById("arenaProgreso").style.width=
+(alive/fighters.length*100)+"%";
+}
+function gameLoop(time){
+const dt=Math.min((time-lastTime)/1000 || 0,.04);
+lastTime=time;
+actualizarCombate(dt);
+dibujarArena();
+animationFrame=requestAnimationFrame(gameLoop);
+}
+function iniciarArena(){
+if(animationFrame){
+cancelAnimationFrame(animationFrame);
+}
+crearCombatientes();
+document.getElementById("arenaEstado")
+.textContent="⚔️ ¡COMBATE EN CURSO!";
+lastTime=performance.now();
+animationFrame=requestAnimationFrame(gameLoop);
+}
+iniciarArena();
+setInterval(()=>{
+if(battleFinished){
+iniciarArena();
+}
+},5000);
+window.addEventListener("beforeunload",()=>{
+if(animationFrame){
+cancelAnimationFrame(animationFrame);
+}
+});
 })();
 </script>
-
 </body>
 </html>
