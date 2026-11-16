@@ -403,13 +403,13 @@ let battleFinished = false;
 let battleStartTime = 0;
 const names = [
 "GOKU",
-"GUERRERO 2",
-"GUERRERO 3",
-"GUERRERO 4",
-"GUERRERO 5",
-"GUERRERO 6",
-"GUERRERO 7",
-"GUERRERO 8"
+"VEGETA",
+"GOHAN",
+"PICCOLO",
+"PIKACHU",
+"CHARIZARD",
+"LUCARIO",
+"GENGAR"
 ];
 const colors = [
 "#f28b20",
@@ -547,7 +547,7 @@ if(fighter.attackCooldown<=0){
 rival.hp -= fighter.damage;
 rival.hitFlash = .18;
 fighter.attackAnimation = .56;
-fighter.attackType = fighter.attackType ? 0 : 1;
+fighter.attackType = (fighter.attackType + 1) % 3;
 // El impacto se registra en la posición real del rival.
 rival.hitFlash = .24;
 rival.hitEffect = .22;
@@ -816,6 +816,12 @@ gokuImage.src="assets/characters/goku-common-sprite.png?v=3";
 gokuImage.onerror=()=>console.error(
  "No se pudo cargar el sprite: assets/characters/goku-common-sprite.png"
 );
+
+const vegetaImage = new Image();
+vegetaImage.src="assets/characters/vegeta-common-sprite.png?v=1";
+vegetaImage.onerror=()=>console.error(
+ "No se pudo cargar el sprite: assets/characters/vegeta-common-sprite.png"
+);
 function dibujarPersonaje(f){
 const x=f.x;
 const y=f.y;
@@ -829,24 +835,26 @@ ctx.beginPath();
 ctx.ellipse(x,y+19,23,9,0,0,Math.PI*2);
 ctx.fill();
 
-if(isGoku && gokuImage.complete && gokuImage.naturalWidth){
-  // Sprite sheet: 8 columnas x 7 filas.
-  // Filas: quieto, caminar, correr, puñetazo,
-  // patada, energía/Kamehameha y recibir daño.
-  const rowEdges=[0,133,259,383,500,620,739,887];
-  const frameW=gokuImage.naturalWidth/8;
+const isVegeta=f.id===1;
+const spriteImage=isGoku?gokuImage:(isVegeta?vegetaImage:null);
+
+if(spriteImage && spriteImage.complete && spriteImage.naturalWidth){
+  // Goku conserva sus cortes originales; Vegeta usa una cuadrícula uniforme.
+  const frameW=spriteImage.naturalWidth/8;
+  const frameH=spriteImage.naturalHeight/7;
+  const gokuRowEdges=[0,133,259,383,500,620,739,887];
+  const rowEdges=isVegeta
+    ? Array.from({length:8},(_,i)=>i*frameH)
+    : gokuRowEdges;
   const rowHeights=rowEdges.slice(1).map((v,i)=>v-rowEdges[i]);
 
   let row=0;
   let frame=0;
-  const frameCount=8;
-  const sourceYForRow=rowEdges;
-
   if(f.hitFlash>0){
     row=6;
     frame=Math.min(7,Math.floor((.24-f.hitFlash)/.24*8));
   }else if(attacking){
-    row=f.attackType?4:3;
+    row=f.attackType===2?5:(f.attackType===1?4:3);
     const progress=Math.max(0,Math.min(1,1-(f.attackAnimation/.56)));
     frame=Math.min(7,Math.floor(progress*8));
   }else if(moving){
@@ -857,26 +865,24 @@ if(isGoku && gokuImage.complete && gokuImage.naturalWidth){
     frame=Math.floor(t*5)%8;
   }
 
-  const sourceY=sourceYForRow[row];
+  const sourceY=rowEdges[row];
   const sourceH=rowHeights[row];
   const sourceX=frame*frameW;
-
-  // El sprite base mira a la derecha: invertirlo si el rival está a la izquierda.
   const facing=Math.cos(f.direction||0)>=0?1:-1;
+
   ctx.save();
   ctx.translate(x,y);
   ctx.scale(facing,1);
   if(attacking){
     const progress=Math.max(0,Math.min(1,1-(f.attackAnimation/.56)));
-    const lunge=Math.sin(progress*Math.PI)*10;
-    ctx.translate(lunge,0);
+    ctx.translate(Math.sin(progress*Math.PI)*10,0);
   }
 
   if(moving || attacking || (isGoku && Math.sin(t*3)>0.75)){
     ctx.globalAlpha=.45+Math.sin(t*15)*.18;
-    ctx.strokeStyle=attacking?"#fff16a":"#55dfff";
+    ctx.strokeStyle=attacking?"#fff16a":(isVegeta?"#4d9dff":"#55dfff");
     ctx.lineWidth=3;
-    ctx.shadowColor=attacking?"#fff16a":"#39cfff";
+    ctx.shadowColor=attacking?"#fff16a":(isVegeta?"#267bff":"#39cfff");
     ctx.shadowBlur=attacking?18:10;
     ctx.beginPath();
     ctx.ellipse(0,-42,39+Math.sin(t*12)*3,61+Math.cos(t*10)*3,0,0,Math.PI*2);
@@ -886,13 +892,10 @@ if(isGoku && gokuImage.complete && gokuImage.naturalWidth){
   }
 
   ctx.imageSmoothingEnabled=false;
-  // Mantiene la proporción del personaje dentro de la arena.
-  const destW=90;
-  const destH=128;
   ctx.drawImage(
-    gokuImage,
+    spriteImage,
     sourceX,sourceY,frameW,sourceH,
-    -destW/2,-108,destW,destH
+    -45,-108,90,128
   );
   ctx.restore();
 }else{
