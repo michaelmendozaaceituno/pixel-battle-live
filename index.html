@@ -456,9 +456,9 @@ alive:true,
 attacking:false,
 attackAnimation:0,
 hitFlash:0,
-animTime:random(0,Math.PI*2),
-walkPhase:random(0,Math.PI*2),
-moving:false
+animTime:random(0,6),
+walkPhase:random(0,6),
+attackType:0
 });
 }
 battleFinished = false;
@@ -532,9 +532,7 @@ const dy = rival.y-fighter.y;
 const distance = Math.hypot(dx,dy);
 fighter.direction = Math.atan2(dy,dx);
 fighter.moving = distance > fighter.attackRange;
-if(fighter.moving){
- fighter.walkPhase += dt*11;
-}
+if(fighter.moving) fighter.walkPhase += dt*12;
 if(distance > fighter.attackRange){
 const moveX = dx/(distance || 1);
 const moveY = dy/(distance || 1);
@@ -546,7 +544,8 @@ fighter.attacking = true;
 if(fighter.attackCooldown<=0){
 rival.hp -= fighter.damage;
 rival.hitFlash = .18;
-fighter.attackAnimation = .25;
+fighter.attackAnimation = .48;
+fighter.attackType = fighter.attackType ? 0 : 1;
 fighter.attackCooldown = random(.7,1.15);
 if(rival.hp<=0){
 rival.hp=0;
@@ -802,15 +801,16 @@ ctx.strokeRect(x-14,y-14,28,28);
 }
 }
 const gokuImage = new Image();
-gokuImage.src="assets/characters/goku-common-sprite.png?v=2";
+gokuImage.src="assets/characters/goku-common-sprite.png?v=3";
+gokuImage.onerror=()=>console.error(
+ "No se pudo cargar el sprite: assets/characters/goku-common-sprite.png"
+);
 function dibujarPersonaje(f){
 const x=f.x;
 const y=f.y;
 const isGoku=f.id===0;
+const t=f.animTime||0;
 const moving=!!f.moving;
-const t=f.animTime || 0;
-const bob=Math.sin(t*(moving?13:3.2))*(moving?3.2:1.8);
-const lean=moving?Math.sin(f.walkPhase || t*11)*0.055:Math.sin(t*2)*0.018;
 const attacking=f.attackAnimation>0;
 
 ctx.fillStyle="#15251b88";
@@ -819,69 +819,80 @@ ctx.ellipse(x,y+19,23,9,0,0,Math.PI*2);
 ctx.fill();
 
 if(isGoku && gokuImage.complete && gokuImage.naturalWidth){
-  const imageRatio=gokuImage.naturalWidth/gokuImage.naturalHeight;
-  let sx=0, sy=0, sw=gokuImage.naturalWidth, sh=gokuImage.naturalHeight;
+  // Sprite sheet: 8 columnas x 7 filas.
+  // Filas: quieto, caminar, correr, puñetazo,
+  // patada, energía/Kamehameha y recibir daño.
+  const rowEdges=[0,133,259,383,500,620,739,887];
+  const frameW=gokuImage.naturalWidth/8;
+  const rowHeights=rowEdges.slice(1).map((v,i)=>v-rowEdges[i]);
 
-  // If the supplied PNG is a 4-frame strip, select a frame.
-  // A normal single-character PNG remains fully visible.
-  if(imageRatio>=3.2){
-    const frames=4;
-    sw=gokuImage.naturalWidth/frames;
-    sx=(Math.floor(t*(moving?10:3))%frames)*sw;
-  }else if(imageRatio<=0.34){
-    const frames=4;
-    sh=gokuImage.naturalHeight/frames;
-    sy=(Math.floor(t*(moving?10:3))%frames)*sh;
+  let row=0;
+  let fps=5;
+
+  if(f.hitFlash>0){
+    row=6; fps=12;
+  }else if(attacking){
+    row=f.attackType?4:3;
+    fps=16;
+  }else if(moving){
+    row=2; fps=13;
+  }else{
+    row=0; fps=5;
   }
 
+  const frameCount=8;
+  const frame=Math.floor(t*fps)%frameCount;
+  const sourceY=rowEdges[row];
+  const sourceH=rowHeights[row];
+  const sourceX=frame*frameW;
+
+  // El sprite sheet se dibuja desde un solo cuadro,
+  // no como una imagen completa.
   ctx.save();
-  ctx.translate(x,y+bob);
+  ctx.translate(x,y);
   if(attacking){
-    const lunge=Math.sin((f.attackAnimation/.25)*Math.PI)*7;
+    const progress=1-(f.attackAnimation/.48);
+    const lunge=Math.sin(progress*Math.PI)*7;
     ctx.translate(Math.cos(f.direction)*lunge,Math.sin(f.direction)*lunge);
   }
-  ctx.rotate(lean + (attacking ? -Math.cos(f.direction)*0.08 : 0));
-  if(isGoku && (moving || attacking)){
-    const auraPulse=0.45+Math.sin(t*16)*0.18;
-    ctx.globalAlpha=auraPulse;
-    ctx.strokeStyle=attacking?"#fff06a":"#55dfff";
+
+  if(moving || attacking || (isGoku && Math.sin(t*3)>0.75)){
+    ctx.globalAlpha=.45+Math.sin(t*15)*.18;
+    ctx.strokeStyle=attacking?"#fff16a":"#55dfff";
     ctx.lineWidth=3;
-    ctx.shadowColor=attacking?"#fff06a":"#39cfff";
-    ctx.shadowBlur=attacking?20:12;
+    ctx.shadowColor=attacking?"#fff16a":"#39cfff";
+    ctx.shadowBlur=attacking?18:10;
     ctx.beginPath();
-    ctx.ellipse(0,-42,42+Math.sin(t*12)*3,65+Math.cos(t*10)*4,0,0,Math.PI*2);
+    ctx.ellipse(0,-42,39+Math.sin(t*12)*3,61+Math.cos(t*10)*3,0,0,Math.PI*2);
     ctx.stroke();
     ctx.globalAlpha=1;
     ctx.shadowBlur=0;
   }
+
   ctx.imageSmoothingEnabled=false;
-  const drawW=90*(attacking?1.04:1);
-  const drawH=128*(attacking?1.04:1);
-  ctx.drawImage(gokuImage,sx,sy,sw,sh,-drawW/2,-108-drawH*0.02,drawW,drawH);
+  // Mantiene la proporción del personaje dentro de la arena.
+  const destW=90;
+  const destH=128;
+  ctx.drawImage(
+    gokuImage,
+    sourceX,sourceY,frameW,sourceH,
+    -destW/2,-108,destW,destH
+  );
   ctx.restore();
 }else{
-  ctx.save();
-  ctx.translate(x,y+bob);
-  ctx.rotate(lean);
+  // Personajes provisionales mientras se integran sus sprites.
   ctx.fillStyle=f.color;
-  ctx.fillRect(-13,-15,26,31);
+  ctx.fillRect(x-13,y-15,26,31);
   ctx.fillStyle="#f0c29b";
-  ctx.fillRect(-9,-32,18,17);
+  ctx.fillRect(x-9,y-32,18,17);
   ctx.fillStyle="#25213a";
-  ctx.fillRect(-11,-36,22,7);
+  ctx.fillRect(x-11,y-36,22,7);
   ctx.fillStyle="#202c55";
-  const leg=Math.sin(f.walkPhase || t*11)*4;
-  ctx.fillRect(-12,15+leg,10,17);
-  ctx.fillRect(2,15-leg,10,17);
-  ctx.restore();
+  const leg=Math.sin(f.walkPhase||t*11)*4;
+  ctx.fillRect(x-12,y+15+leg,10,17);
+  ctx.fillRect(x+2,y+15-leg,10,17);
 }
 
-if(f.hitFlash>0){
-  ctx.fillStyle="#ffffff";
-  ctx.beginPath();
-  ctx.arc(x,y-35,31,0,Math.PI*2);
-  ctx.fill();
-}
 if(attacking){
   const attackX=x+Math.cos(f.direction)*38;
   const attackY=y+Math.sin(f.direction)*38;
@@ -894,11 +905,11 @@ if(attacking){
 ctx.fillStyle="#ffffff";
 ctx.font="bold 12px Arial";
 ctx.textAlign="center";
-ctx.fillText(f.name,x,y-126+bob);
+ctx.fillText(f.name,x,y-126);
 ctx.fillStyle="#351c29";
-ctx.fillRect(x-22,y-119+bob,44,6);
+ctx.fillRect(x-22,y-119,44,6);
 ctx.fillStyle=f.hp>35?"#42ed75":"#ff4242";
-ctx.fillRect(x-22,y-119+bob,44*(f.hp/f.maxHp),6);
+ctx.fillRect(x-22,y-119,44*(f.hp/f.maxHp),6);
 }
 function calcularEncuadre(alive,width,height){
 const centroX=WORLD_W/2;
