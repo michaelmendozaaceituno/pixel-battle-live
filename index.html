@@ -514,6 +514,70 @@ function moverConColisiones(fighter,nextX,nextY){
   fighter.x=clamp(x,radius,WORLD_W-radius);
   fighter.y=clamp(y,radius,WORLD_H-radius);
 }
+// Navegación sencilla: calcula un camino alrededor de edificios y gradas.
+function obtenerSiguientePuntoRuta(fighter,target){
+  const margen=38;
+  const rects=MAP_OBSTACLES.map(o=>({
+    left:o.x-margen,right:o.x+o.w+margen,
+    top:o.y-margen,bottom:o.y+o.h+margen
+  }));
+  const dentro=(p,r)=>p.x>r.left && p.x<r.right && p.y>r.top && p.y<r.bottom;
+
+  function cruza(a,b,r){
+    let t0=0,t1=1;
+    const dx=b.x-a.x,dy=b.y-a.y;
+    const tests=[[-dx,a.x-r.left],[dx,r.right-a.x],[-dy,a.y-r.top],[dy,r.bottom-a.y]];
+    for(const [p,q] of tests){
+      if(Math.abs(p)<1e-9){if(q<0)return false;}
+      else{
+        const t=q/p;
+        if(p<0){if(t>t1)return false;if(t>t0)t0=t;}
+        else{if(t<t0)return false;if(t<t1)t1=t;}
+      }
+    }
+    return t0<t1 && t1>0 && t0<1;
+  }
+
+  const start={x:fighter.x,y:fighter.y};
+  const goal={x:target.x,y:target.y};
+  const bloquea=(a,b)=>rects.some(r=>cruza(a,b,r));
+  if(!bloquea(start,goal)) return goal;
+
+  const nodes=[start,goal];
+  for(const r of rects){
+    const pad=5;
+    const corners=[
+      {x:r.left-pad,y:r.top-pad},{x:r.right+pad,y:r.top-pad},
+      {x:r.left-pad,y:r.bottom+pad},{x:r.right+pad,y:r.bottom+pad}
+    ];
+    for(const p of corners){
+      p.x=clamp(p.x,35,WORLD_W-35);
+      p.y=clamp(p.y,35,WORLD_H-35);
+      if(!rects.some(other=>dentro(p,other))) nodes.push(p);
+    }
+  }
+
+  const n=nodes.length,dist=Array(n).fill(Infinity);
+  const prev=Array(n).fill(-1),used=Array(n).fill(false);
+  dist[0]=0;
+  for(let step=0;step<n;step++){
+    let u=-1;
+    for(let i=0;i<n;i++) if(!used[i] && (u<0 || dist[i]<dist[u])) u=i;
+    if(u<0 || !Number.isFinite(dist[u])) break;
+    if(u===1) break;
+    used[u]=true;
+    for(let v=0;v<n;v++){
+      if(v===u || used[v] || bloquea(nodes[u],nodes[v])) continue;
+      const cost=Math.hypot(nodes[v].x-nodes[u].x,nodes[v].y-nodes[u].y);
+      if(dist[u]+cost<dist[v]){dist[v]=dist[u]+cost;prev[v]=u;}
+    }
+  }
+  if(prev[1]===-1) return goal;
+  let first=1;
+  while(prev[first]!==0 && prev[first]!==-1) first=prev[first];
+  return nodes[first];
+}
+
 function actualizarCombate(dt){
 if(battleFinished) return;
 for(const fighter of fighters){
@@ -536,10 +600,15 @@ const contactRange = 76;
 fighter.moving = distance > contactRange;
 if(fighter.moving) fighter.walkPhase += dt*12;
 if(distance > contactRange){
-const moveX = dx/(distance || 1);
-const moveY = dy/(distance || 1);
-const nextX = fighter.x + moveX*fighter.speed*dt;
-const nextY = fighter.y + moveY*fighter.speed*dt;
+const waypoint=obtenerSiguientePuntoRuta(fighter,rival);
+const routeX=waypoint.x-fighter.x;
+const routeY=waypoint.y-fighter.y;
+const routeDistance=Math.hypot(routeX,routeY);
+const moveX=routeX/(routeDistance || 1);
+const moveY=routeY/(routeDistance || 1);
+fighter.direction=Math.atan2(routeY,routeX);
+const nextX=fighter.x+moveX*fighter.speed*dt;
+const nextY=fighter.y+moveY*fighter.speed*dt;
 moverConColisiones(fighter,nextX,nextY);
 }else{
 fighter.attacking = true;
