@@ -1,419 +1,26 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PIXEL BATTLE LIVE</title>
-<style>
-*{box-sizing:border-box}
-body{
-margin:0;
-font-family:Arial,sans-serif;
-color:white;
-background:linear-gradient(145deg,#100b30,#17134b,#071d35);
-min-height:100vh;
-}
-.character-card{
-position:relative;
-width:100%;
-max-width:340px;
-margin:20px auto;
-padding:18px;
-border-radius:20px;
-background:linear-gradient(145deg,#172c55,#10152f);
-border:2px solid #d9a832;
-box-shadow:0 0 18px rgba(255,190,45,.25);
-text-align:center;
-overflow:hidden;
-}
-.character-card h3{
-color:#ffd76a;
-font-size:25px;
-margin:12px 0 5px;
-font-weight:900;
-}
-.character-sprite-container{
-width:100%;
-height:260px;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-.character-sprite{
-display:block;
-width:160px;
-height:220px;
-max-width:100%;
-object-fit:contain;
-image-rendering:pixelated;
-overflow:visible;
-flex-shrink:0;
-}
-.character-rarity{
-display:inline-block;
-padding:6px 18px;
-margin-top:8px;
-border-radius:20px;
-background:linear-gradient(90deg,#168d50,#27c879);
-color:white;
-font-size:12px;
-font-weight:bold;
-letter-spacing:1px;
-}
-.character-franchise{
-color:#b9c9ed;
-font-size:13px;
-margin-top:5px;
-}
-.pokebola-animada{
-animation:captura 2s ease-in-out infinite;
-transform-origin:center;
-filter:drop-shadow(0 0 12px #ff304b);
-}
-@keyframes captura{
-0%,100%{transform:rotate(0deg) scale(1)}
-15%{transform:rotate(-20deg) scale(1.08)}
-30%{transform:rotate(20deg) scale(1.08)}
-45%{transform:rotate(-18deg)}
-60%{transform:rotate(18deg)}
-75%{transform:rotate(0deg) scale(1.12)}
-}
-header{
-padding:12px 22px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:12px;
-flex-wrap:wrap;
-border-bottom:1px solid #ffffff20;
-}
-.logo-link{
-display:flex;
-align-items:center;
-flex:0 1 auto;
-text-decoration:none;
-line-height:0;
-}
-.logo-image{
-display:block;
-width:190px;
-max-width:42vw;
-height:auto;
-object-fit:contain;
-filter:drop-shadow(0 0 10px rgba(54,223,255,.28));
-}
-nav{display:flex;gap:12px;flex-wrap:wrap}
-nav a{color:white;text-decoration:none;font-size:13px}
-.hero{text-align:center;padding:65px 20px 40px}
-.hero h1{
-font-size:clamp(38px,9vw,65px);
-margin:10px 0;
-text-shadow:0 0 25px #36dfff;
-}
-.hero h1 span{color:#ff58ce}
-.hero p{color:#c9c6e9;line-height:1.7}
-.button{
-display:inline-block;
-padding:14px 25px;
-border-radius:12px;
-background:linear-gradient(90deg,#19d8ed,#9b55ff);
-color:white;
-font-weight:bold;
-text-decoration:none;
-margin:12px 5px;
-border:0;
-}
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-gap:15px;
-padding:20px;
-max-width:900px;
-margin:auto;
-}
-.card{
-background:#ffffff10;
-border:1px solid #ffffff25;
-border-radius:18px;
-padding:25px 12px;
-text-align:center;
-}
-.card .emoji{font-size:38px}
-.card h3{color:#54eaff}
-button{
-cursor:pointer;
-padding:12px 18px;
-margin:5px;
-border:0;
-border-radius:12px;
-color:white;
-font-weight:bold;
-background:linear-gradient(90deg,#19aeca,#7950d9);
-}
-button:disabled{opacity:.55;cursor:not-allowed}
-input{
-border:1px solid #ffffff40;
-border-radius:9px;
-background:#fff;
-color:#17172b;
-font-size:15px;
-}
-.panel{
-max-width:450px;
-margin:30px auto;
-padding:22px;
-background:linear-gradient(145deg,#17172b,#292052);
-border:2px solid #36dfff;
-border-radius:20px;
-color:white;
-text-align:center;
-width:calc(100% - 28px);
-}
-footer{text-align:center;padding:35px;color:#aaa;font-size:12px}
-.arena-panel{
-width:min(1100px,calc(100% - 24px));
-margin:28px auto;
-padding:16px;
-background:linear-gradient(145deg,#101d3c,#1c2451);
-border:2px solid #36dfff;
-border-radius:20px;
-box-shadow:0 0 25px #36dfff22;
-}
-.arena-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-gap:10px;
-}
-.arena-top h2{color:#65eaff}
-.arena-help{
-color:#c8d8f5;
-font-size:13px;
-line-height:1.6;
-}
-.arena-viewport{
-position:relative;
-width:100%;
-height:min(65vh,560px);
-min-height:320px;
-overflow:hidden;
-border:2px solid #6deaff;
-border-radius:14px;
-background:#315d3c;
-}
-#arenaCanvas{
-display:block;
-width:100%;
-height:100%;
-}
-.arena-hud{
-display:flex;
-justify-content:space-between;
-flex-wrap:wrap;
-gap:10px;
-margin:12px 0;
-color:#ffe27a;
-font-weight:bold;
-}
-.arena-bar{
-height:10px;
-background:#ffffff25;
-border-radius:20px;
-overflow:hidden;
-}
-.arena-bar-fill{
-height:100%;
-background:linear-gradient(90deg,#35e879,#ffe34d);
-transition:width .2s;
-}
-.arena-legend{
-display:flex;
-justify-content:center;
-gap:15px;
-flex-wrap:wrap;
-color:#d5e5ff;
-font-size:12px;
-margin-top:12px;
-}
-@media(max-width:480px){
-header{justify-content:center;padding:10px 14px}
-.logo-image{width:155px;max-width:48vw}
-nav{justify-content:center}
-.hero{padding-top:45px}
-.arena-panel{padding:11px}
-.arena-viewport{height:55vh;min-height:300px}
-}
-</style>
-</head>
-<body>
-<header>
-<a class="logo-link" href="#inicio" aria-label="PIXEL BATTLE LIVE - Inicio">
-<img class="logo-image" src="assets/pixel-battle-live-logo.png" alt="PIXEL BATTLE LIVE - Dragon Ball y Pokémon">
-</a>
-<nav>
-<a href="#inicio">Inicio</a>
-<a href="#juego">Jugar</a>
-<a href="#arena">Arena</a>
-<a href="#login" onclick="mostrarLogin();return false;">Entrar</a>
-<a href="#registro" onclick="mostrarRegistro();return false;">Registrar</a>
-</nav>
-</header>
-<main id="inicio">
-<section class="hero">
-<div style="font-size:45px">🎮</div>
-<svg class="pokebola-animada" viewBox="0 0 100 100" width="55" height="55" aria-label="Pokébola">
-<circle cx="50" cy="50" r="44" fill="white" stroke="#111" stroke-width="6"/>
-<path d="M6 50 A44 44 0 0 1 94 50 Z" fill="#ef3038"/>
-<path d="M6 50 H94" stroke="#111" stroke-width="7"/>
-<circle cx="50" cy="50" r="14" fill="white" stroke="#111" stroke-width="6"/>
-<circle cx="50" cy="50" r="6" fill="#ddd"/>
-</svg>
-<h1>PIXEL BATTLE <span>LIVE</span></h1>
-<p>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PIXEL BATTLE LIVE</title><style>*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:white;background:linear-gradient(145deg,#100b30,#17134b,#071d35);min-height:100vh;}.character-card{position:relative;width:100%;max-width:340px;margin:20px auto;padding:18px;border-radius:20px;background:linear-gradient(145deg,#172c55,#10152f);border:2px solid #d9a832;box-shadow:0 0 18px rgba(255,190,45,.25);text-align:center;overflow:hidden;}.character-card h3{color:#ffd76a;font-size:25px;margin:12px 0 5px;font-weight:900;}.character-sprite-container{width:100%;height:260px;display:flex;justify-content:center;align-items:center;}.character-sprite{display:block;width:160px;height:220px;max-width:100%;object-fit:contain;image-rendering:pixelated;overflow:visible;flex-shrink:0;}.character-rarity{display:inline-block;padding:6px 18px;margin-top:8px;border-radius:20px;background:linear-gradient(90deg,#168d50,#27c879);color:white;font-size:12px;font-weight:bold;letter-spacing:1px;}.character-franchise{color:#b9c9ed;font-size:13px;margin-top:5px;}.pokebola-animada{animation:captura 2s ease-in-out infinite;transform-origin:center;filter:drop-shadow(0 0 12px #ff304b);}@keyframes captura{0%,100%{transform:rotate(0deg) scale(1)}15%{transform:rotate(-20deg) scale(1.08)}30%{transform:rotate(20deg) scale(1.08)}45%{transform:rotate(-18deg)}60%{transform:rotate(18deg)}75%{transform:rotate(0deg) scale(1.12)}}header{padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid #ffffff20;}.logo-link{display:flex;align-items:center;flex:0 1 auto;text-decoration:none;line-height:0;}.logo-image{display:block;width:190px;max-width:42vw;height:auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(54,223,255,.28));}nav{display:flex;gap:12px;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-size:13px}.hero{text-align:center;padding:65px 20px 40px}.hero h1{font-size:clamp(38px,9vw,65px);margin:10px 0;text-shadow:0 0 25px #36dfff;}.hero h1 span{color:#ff58ce}.hero p{color:#c9c6e9;line-height:1.7}.button{display:inline-block;padding:14px 25px;border-radius:12px;background:linear-gradient(90deg,#19d8ed,#9b55ff);color:white;font-weight:bold;text-decoration:none;margin:12px 5px;border:0;}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:15px;padding:20px;max-width:900px;margin:auto;}.card{background:#ffffff10;border:1px solid #ffffff25;border-radius:18px;padding:25px 12px;text-align:center;}.card .emoji{font-size:38px}.card h3{color:#54eaff}button{cursor:pointer;padding:12px 18px;margin:5px;border:0;border-radius:12px;color:white;font-weight:bold;background:linear-gradient(90deg,#19aeca,#7950d9);}button:disabled{opacity:.55;cursor:not-allowed}input{border:1px solid #ffffff40;border-radius:9px;background:#fff;color:#17172b;font-size:15px;}.panel{max-width:450px;margin:30px auto;padding:22px;background:linear-gradient(145deg,#17172b,#292052);border:2px solid #36dfff;border-radius:20px;color:white;text-align:center;width:calc(100% - 28px);}footer{text-align:center;padding:35px;color:#aaa;font-size:12px}.arena-panel{width:min(1100px,calc(100% - 24px));margin:28px auto;padding:16px;background:linear-gradient(145deg,#101d3c,#1c2451);border:2px solid #36dfff;border-radius:20px;box-shadow:0 0 25px #36dfff22;}.arena-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}.arena-top h2{color:#65eaff}.arena-help{color:#c8d8f5;font-size:13px;line-height:1.6;}.arena-viewport{position:relative;width:100%;height:min(65vh,560px);min-height:320px;overflow:hidden;border:2px solid #6deaff;border-radius:14px;background:#315d3c;}#arenaCanvas{display:block;width:100%;height:100%;}.arena-hud{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:12px 0;color:#ffe27a;font-weight:bold;}.arena-bar{height:10px;background:#ffffff25;border-radius:20px;overflow:hidden;}.arena-bar-fill{height:100%;background:linear-gradient(90deg,#35e879,#ffe34d);transition:width .2s;}.arena-legend{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#d5e5ff;font-size:12px;margin-top:12px;}@media(max-width:480px){header{justify-content:center;padding:10px 14px}.logo-image{width:155px;max-width:48vw}nav{justify-content:center}.hero{padding-top:45px}.arena-panel{padding:11px}.arena-viewport{height:55vh;min-height:300px}}</style></head><body><header><a class="logo-link" href="#inicio" aria-label="PIXEL BATTLE LIVE - Inicio"><img class="logo-image" src="assets/pixel-battle-live-logo.png" alt="PIXEL BATTLE LIVE - Dragon Ball y Pokémon"></a><nav><a href="#inicio">Inicio</a><a href="#juego">Jugar</a><a href="#arena">Arena</a><a href="#login" onclick="mostrarLogin();return false;">Entrar</a><a href="#registro" onclick="mostrarRegistro();return false;">Registrar</a></nav></header><main id="inicio"><section class="hero"><div style="font-size:45px">🎮</div><svg class="pokebola-animada" viewBox="0 0 100 100" width="55" height="55" aria-label="Pokébola"><circle cx="50" cy="50" r="44" fill="white" stroke="#111" stroke-width="6"/><path d="M6 50 A44 44 0 0 1 94 50 Z" fill="#ef3038"/><path d="M6 50 H94" stroke="#111" stroke-width="7"/><circle cx="50" cy="50" r="14" fill="white" stroke="#111" stroke-width="6"/><circle cx="50" cy="50" r="6" fill="#ddd"/></svg><h1>PIXEL BATTLE <span>LIVE</span></h1><p>
 ¡Tu aventura comienza aquí!<br>
 Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.
-</p>
-<a class="button" href="#juego">COMENZAR AVENTURA</a>
-</section>
-<section class="cards" id="juego">
-<div class="card">
-<div class="emoji">👤</div>
-<h3>JUGADORES</h3>
-<p>Crea tu perfil gamer.</p>
-</div>
-<div class="card">
-<div class="emoji">⭐</div>
-<h3>EXPERIENCIA</h3>
-<p>Consigue XP y sube niveles.</p>
-</div>
-<div class="card">
-<div class="emoji">🪙</div>
-<h3>MONEDAS</h3>
-<p>Prepara tus recompensas.</p>
-</div>
-<div class="card">
-<div class="emoji">🏆</div>
-<h3>LOGROS</h3>
-<p>Demuestra tus habilidades.</p>
-</div>
-</section>
-</main>
-<section id="arena" class="arena-panel">
-<div class="arena-top">
-<h2>⚔️ ARENA BATTLE ROYALE</h2>
-<span class="character-rarity">MODO AUTOMÁTICO</span>
-</div>
-<p class="arena-help">
+</p><a class="button" href="#juego">COMENZAR AVENTURA</a></section><section class="cards" id="juego"><div class="card"><div class="emoji">👤</div><h3>JUGADORES</h3><p>Crea tu perfil gamer.</p></div><div class="card"><div class="emoji">⭐</div><h3>EXPERIENCIA</h3><p>Consigue XP y sube niveles.</p></div><div class="card"><div class="emoji">🪙</div><h3>MONEDAS</h3><p>Prepara tus recompensas.</p></div><div class="card"><div class="emoji">🏆</div><h3>LOGROS</h3><p>Demuestra tus habilidades.</p></div></section></main><section id="arena" class="arena-panel"><div class="arena-top"><h2>⚔️ ARENA BATTLE ROYALE</h2><span class="character-rarity">MODO AUTOMÁTICO</span></div><p class="arena-help">
 Los personajes se desplazan, buscan rivales y combaten automáticamente.
 ¡El último sobreviviente será el ganador!
-</p>
-<div class="arena-viewport">
-<canvas id="arenaCanvas" aria-label="Arena automática de combate"></canvas>
-</div>
-<div class="arena-hud">
-<span id="arenaEstado">Preparando combate...</span>
-<span>👥 Vivos: <b id="arenaVivos">8</b></span>
-<span>💀 Eliminados: <b id="arenaEliminados">0</b></span>
-</div>
-<div class="arena-bar">
-<div id="arenaProgreso" class="arena-bar-fill" style="width:100%"></div>
-</div>
-<div class="arena-legend">
-<span>🟢 Personaje con vida</span>
-<span>⚡ Ataque automático</span>
-<span>🏆 Último sobreviviente</span>
-</div>
-</section>
-<section id="perfilJugador" class="panel" style="display:none">
-<h2>🎮 MI PERFIL GAMER</h2>
-<div style="font-size:55px">👾</div>
-<h3 id="perfilNombre">Jugador</h3>
-<p>🏆 Nivel: <span id="perfilNivel">1</span></p>
-<p>⭐ Experiencia: <span id="perfilXP">0</span> XP</p>
-<p>🪙 Monedas: <span id="perfilMonedas">100</span></p>
-<p>⚔️ Victorias: <span id="perfilVictorias">0</span></p>
-<p>💀 Derrotas: <span id="perfilDerrotas">0</span></p>
-<div id="panelPersonaje" style="display:none;text-align:center;margin:20px auto">
-<img
+</p><div class="arena-viewport"><canvas id="arenaCanvas" aria-label="Arena automática de combate"></canvas></div><div class="arena-hud"><span id="arenaEstado">Preparando combate...</span><span>👥 Vivos: <b id="arenaVivos">8</b></span><span>💀 Eliminados: <b id="arenaEliminados">0</b></span></div><div class="arena-bar"><div id="arenaProgreso" class="arena-bar-fill" style="width:100%"></div></div><div class="arena-legend"><span>🟢 Personaje con vida</span><span>⚡ Ataque automático</span><span>🏆 Último sobreviviente</span></div></section><section id="perfilJugador" class="panel" style="display:none"><h2>🎮 MI PERFIL GAMER</h2><div style="font-size:55px">👾</div><h3 id="perfilNombre">Jugador</h3><p>🏆 Nivel: <span id="perfilNivel">1</span></p><p>⭐ Experiencia: <span id="perfilXP">0</span> XP</p><p>🪙 Monedas: <span id="perfilMonedas">100</span></p><p>⚔️ Victorias: <span id="perfilVictorias">0</span></p><p>💀 Derrotas: <span id="perfilDerrotas">0</span></p><div id="panelPersonaje" style="display:none;text-align:center;margin:20px auto"><img
 src="assets/characters/goku-common.png"
 alt="Mi primer personaje: Goku"
 style="display:block;width:100%;max-width:360px;height:auto;margin:0 auto;border-radius:18px"
->
-</div>
-<div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px">
-<h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2>
-<p>¡Toca para conseguir Cápsulas del Poder!</p>
-<div style="font-size:55px;margin:15px">⚡</div>
-<h2 style="color:#ffd700">
-<span id="contadorTap">0</span> / 200
-</h2>
-<div style="height:12px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:15px 0">
-<div id="barraTap" style="height:100%;width:0%;background:linear-gradient(90deg,#36dfff,#a855f7);transition:width .15s"></div>
-</div>
-<button id="botonTap" onclick="registrarToque()" style="padding:18px 35px;font-size:20px">
+></div><div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px"><h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2><p>¡Toca para conseguir Cápsulas del Poder!</p><div style="font-size:55px;margin:15px">⚡</div><h2 style="color:#ffd700"><span id="contadorTap">0</span> / 200
+</h2><div style="height:12px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:15px 0"><div id="barraTap" style="height:100%;width:0%;background:linear-gradient(90deg,#36dfff,#a855f7);transition:width .15s"></div></div><button id="botonTap" onclick="registrarToque()" style="padding:18px 35px;font-size:20px">
 ⚡ ¡TOCAR!
-</button>
-<p id="mensajeTap" style="color:#c9c6e9">
+</button><p id="mensajeTap" style="color:#c9c6e9">
 Cada 200 toques consigues 1 Cápsula del Poder.
-</p>
-</div>
-<div id="panelGacha" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#101b40,#292052);border:2px solid #a855f7;border-radius:18px">
-<h2 style="color:#50eaff">🔮 CÁPSULA DEL PODER</h2>
-<div style="font-size:65px;margin:15px">💠</div>
-<p>Tu energía disponible:</p>
-<h2 style="color:#ffd700">
-<span id="saldoCapsulas">0</span>
-</h2>
-<p style="color:#c9c6e9">100 Cápsulas del Poder = 1 tirada</p>
-<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-<button onclick="abrirGacha(1)">ABRIR x1</button>
-<button onclick="abrirGacha(5)">ABRIR x5</button>
-<button onclick="abrirGacha(10)">ABRIR x10</button>
-</div>
-<div id="resultadoGacha" style="margin-top:20px;color:white;line-height:1.8;white-space:pre-wrap"></div>
-<p style="font-size:12px;color:#aaa">
+</p></div><div id="panelGacha" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#101b40,#292052);border:2px solid #a855f7;border-radius:18px"><h2 style="color:#50eaff">🔮 CÁPSULA DEL PODER</h2><div style="font-size:65px;margin:15px">💠</div><p>Tu energía disponible:</p><h2 style="color:#ffd700"><span id="saldoCapsulas">0</span></h2><p style="color:#c9c6e9">100 Cápsulas del Poder = 1 tirada</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button onclick="abrirGacha(1)">ABRIR x1</button><button onclick="abrirGacha(5)">ABRIR x5</button><button onclick="abrirGacha(10)">ABRIR x10</button></div><div id="resultadoGacha" style="margin-top:20px;color:white;line-height:1.8;white-space:pre-wrap"></div><p style="font-size:12px;color:#aaa">
 ⭐ Protección legendaria: 50 tiradas consecutivas.
-</p>
-</div>
-<button onclick="cerrarSesion()">CERRAR SESIÓN</button>
-</section>
-<section id="login" class="panel" style="display:none">
-<h2>⚡ ENTRAR A LA ARENA</h2>
-<p>Bienvenido de nuevo, entrenador.</p>
-<input id="loginEmail" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0">
-<input id="loginPassword" type="password" autocomplete="current-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0">
-<button onclick="iniciarSesion()">INICIAR SESIÓN</button>
-<p>
-<a href="#" onclick="recuperarPassword();return false;" style="color:#50eaff">
+</p></div><button onclick="cerrarSesion()">CERRAR SESIÓN</button></section><section id="login" class="panel" style="display:none"><h2>⚡ ENTRAR A LA ARENA</h2><p>Bienvenido de nuevo, entrenador.</p><input id="loginEmail" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0"><button onclick="iniciarSesion()">INICIAR SESIÓN</button><p><a href="#" onclick="recuperarPassword();return false;" style="color:#50eaff">
 ¿Olvidaste tu contraseña?
-</a>
-</p>
-<p id="mensajeLogin" aria-live="polite"></p>
-</section>
-<section id="nuevaPassword" class="panel" style="display:none;border-color:#ff55c8">
-<h2>🔐 NUEVA CONTRASEÑA</h2>
-<p>Escribe tu nueva contraseña.</p>
-<input id="passwordNueva" type="password" autocomplete="new-password" placeholder="Nueva contraseña" style="width:100%;padding:12px;margin:8px 0">
-<input id="passwordNuevaConfirmar" type="password" autocomplete="new-password" placeholder="Confirmar nueva contraseña" style="width:100%;padding:12px;margin:8px 0">
-<button onclick="guardarNuevaPassword()">GUARDAR CONTRASEÑA</button>
-<p id="mensajeNuevaPassword" aria-live="polite"></p>
-</section>
-<section id="registro" class="panel" style="display:none;border-color:#7c3aed">
-<h2>🎮 Crear cuenta</h2>
-<input id="username" autocomplete="username" placeholder="Nombre de jugador" style="width:100%;padding:12px;margin:8px 0">
-<input id="email" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0">
-<input id="password" type="password" autocomplete="new-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0">
-<input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirmar contraseña" style="width:100%;padding:12px;margin:8px 0">
-<button onclick="registrarJugador()">CREAR CUENTA</button>
-<p id="mensajeRegistro" aria-live="polite"></p>
-</section>
-<footer>
+</a></p><p id="mensajeLogin" aria-live="polite"></p></section><section id="nuevaPassword" class="panel" style="display:none;border-color:#ff55c8"><h2>🔐 NUEVA CONTRASEÑA</h2><p>Escribe tu nueva contraseña.</p><input id="passwordNueva" type="password" autocomplete="new-password" placeholder="Nueva contraseña" style="width:100%;padding:12px;margin:8px 0"><input id="passwordNuevaConfirmar" type="password" autocomplete="new-password" placeholder="Confirmar nueva contraseña" style="width:100%;padding:12px;margin:8px 0"><button onclick="guardarNuevaPassword()">GUARDAR CONTRASEÑA</button><p id="mensajeNuevaPassword" aria-live="polite"></p></section><section id="registro" class="panel" style="display:none;border-color:#7c3aed"><h2>🎮 Crear cuenta</h2><input id="username" autocomplete="username" placeholder="Nombre de jugador" style="width:100%;padding:12px;margin:8px 0"><input id="email" type="email" autocomplete="email" placeholder="Correo electrónico" style="width:100%;padding:12px;margin:8px 0"><input id="password" type="password" autocomplete="new-password" placeholder="Contraseña" style="width:100%;padding:12px;margin:8px 0"><input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirmar contraseña" style="width:100%;padding:12px;margin:8px 0"><button onclick="registrarJugador()">CREAR CUENTA</button><p id="mensajeRegistro" aria-live="polite"></p></section><footer>
 PIXEL BATTLE LIVE © 2026<br>
 Tu aventura, tus reglas.
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
+</footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 "use strict";
 const SUPABASE_URL = "https://xqgxiomyxkybbqnqjore.supabase.co";
 const SUPABASE_KEY = "sb_publishable_bPK-l_HqxtkheMFM59Ksqg_dhG5zPJs";
@@ -781,6 +388,7 @@ let cameraZoom = 0.4;
 let lastTime = 0;
 let animationFrame = null;
 let battleFinished = false;
+let battleStartTime = 0;
 const names = [
 "GOKU",
 "GUERRERO 2",
@@ -1141,7 +749,7 @@ ctx.strokeRect(x-14,y-14,28,28);
 }
 }
 const gokuImage = new Image();
-gokuImage.src="assets/characters/goku-common.png";
+gokuImage.src="assets/characters/goku-common-sprite.png?v=2";
 function dibujarPersonaje(f){
 const x=f.x;
 const y=f.y;
@@ -1157,7 +765,7 @@ ctx.fill();
 }
 if(f.id===0 && gokuImage.complete && gokuImage.naturalWidth){
 ctx.imageSmoothingEnabled=false;
-ctx.drawImage(gokuImage,x-27,y-58,54,65);
+ctx.drawImage(gokuImage,x-45,y-108,90,128);
 }else{
 ctx.fillStyle=f.color;
 ctx.fillRect(x-13,y-15,26,31);
@@ -1187,20 +795,26 @@ ctx.stroke();
 ctx.fillStyle="#ffffff";
 ctx.font="bold 12px Arial";
 ctx.textAlign="center";
-ctx.fillText(f.name,x,y-48);
+ctx.fillText(f.name,x,y-126);
 ctx.fillStyle="#351c29";
-ctx.fillRect(x-22,y-43,44,6);
+ctx.fillRect(x-22,y-119,44,6);
 ctx.fillStyle=f.hp>35?"#42ed75":"#ff4242";
 ctx.fillRect(
 x-22,
-y-43,
+y-119,
 44*(f.hp/f.maxHp),
 6
 );
 }
 function calcularEncuadre(alive,width,height){
+const centroX=WORLD_W/2;
+const centroY=WORLD_H/2;
+const zoomMapaCompleto=Math.min((width-36)/WORLD_W,(height-36)/WORLD_H)*0.96;
+if(performance.now()-battleStartTime<3500){
+return {x:centroX,y:centroY,zoom:zoomMapaCompleto};
+}
 if(!alive.length){
-return {x:WORLD_W/2,y:WORLD_H/2,zoom:0.4};
+return {x:centroX,y:centroY,zoom:zoomMapaCompleto};
 }
 let minX=Math.min(...alive.map(f=>f.x));
 let maxX=Math.max(...alive.map(f=>f.x));
@@ -1208,13 +822,13 @@ let minY=Math.min(...alive.map(f=>f.y));
 let maxY=Math.max(...alive.map(f=>f.y));
 const centerX=(minX+maxX)/2;
 const centerY=(minY+maxY)/2;
-const paddingX=260;
-const paddingY=260;
-const spanX=Math.max(360,maxX-minX+paddingX);
-const spanY=Math.max(360,maxY-minY+paddingY);
-const fitX=(width-36)/spanX;
-const fitY=(height-36)/spanY;
-const zoom=clamp(Math.min(fitX,fitY),0.30,1.18);
+const paddingX=300;
+const paddingY=300;
+const spanX=Math.max(420,maxX-minX+paddingX);
+const spanY=Math.max(420,maxY-minY+paddingY);
+const fitX=(width-48)/spanX;
+const fitY=(height-48)/spanY;
+const zoom=clamp(Math.min(fitX,fitY),0.24,1.05);
 return {x:centerX,y:centerY,zoom};
 }
 function dibujarArena(){
@@ -1265,6 +879,9 @@ if(animationFrame){
 cancelAnimationFrame(animationFrame);
 }
 crearCombatientes();
+battleStartTime=performance.now();
+cameraX=WORLD_W/2;
+cameraY=WORLD_H/2;
 document.getElementById("arenaEstado")
 .textContent="⚔️ ¡COMBATE EN CURSO!";
 lastTime=performance.now();
@@ -1282,6 +899,4 @@ cancelAnimationFrame(animationFrame);
 }
 });
 })();
-</script>
-</body>
-</html>
+</script></body></html>
