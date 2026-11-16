@@ -766,9 +766,11 @@ if(fighter.attackCooldown<=0){
 rival.hp -= fighter.damage;
 rival.hitFlash = .18;
 fighter.attackAnimation = .56;
-fighter.attackType = fighter.id===6
-  ? (Math.random()<0.30?2:(fighter.attackType===1?0:1))
-  : (fighter.attackType ? 0 : 1);
+fighter.attackType = fighter.id===4
+  ? 2
+  : (fighter.id===6
+      ? (Math.random()<0.30?2:(fighter.attackType===1?0:1))
+      : (fighter.attackType ? 0 : 1));
 // El impacto se registra en la posición real del rival.
 rival.hitFlash = .24;
 rival.hitEffect = .22;
@@ -1204,16 +1206,68 @@ if(spriteImage && spriteImage.complete && spriteImage.naturalWidth){
 }
 
 if(attacking){
-  // Destello delante de Goku, orientado hacia el rival.
-  const attackX=x+Math.cos(f.direction)*48;
-  const attackY=y+Math.sin(f.direction)*18-35;
+  const dir=f.direction||0;
+  const attackX=x+Math.cos(dir)*52;
+  const attackY=y+Math.sin(dir)*20-35;
   ctx.save();
-  ctx.globalAlpha=.8;
-  ctx.strokeStyle="#fff16a";
-  ctx.lineWidth=5;
-  ctx.beginPath();
-  ctx.arc(attackX,attackY,15,Math.PI*.15,Math.PI*1.45);
-  ctx.stroke();
+
+  if(isPikachu){
+    // Ataque eléctrico de Pikachu: rayo zigzagueante y chispas animadas.
+    const pulse=.75+Math.sin((f.animTime||0)*38)*.2;
+    const endX=x+Math.cos(dir)*104;
+    const endY=y+Math.sin(dir)*40-35;
+    const sideX=-Math.sin(dir);
+    const sideY=Math.cos(dir);
+    ctx.globalAlpha=pulse;
+    ctx.lineCap="round";
+    ctx.lineJoin="round";
+    ctx.shadowColor="#ffe600";
+    ctx.shadowBlur=22;
+    ctx.strokeStyle="#fffde7";
+    ctx.lineWidth=9;
+    ctx.beginPath();
+    ctx.moveTo(attackX,attackY);
+    ctx.lineTo(attackX+Math.cos(dir)*17+sideX*9,attackY+Math.sin(dir)*17+sideY*9);
+    ctx.lineTo(attackX+Math.cos(dir)*31-sideX*8,attackY+Math.sin(dir)*31-sideY*8);
+    ctx.lineTo(attackX+Math.cos(dir)*49+sideX*12,attackY+Math.sin(dir)*49+sideY*12);
+    ctx.lineTo(endX,endY);
+    ctx.stroke();
+
+    ctx.shadowBlur=12;
+    ctx.strokeStyle="#ffd400";
+    ctx.lineWidth=4;
+    ctx.stroke();
+
+    // Descargas laterales para que el ataque se vea eléctrico y no como un golpe común.
+    for(let i=0;i<3;i++){
+      const spread=(i-1)*13;
+      const sx=attackX+Math.cos(dir)*24+sideX*spread;
+      const sy=attackY+Math.sin(dir)*24+sideY*spread;
+      ctx.beginPath();
+      ctx.moveTo(sx,sy);
+      ctx.lineTo(sx+Math.cos(dir)*12+sideX*8,sy+Math.sin(dir)*12+sideY*8);
+      ctx.lineTo(sx+Math.cos(dir)*23-sideX*5,sy+Math.sin(dir)*23-sideY*5);
+      ctx.stroke();
+    }
+    ctx.fillStyle="#fff36a";
+    ctx.shadowBlur=16;
+    for(let i=0;i<5;i++){
+      const phase=(f.animTime*9+i*1.7)%1;
+      const px=attackX+Math.cos(dir)*(18+phase*72)+sideX*Math.sin(i*8+f.animTime*20)*10;
+      const py=attackY+Math.sin(dir)*(18+phase*72)+sideY*Math.sin(i*8+f.animTime*20)*10;
+      ctx.beginPath();
+      ctx.arc(px,py,2.5+(i%2),0,Math.PI*2);
+      ctx.fill();
+    }
+  }else{
+    // Destello de impacto para los demás personajes.
+    ctx.globalAlpha=.8;
+    ctx.strokeStyle="#fff16a";
+    ctx.lineWidth=5;
+    ctx.beginPath();
+    ctx.arc(attackX,attackY,15,Math.PI*.15,Math.PI*1.45);
+    ctx.stroke();
+  }
   ctx.restore();
 }
 if(f.hitEffect>0){
