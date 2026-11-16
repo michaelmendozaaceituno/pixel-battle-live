@@ -1212,54 +1212,90 @@ if(attacking){
   ctx.save();
 
   if(isPikachu){
-    // Ataque eléctrico de Pikachu: rayo zigzagueante y chispas animadas.
-    const pulse=.75+Math.sin((f.animTime||0)*38)*.2;
-    const endX=x+Math.cos(dir)*104;
-    const endY=y+Math.sin(dir)*40-35;
+    // Descarga eléctrica potente de largo alcance.
+    const t=f.animTime||0;
+    const pulse=.82+Math.sin(t*42)*.18;
     const sideX=-Math.sin(dir);
     const sideY=Math.cos(dir);
+    const beamLength=300;
+    const startX=x+Math.cos(dir)*38;
+    const startY=y+Math.sin(dir)*15-36;
+    const endX=startX+Math.cos(dir)*beamLength;
+    const endY=startY+Math.sin(dir)*beamLength*.42;
+
     ctx.globalAlpha=pulse;
     ctx.lineCap="round";
     ctx.lineJoin="round";
-    ctx.shadowColor="#ffe600";
-    ctx.shadowBlur=22;
-    ctx.strokeStyle="#fffde7";
-    ctx.lineWidth=9;
+
+    // Halo ancho para que el ataque se vea desde lejos.
+    ctx.shadowColor="#ffe500";
+    ctx.shadowBlur=34;
+    ctx.strokeStyle="rgba(255,210,0,.72)";
+    ctx.lineWidth=25;
     ctx.beginPath();
-    ctx.moveTo(attackX,attackY);
-    ctx.lineTo(attackX+Math.cos(dir)*17+sideX*9,attackY+Math.sin(dir)*17+sideY*9);
-    ctx.lineTo(attackX+Math.cos(dir)*31-sideX*8,attackY+Math.sin(dir)*31-sideY*8);
-    ctx.lineTo(attackX+Math.cos(dir)*49+sideX*12,attackY+Math.sin(dir)*49+sideY*12);
+    ctx.moveTo(startX,startY);
     ctx.lineTo(endX,endY);
     ctx.stroke();
 
-    ctx.shadowBlur=12;
-    ctx.strokeStyle="#ffd400";
-    ctx.lineWidth=4;
+    // Rayo principal blanco y amarillo con zigzag grande.
+    const z1x=startX+Math.cos(dir)*65+sideX*24;
+    const z1y=startY+Math.sin(dir)*65*.42+sideY*24;
+    const z2x=startX+Math.cos(dir)*132-sideX*28;
+    const z2y=startY+Math.sin(dir)*132*.42-sideY*28;
+    const z3x=startX+Math.cos(dir)*205+sideX*19;
+    const z3y=startY+Math.sin(dir)*205*.42+sideY*19;
+    ctx.strokeStyle="#fffde7";
+    ctx.lineWidth=13;
+    ctx.beginPath();
+    ctx.moveTo(startX,startY);
+    ctx.lineTo(z1x,z1y);
+    ctx.lineTo(z2x,z2y);
+    ctx.lineTo(z3x,z3y);
+    ctx.lineTo(endX,endY);
     ctx.stroke();
 
-    // Descargas laterales para que el ataque se vea eléctrico y no como un golpe común.
-    for(let i=0;i<3;i++){
-      const spread=(i-1)*13;
-      const sx=attackX+Math.cos(dir)*24+sideX*spread;
-      const sy=attackY+Math.sin(dir)*24+sideY*spread;
+    ctx.shadowBlur=18;
+    ctx.strokeStyle="#ffd400";
+    ctx.lineWidth=6;
+    ctx.stroke();
+
+    // Ramificaciones que salen del rayo principal.
+    for(let i=0;i<6;i++){
+      const along=38+i*42;
+      const bx=startX+Math.cos(dir)*along;
+      const by=startY+Math.sin(dir)*along*.42;
+      const sign=i%2===0?1:-1;
       ctx.beginPath();
-      ctx.moveTo(sx,sy);
-      ctx.lineTo(sx+Math.cos(dir)*12+sideX*8,sy+Math.sin(dir)*12+sideY*8);
-      ctx.lineTo(sx+Math.cos(dir)*23-sideX*5,sy+Math.sin(dir)*23-sideY*5);
+      ctx.moveTo(bx,by);
+      ctx.lineTo(bx+Math.cos(dir)*18+sideX*sign*17,by+Math.sin(dir)*18*.42+sideY*sign*17);
+      ctx.lineTo(bx+Math.cos(dir)*38+sideX*sign*29,by+Math.sin(dir)*38*.42+sideY*sign*29);
       ctx.stroke();
     }
+
+    // Brillo de impacto al final de la descarga.
+    const impactR=17+Math.sin(t*35)*6;
+    ctx.fillStyle="rgba(255,247,150,.8)";
+    ctx.shadowBlur=28;
+    ctx.beginPath();
+    ctx.arc(endX,endY,impactR,0,Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle="#fff";
+    ctx.lineWidth=4;
+    ctx.beginPath();
+    ctx.arc(endX,endY,impactR+7,0,Math.PI*2);
+    ctx.stroke();
+
+    // Chispas que recorren toda la descarga.
     ctx.fillStyle="#fff36a";
-    ctx.shadowBlur=16;
-    for(let i=0;i<5;i++){
-      const phase=(f.animTime*9+i*1.7)%1;
-      const px=attackX+Math.cos(dir)*(18+phase*72)+sideX*Math.sin(i*8+f.animTime*20)*10;
-      const py=attackY+Math.sin(dir)*(18+phase*72)+sideY*Math.sin(i*8+f.animTime*20)*10;
+    for(let i=0;i<18;i++){
+      const phase=(t*3.5+i/18)%1;
+      const px=startX+Math.cos(dir)*(phase*beamLength)+sideX*Math.sin(t*25+i*2)*9;
+      const py=startY+Math.sin(dir)*(phase*beamLength)*.42+sideY*Math.sin(t*25+i*2)*9;
       ctx.beginPath();
-      ctx.arc(px,py,2.5+(i%2),0,Math.PI*2);
+      ctx.arc(px,py,2.5+(i%3),0,Math.PI*2);
       ctx.fill();
     }
-  }else{
+    }else{
     // Destello de impacto para los demás personajes.
     ctx.globalAlpha=.8;
     ctx.strokeStyle="#fff16a";
