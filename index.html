@@ -93,6 +93,7 @@ body{
   margin-top:5px;
 }
 
+/* ANIMACIÓN POKÉBOLA */
 .pokebola-animada{
   animation:captura 2s ease-in-out infinite;
   transform-origin:center;
@@ -148,7 +149,9 @@ nav a:hover{
   text-shadow:0 0 25px #36dfff;
 }
 
-.hero h1 span{color:#ff58ce}
+.hero h1 span{
+  color:#ff58ce;
+}
 
 .hero p{
   color:#c9c6e9;
@@ -212,6 +215,7 @@ input{
   font-size:15px;
 }
 
+/* PANELES */
 .panel{
   max-width:450px;
   margin:30px auto;
@@ -233,6 +237,7 @@ footer{
 
 /* ADAPTACIÓN PARA CELULARES */
 @media(max-width:480px){
+
   header{
     justify-content:center;
     padding:12px;
@@ -256,7 +261,9 @@ footer{
 
 <body>
 
+<!-- ENCABEZADO CON NUEVO LOGOTIPO -->
 <header>
+
   <div class="logo">
     <img
       src="assets/pixel-battle-live-logo.png"
@@ -270,11 +277,14 @@ footer{
     <a href="#login" onclick="mostrarLogin();return false;">Entrar</a>
     <a href="#registro" onclick="mostrarRegistro();return false;">Registrar</a>
   </nav>
+
 </header>
 
+<!-- PÁGINA PRINCIPAL -->
 <main id="inicio">
 
   <section class="hero">
+
     <div style="font-size:45px">🎮</div>
 
     <svg class="pokebola-animada" viewBox="0 0 100 100" width="55" height="55" aria-label="Pokébola">
@@ -293,8 +303,10 @@ footer{
     </p>
 
     <a class="button" href="#juego">COMENZAR AVENTURA</a>
+
   </section>
 
+  <!-- TARJETAS PRINCIPALES -->
   <section class="cards" id="juego">
 
     <div class="card">
@@ -322,6 +334,7 @@ footer{
     </div>
 
   </section>
+
 </main>
 
 <!-- PERFIL GAMER -->
@@ -350,7 +363,7 @@ footer{
 
   </div>
 
-  <!-- TAP TAP -->
+  <!-- TAP TAP BATTLE -->
   <div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px">
 
     <h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2>
@@ -364,7 +377,9 @@ footer{
     </h2>
 
     <div style="height:12px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:15px 0">
+
       <div id="barraTap" style="height:100%;width:0%;background:linear-gradient(90deg,#36dfff,#a855f7);transition:width .15s"></div>
+
     </div>
 
     <button id="botonTap" onclick="registrarToque()" style="padding:18px 35px;font-size:20px">
@@ -395,9 +410,11 @@ footer{
     </p>
 
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+
       <button onclick="abrirGacha(1)">ABRIR x1</button>
       <button onclick="abrirGacha(5)">ABRIR x5</button>
       <button onclick="abrirGacha(10)">ABRIR x10</button>
+
     </div>
 
     <div id="resultadoGacha" style="margin-top:20px;color:white;line-height:1.8;white-space:pre-wrap"></div>
@@ -494,13 +511,18 @@ let tapPendientes = 0;
 let tapEnviando = false;
 let tapTemporizador = null;
 
+/* MOSTRAR SECCIONES */
 function mostrarSeccion(id) {
+
   const elemento = document.getElementById(id);
+
   elemento.style.display = "block";
+
   elemento.scrollIntoView({
     behavior:"smooth",
     block:"center"
   });
+
 }
 
 function mostrarRegistro() {
@@ -536,15 +558,22 @@ async function iniciarSesion() {
   });
 
   if (error) {
-    mensaje.textContent = "No se pudo iniciar sesión. Revisa tus datos.";
+
+    mensaje.textContent =
+      "No se pudo iniciar sesión. Revisa tus datos.";
+
     console.error("Error de inicio de sesión:",error);
+
     return;
   }
 
   const perfilCargado = await cargarPerfil(data.user.id);
 
   if (!perfilCargado) {
-    mensaje.textContent = "La sesión inició, pero no se pudo cargar tu perfil. Revisa los permisos de player_profiles.";
+
+    mensaje.textContent =
+      "La sesión inició, pero no se pudo cargar tu perfil. Revisa los permisos de player_profiles.";
+
     return;
   }
 
@@ -553,6 +582,7 @@ async function iniciarSesion() {
   mostrarSeccion("perfilJugador");
 
   mensaje.textContent = "";
+
 }
 
 /* CARGAR PERFIL */
@@ -565,7 +595,9 @@ async function cargarPerfil(userId) {
     .single();
 
   if (error || !perfil) {
+
     console.error("Error cargando perfil:",error);
+
     return false;
   }
 
@@ -596,13 +628,20 @@ async function cargarPerfil(userId) {
     await supabaseClient.rpc("claim_starter_character");
 
   if (errorPersonaje) {
-    console.error("Error consultando personaje inicial:",errorPersonaje);
+
+    console.error(
+      "Error consultando personaje inicial:",
+      errorPersonaje
+    );
+
   } else if (personaje && (
     personaje.character_key ||
     personaje.success ||
     personaje.already_claimed
   )) {
+
     mostrarPersonajeInicial(personaje);
+
   }
 
   return true;
@@ -612,15 +651,22 @@ async function cargarPerfil(userId) {
 async function cerrarSesion() {
 
   if (tapPendientes > 0 || tapEnviando) {
-    alert("Espera a que se guarden tus toques antes de cerrar sesión.");
+
+    alert(
+      "Espera a que se guarden tus toques antes de cerrar sesión."
+    );
+
     return;
   }
 
   const {error} = await supabaseClient.auth.signOut();
 
   if (error) {
+
     alert("No se pudo cerrar sesión.");
+
     console.error(error);
+
     return;
   }
 
@@ -636,6 +682,7 @@ async function cerrarSesion() {
   tapPendientes = 0;
 
   actualizarTapUI();
+
 }
 
 /* RECUPERAR CONTRASEÑA */
@@ -645,11 +692,15 @@ async function recuperarPassword() {
   const mensaje = document.getElementById("mensajeLogin");
 
   if (!email || !email.includes("@")) {
-    mensaje.textContent = "Escribe primero tu correo electrónico.";
+
+    mensaje.textContent =
+      "Escribe primero tu correo electrónico.";
+
     return;
   }
 
-  mensaje.textContent = "Enviando enlace de recuperación...";
+  mensaje.textContent =
+    "Enviando enlace de recuperación...";
 
   const {error} = await supabaseClient.auth.resetPasswordForEmail(
     email,
@@ -659,15 +710,21 @@ async function recuperarPassword() {
   );
 
   if (error) {
-    mensaje.textContent = "No se pudo enviar el correo. Revisa la configuración.";
+
+    mensaje.textContent =
+      "No se pudo enviar el correo. Revisa la configuración.";
+
     console.error(error);
+
     return;
   }
 
-  mensaje.textContent = "¡Enlace enviado! Revisa tu correo. 📩";
+  mensaje.textContent =
+    "¡Enlace enviado! Revisa tu correo. 📩";
+
 }
 
-/* GUARDAR NUEVA CONTRASEÑA */
+/* NUEVA CONTRASEÑA */
 async function guardarNuevaPassword() {
 
   const password = document.getElementById("passwordNueva").value;
@@ -675,12 +732,18 @@ async function guardarNuevaPassword() {
   const mensaje = document.getElementById("mensajeNuevaPassword");
 
   if (password.length < 8) {
-    mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
+
+    mensaje.textContent =
+      "La contraseña debe tener al menos 8 caracteres.";
+
     return;
   }
 
   if (password !== confirmar) {
-    mensaje.textContent = "Las contraseñas no coinciden.";
+
+    mensaje.textContent =
+      "Las contraseñas no coinciden.";
+
     return;
   }
 
@@ -691,19 +754,27 @@ async function guardarNuevaPassword() {
   });
 
   if (error) {
-    mensaje.textContent = "No se pudo actualizar. Intenta nuevamente.";
+
+    mensaje.textContent =
+      "No se pudo actualizar. Intenta nuevamente.";
+
     console.error(error);
+
     return;
   }
 
-  mensaje.textContent = "¡Contraseña actualizada correctamente! 🎮";
+  mensaje.textContent =
+    "¡Contraseña actualizada correctamente! 🎮";
 
   document.getElementById("passwordNueva").value = "";
   document.getElementById("passwordNuevaConfirmar").value = "";
 
   setTimeout(() => {
+
     document.getElementById("nuevaPassword").style.display = "none";
+
   },1500);
+
 }
 
 /* REGISTRAR JUGADOR */
@@ -716,61 +787,84 @@ async function registrarJugador() {
   const mensaje = document.getElementById("mensajeRegistro");
 
   if (!username || !email || !password || !confirmar) {
+
     mensaje.textContent = "Completa todos los campos.";
+
     return;
   }
 
   if (!/^[a-z0-9_]{3,20}$/.test(username)) {
-    mensaje.textContent = "Usa 3 a 20 caracteres: letras, números o guion bajo.";
+
+    mensaje.textContent =
+      "Usa 3 a 20 caracteres: letras, números o guion bajo.";
+
     return;
   }
 
   if (password.length < 8) {
-    mensaje.textContent = "La contraseña debe tener al menos 8 caracteres.";
+
+    mensaje.textContent =
+      "La contraseña debe tener al menos 8 caracteres.";
+
     return;
   }
 
   if (password !== confirmar) {
-    mensaje.textContent = "Las contraseñas no coinciden.";
+
+    mensaje.textContent =
+      "Las contraseñas no coinciden.";
+
     return;
   }
 
   mensaje.textContent = "Creando tu cuenta...";
 
   const {error} = await supabaseClient.auth.signUp({
+
     email,
     password,
+
     options:{
       data:{
         username,
         display_name:username
       }
     }
+
   });
 
   if (error) {
+
     mensaje.textContent = error.message;
+
     return;
   }
 
-  mensaje.textContent = "¡Cuenta creada! Revisa tu correo para verificarla.";
+  mensaje.textContent =
+    "¡Cuenta creada! Revisa tu correo para verificarla.";
+
 }
 
 /* ACTUALIZAR TAP TAP */
 function actualizarTapUI() {
 
-  const avance = (tapConfirmados + tapPendientes) % 200;
+  const avance =
+    (tapConfirmados + tapPendientes) % 200;
 
-  document.getElementById("contadorTap").textContent = avance;
+  document.getElementById("contadorTap").textContent =
+    avance;
 
   document.getElementById("barraTap").style.width =
     (avance / 200 * 100) + "%";
+
 }
 
 /* CARGAR PROGRESO TAP TAP */
 async function cargarProgresoTap() {
 
-  const {data:sesion} = await supabaseClient.auth.getSession();
+  const {data:sesion} =
+    await supabaseClient.auth.getSession();
+
   const usuario = sesion.session?.user;
 
   if (!usuario) return;
@@ -782,6 +876,7 @@ async function cargarProgresoTap() {
     .maybeSingle();
 
   if (error) {
+
     console.error("Error cargando TAP TAP:",error);
 
     document.getElementById("mensajeTap").textContent =
@@ -793,12 +888,15 @@ async function cargarProgresoTap() {
   tapConfirmados = data ? Number(data.tap_tokens) : 0;
 
   actualizarTapUI();
+
 }
 
 /* REGISTRAR TOQUE */
 function registrarToque() {
 
-  if (document.getElementById("perfilJugador").style.display === "none") {
+  if (
+    document.getElementById("perfilJugador").style.display === "none"
+  ) {
     return;
   }
 
@@ -812,10 +910,15 @@ function registrarToque() {
   clearTimeout(tapTemporizador);
 
   if (tapPendientes >= 10) {
+
     enviarToquesTap();
+
   } else {
+
     tapTemporizador = setTimeout(enviarToquesTap,800);
+
   }
+
 }
 
 /* MOSTRAR PERSONAJE INICIAL */
@@ -833,6 +936,7 @@ function mostrarPersonajeInicial(personaje) {
     behavior:"smooth",
     block:"center"
   });
+
 }
 
 /* ENVIAR TOQUES A SUPABASE */
@@ -858,7 +962,8 @@ async function enviarToquesTap() {
 
       actualizarTapUI();
 
-      mensaje.textContent = "Guardando " + cantidad + " toques...";
+      mensaje.textContent =
+        "Guardando " + cantidad + " toques...";
 
       const {data,error} = await supabaseClient.rpc(
         "register_tap_batch",
@@ -870,7 +975,8 @@ async function enviarToquesTap() {
         tapPendientes += cantidad;
         huboError = true;
 
-        mensaje.textContent = "Error al guardar: " + error.message;
+        mensaje.textContent =
+          "Error al guardar: " + error.message;
 
         console.error("Error TAP TAP:",error);
 
@@ -917,6 +1023,7 @@ async function enviarToquesTap() {
 
         mensaje.textContent =
           "🎁 ¡Tu personaje inicial está disponible!";
+
       }
 
       if (Number(data.capsules_earned) > 0) {
@@ -931,9 +1038,11 @@ async function enviarToquesTap() {
 
         mensaje.textContent =
           "¡Toques guardados correctamente! ⚡";
+
       }
 
       actualizarTapUI();
+
     }
 
   } catch(error) {
@@ -952,9 +1061,14 @@ async function enviarToquesTap() {
     actualizarTapUI();
 
     if (tapPendientes > 0 && !huboError) {
-      tapTemporizador = setTimeout(enviarToquesTap,300);
+
+      tapTemporizador =
+        setTimeout(enviarToquesTap,300);
+
     }
+
   }
+
 }
 
 /* CARGAR SALDO DE CÁPSULAS */
@@ -964,12 +1078,15 @@ async function cargarSaldoCapsulas() {
 
   if (!saldo) return;
 
-  const {data:sesion} = await supabaseClient.auth.getSession();
+  const {data:sesion} =
+    await supabaseClient.auth.getSession();
 
   const usuario = sesion.session?.user;
 
   if (!usuario) {
+
     saldo.textContent = "0";
+
     return;
   }
 
@@ -989,16 +1106,19 @@ async function cargarSaldoCapsulas() {
   }
 
   saldo.textContent = data ? data.balance : 0;
+
 }
 
 /* ABRIR GACHA */
 async function abrirGacha(cantidad) {
 
-  const resultado = document.getElementById("resultadoGacha");
+  const resultado =
+    document.getElementById("resultadoGacha");
 
   if (![1,5,10].includes(cantidad)) return;
 
-  const {data:sesion} = await supabaseClient.auth.getSession();
+  const {data:sesion} =
+    await supabaseClient.auth.getSession();
 
   if (!sesion.session) {
 
@@ -1029,13 +1149,16 @@ async function abrirGacha(cantidad) {
     JSON.stringify(data,null,2);
 
   await cargarSaldoCapsulas();
+
 }
 
 /* RECUPERACIÓN DE CONTRASEÑA */
 supabaseClient.auth.onAuthStateChange((event,session) => {
 
   if (event === "PASSWORD_RECOVERY" && session) {
+
     mostrarSeccion("nuevaPassword");
+
   }
 
 });
