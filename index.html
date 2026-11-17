@@ -1160,11 +1160,11 @@ if(spriteImage && spriteImage.complete && spriteImage.naturalWidth){
     sourceH=rowHeights[row];
   }
 
-  // La lámina de Pikachu está orientada al lado contrario que las demás.
-  // Se invierte su escala para que la cara y las patas apunten al rival,
-  // nunca la cola.
+  // Pikachu comparte la orientación base hacia la derecha del resto.
+  // La dirección se calcula hacia el rival: derecha = normal, izquierda = espejo.
+  // No invertir Pikachu por separado: eso hacía que corriera de espaldas.
   const directionFacing=Math.cos(f.direction||0)>=0?1:-1;
-  const facing=isPikachu?-directionFacing:directionFacing;
+  const facing=directionFacing;
   ctx.save();
   ctx.translate(x,y);
   ctx.scale(facing,1);
