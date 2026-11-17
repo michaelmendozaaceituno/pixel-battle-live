@@ -1089,8 +1089,11 @@ if(spriteImage && spriteImage.complete && spriteImage.naturalWidth){
       const progress=Math.max(0,Math.min(1,1-(f.attackAnimation/.56)));
       frame=Math.min(cols-1,Math.floor(progress*cols));
     }else if(moving){
-      row=f.speed>96?2:1;
-      frame=Math.floor(t*(row===2?13:9))%cols;
+      // Fila 1 = caminar y fila 2 = correr. El umbral más bajo
+      // permite que la carrera se active de forma visible en la arena.
+      row=f.speed>88?2:1;
+      const cadence=row===2?18:13;
+      frame=Math.floor(t*cadence)%cols;
     }else{
       row=0;
       frame=Math.floor(t*5)%cols;
@@ -1157,8 +1160,11 @@ if(spriteImage && spriteImage.complete && spriteImage.naturalWidth){
     sourceH=rowHeights[row];
   }
 
-  // El sprite base mira a la derecha: invertirlo si el rival está a la izquierda.
-  const facing=Math.cos(f.direction||0)>=0?1:-1;
+  // La lámina de Pikachu está orientada al lado contrario que las demás.
+  // Se invierte su escala para que la cara y las patas apunten al rival,
+  // nunca la cola.
+  const directionFacing=Math.cos(f.direction||0)>=0?1:-1;
+  const facing=isPikachu?-directionFacing:directionFacing;
   ctx.save();
   ctx.translate(x,y);
   ctx.scale(facing,1);
@@ -1218,10 +1224,12 @@ if(attacking){
     const sideX=-Math.sin(dir);
     const sideY=Math.cos(dir);
     const beamLength=300;
-    const startX=x+Math.cos(dir)*38;
-    const startY=y+Math.sin(dir)*15-36;
+    // El rayo nace delante del pecho/cara, no detrás del cuerpo ni de la cola.
+    // El vector completo sigue la dirección del rival en ambos ejes.
+    const startX=x+Math.cos(dir)*39;
+    const startY=y-47+Math.sin(dir)*10;
     const endX=startX+Math.cos(dir)*beamLength;
-    const endY=startY+Math.sin(dir)*beamLength*.42;
+    const endY=startY+Math.sin(dir)*beamLength;
 
     ctx.globalAlpha=pulse;
     ctx.lineCap="round";
@@ -1239,11 +1247,11 @@ if(attacking){
 
     // Rayo principal blanco y amarillo con zigzag grande.
     const z1x=startX+Math.cos(dir)*65+sideX*24;
-    const z1y=startY+Math.sin(dir)*65*.42+sideY*24;
+    const z1y=startY+Math.sin(dir)*65+sideY*24;
     const z2x=startX+Math.cos(dir)*132-sideX*28;
-    const z2y=startY+Math.sin(dir)*132*.42-sideY*28;
+    const z2y=startY+Math.sin(dir)*132-sideY*28;
     const z3x=startX+Math.cos(dir)*205+sideX*19;
-    const z3y=startY+Math.sin(dir)*205*.42+sideY*19;
+    const z3y=startY+Math.sin(dir)*205+sideY*19;
     ctx.strokeStyle="#fffde7";
     ctx.lineWidth=13;
     ctx.beginPath();
@@ -1263,12 +1271,12 @@ if(attacking){
     for(let i=0;i<6;i++){
       const along=38+i*42;
       const bx=startX+Math.cos(dir)*along;
-      const by=startY+Math.sin(dir)*along*.42;
+      const by=startY+Math.sin(dir)*along;
       const sign=i%2===0?1:-1;
       ctx.beginPath();
       ctx.moveTo(bx,by);
-      ctx.lineTo(bx+Math.cos(dir)*18+sideX*sign*17,by+Math.sin(dir)*18*.42+sideY*sign*17);
-      ctx.lineTo(bx+Math.cos(dir)*38+sideX*sign*29,by+Math.sin(dir)*38*.42+sideY*sign*29);
+      ctx.lineTo(bx+Math.cos(dir)*18+sideX*sign*17,by+Math.sin(dir)*18+sideY*sign*17);
+      ctx.lineTo(bx+Math.cos(dir)*38+sideX*sign*29,by+Math.sin(dir)*38+sideY*sign*29);
       ctx.stroke();
     }
 
@@ -1290,7 +1298,7 @@ if(attacking){
     for(let i=0;i<18;i++){
       const phase=(t*3.5+i/18)%1;
       const px=startX+Math.cos(dir)*(phase*beamLength)+sideX*Math.sin(t*25+i*2)*9;
-      const py=startY+Math.sin(dir)*(phase*beamLength)*.42+sideY*Math.sin(t*25+i*2)*9;
+      const py=startY+Math.sin(dir)*(phase*beamLength)+sideY*Math.sin(t*25+i*2)*9;
       ctx.beginPath();
       ctx.arc(px,py,2.5+(i%3),0,Math.PI*2);
       ctx.fill();
