@@ -8,7 +8,7 @@ Los personajes se desplazan, buscan rivales y combaten automáticamente.
 src="assets/characters/goku-common.png"
 alt="Mi primer personaje: Goku"
 style="display:block;width:100%;max-width:360px;height:auto;margin:0 auto;border-radius:18px"
-></div><div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px"><h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2><p>¡Toca para conseguir Cápsulas del Poder!</p><div style="font-size:55px;margin:15px">⚡</div><h2 style="color:#ffd700"><span id="contadorTap">0</span> / 200
+><div id="gokuTransformaciones" style="margin:18px auto 0;padding:16px;background:linear-gradient(145deg,#111d3c,#25194b);border:1px solid #e5b83f;border-radius:16px;max-width:390px"><h3 style="color:#ffd76a;margin:0 0 8px">🐉 TRANSFORMACIONES DE GOKU</h3><p id="gokuFormaEstado" style="color:#dbeafe;font-size:13px;margin:6px 0 12px">Consultando tus transformaciones...</p><div id="gokuFormaPreviewMarco" style="width:222px;height:133px;overflow:hidden;margin:0 auto 12px;border-radius:10px;background:#090d1d;display:flex;align-items:flex-start;justify-content:flex-start"><img id="gokuFormaPreview" src="assets/characters/goku-common-sprite.png?v=3" alt="Vista previa de Goku" style="width:1774px;height:887px;max-width:none;flex:none;image-rendering:pixelated"></div><div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap"><button id="botonGokuBase" onclick="seleccionarTransformacionGoku('base')" type="button">BASE</button><button id="botonGokuSSJ" onclick="seleccionarTransformacionGoku('ssj')" type="button" disabled>SUPER SAIYAJIN · NIVEL 15</button><button id="botonGokuSSJ2" onclick="seleccionarTransformacionGoku('ssj2')" type="button" disabled>SUPER SAIYAJIN 2 · NIVEL 30</button></div><p style="font-size:11px;color:#aebbd8;margin:12px 0 0">Las formas se desbloquean con el nivel propio de Goku y se guardan en Supabase.</p></div></div><div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px"><h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2><p>¡Toca para conseguir Cápsulas del Poder!</p><div style="font-size:55px;margin:15px">⚡</div><h2 style="color:#ffd700"><span id="contadorTap">0</span> / 200
 </h2><div style="height:12px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:15px 0"><div id="barraTap" style="height:100%;width:0%;background:linear-gradient(90deg,#36dfff,#a855f7);transition:width .15s"></div></div><button id="botonTap" onclick="registrarToque()" style="padding:18px 35px;font-size:20px">
 ⚡ ¡TOCAR!
 </button><p id="mensajeTap" style="color:#c9c6e9">
@@ -28,6 +28,105 @@ const supabaseClient = window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
+// Transformación activa del Goku del jugador conectado.
+// Los desbloqueos y la forma seleccionada se persisten en player_characters.
+let gokuActiveForm = "base";
+let gokuUnlockedForms = ["base"];
+let gokuCharacterLevel = 1;
+let gokuCharacterRowId = null;
+let gokuFormSaveBusy = false;
+const GOKU_FORM_CONFIG = {
+base: {label:"Goku Base",level:1,src:"assets/characters/goku-common-sprite.png?v=3"},
+ssj: {label:"Super Saiyajin",level:15,src:"assets/characters/goku-ssj-sprite.png?v=1"},
+ssj2: {label:"Super Saiyajin 2",level:30,src:"assets/characters/goku-ssj2-sprite.png?v=1"}
+};
+function renderizarTransformacionesGoku(mensajeExtra="") {
+const estado=document.getElementById("gokuFormaEstado");
+const preview=document.getElementById("gokuFormaPreview");
+if(!estado || !preview) return;
+const labels={base:"BASE",ssj:"SUPER SAIYAJIN",ssj2:"SUPER SAIYAJIN 2"};
+estado.textContent=(labels[gokuActiveForm]||"BASE")+" · Nivel de Goku: "+gokuCharacterLevel+(mensajeExtra?" · "+mensajeExtra:"");
+const config=GOKU_FORM_CONFIG[gokuActiveForm]||GOKU_FORM_CONFIG.base;
+preview.src=config.src;
+preview.alt="Vista previa: "+config.label;
+for(const [form,id] of [["base","botonGokuBase"],["ssj","botonGokuSSJ"],["ssj2","botonGokuSSJ2"]]){
+const button=document.getElementById(id);
+if(!button) continue;
+const unlocked=gokuUnlockedForms.includes(form);
+button.disabled=!unlocked || gokuFormSaveBusy;
+button.style.outline=form===gokuActiveForm?"2px solid #ffe27a":"none";
+button.style.filter=unlocked?"none":"grayscale(1)";
+button.setAttribute("aria-pressed",String(form===gokuActiveForm));
+}
+}
+async function cargarTransformacionesGoku(userId) {
+const estado=document.getElementById("gokuFormaEstado");
+if(estado) estado.textContent="Cargando los datos de Goku desde Supabase...";
+const {data,error}=await supabaseClient
+.from("player_characters")
+.select("id,character_key,character_level,character_xp,unlocked_forms,active_form")
+.eq("user_id",userId)
+.ilike("character_key","goku%")
+.maybeSingle();
+if(error){
+console.error("Error consultando player_characters para Goku:",error);
+if(estado) estado.textContent="No se pudieron cargar las transformaciones. Revisa los permisos de player_characters.";
+return false;
+}
+if(!data){
+gokuCharacterRowId=null;
+gokuCharacterLevel=1;
+gokuUnlockedForms=["base"];
+gokuActiveForm="base";
+renderizarTransformacionesGoku("Goku aún no aparece en tu colección");
+return false;
+}
+gokuCharacterRowId=data.id;
+gokuCharacterLevel=Math.max(1,Number(data.character_level)||1);
+const stored=Array.isArray(data.unlocked_forms)?data.unlocked_forms:[];
+gokuUnlockedForms=["base",...stored.filter(form=>["ssj","ssj2"].includes(form))];
+// Los niveles de transformación se calculan con el nivel individual de Goku.
+if(gokuCharacterLevel>=15 && !gokuUnlockedForms.includes("ssj")) gokuUnlockedForms.push("ssj");
+if(gokuCharacterLevel>=30 && !gokuUnlockedForms.includes("ssj2")) gokuUnlockedForms.push("ssj2");
+const requested=data.active_form||"base";
+gokuActiveForm=gokuUnlockedForms.includes(requested)?requested:"base";
+const needsSave=JSON.stringify(stored.slice().sort())!==JSON.stringify(gokuUnlockedForms.filter(x=>x!=="base").sort()) || requested!==gokuActiveForm;
+if(needsSave){
+const {error:saveError}=await supabaseClient
+.from("player_characters")
+.update({unlocked_forms:gokuUnlockedForms.filter(x=>x!=="base"),active_form:gokuActiveForm})
+.eq("id",gokuCharacterRowId)
+.eq("user_id",userId);
+if(saveError) console.error("No se pudieron guardar los desbloqueos de Goku:",saveError);
+}
+renderizarTransformacionesGoku();
+return true;
+}
+async function seleccionarTransformacionGoku(form) {
+if(!["base","ssj","ssj2"].includes(form) || !gokuUnlockedForms.includes(form) || gokuFormSaveBusy) return;
+if(!gokuCharacterRowId){
+renderizarTransformacionesGoku("No se encontró el registro de Goku");
+return;
+}
+const {data:sesion}=await supabaseClient.auth.getSession();
+const userId=sesion.session?.user?.id;
+if(!userId) return;
+gokuFormSaveBusy=true;
+renderizarTransformacionesGoku("Guardando selección...");
+const {error}=await supabaseClient
+.from("player_characters")
+.update({active_form:form})
+.eq("id",gokuCharacterRowId)
+.eq("user_id",userId);
+gokuFormSaveBusy=false;
+if(error){
+console.error("Error guardando transformación de Goku:",error);
+renderizarTransformacionesGoku("No se pudo guardar; intenta otra vez");
+return;
+}
+gokuActiveForm=form;
+renderizarTransformacionesGoku("Transformación guardada");
+}
 let tapConfirmados = 0;
 let tapPendientes = 0;
 let tapEnviando = false;
@@ -106,6 +205,7 @@ personaje.already_claimed
 )) {
 mostrarPersonajeInicial(personaje);
 }
+await cargarTransformacionesGoku(userId);
 return true;
 }
 async function cerrarSesion() {
@@ -127,6 +227,11 @@ block:"center"
 });
 tapConfirmados = 0;
 tapPendientes = 0;
+gokuActiveForm="base";
+gokuUnlockedForms=["base"];
+gokuCharacterLevel=1;
+gokuCharacterRowId=null;
+renderizarTransformacionesGoku();
 actualizarTapUI();
 }
 async function recuperarPassword() {
@@ -1039,6 +1144,16 @@ gokuImage.src="assets/characters/goku-common-sprite.png?v=3";
 gokuImage.onerror=()=>console.error(
  "No se pudo cargar el sprite: assets/characters/goku-common-sprite.png"
 );
+const gokuSsjImage = new Image();
+gokuSsjImage.src="assets/characters/goku-ssj-sprite.png?v=1";
+gokuSsjImage.onerror=()=>console.error(
+ "No se pudo cargar el sprite: assets/characters/goku-ssj-sprite.png"
+);
+const gokuSsj2Image = new Image();
+gokuSsj2Image.src="assets/characters/goku-ssj2-sprite.png?v=1";
+gokuSsj2Image.onerror=()=>console.error(
+ "No se pudo cargar el sprite: assets/characters/goku-ssj2-sprite.png"
+);
 const vegetaImage = new Image();
 vegetaImage.src="assets/characters/vegeta-common-sprite.png?v=1";
 vegetaImage.onerror=()=>console.error(
@@ -1062,7 +1177,9 @@ const isGoku=f.id===0;
 const isVegeta=f.id===1;
 const isPikachu=f.id===4;
 const isLucario=f.id===6;
-const spriteImage=isGoku?gokuImage:(isVegeta?vegetaImage:(isPikachu?pikachuImage:(isLucario?lucarioImage:null)));
+const spriteImage=isGoku
+  ?(gokuActiveForm==="ssj2"?gokuSsj2Image:(gokuActiveForm==="ssj"?gokuSsjImage:gokuImage))
+  :(isVegeta?vegetaImage:(isPikachu?pikachuImage:(isLucario?lucarioImage:null)));
 const t=f.animTime||0;
 const moving=!!f.moving;
 const attacking=f.attackAnimation>0;
@@ -1176,9 +1293,9 @@ if(spriteImage && spriteImage.complete && spriteImage.naturalWidth){
 
   if(moving || attacking || ((isGoku || isVegeta) && Math.sin(t*3)>0.75)){
     ctx.globalAlpha=.45+Math.sin(t*15)*.18;
-    ctx.strokeStyle=attacking?"#fff16a":(isPikachu?"#ffe22e":(isLucario?"#27bfff":(isVegeta?"#4d9dff":"#55dfff")));
+    ctx.strokeStyle=attacking?"#fff16a":(isPikachu?"#ffe22e":(isLucario?"#27bfff":(isVegeta?"#4d9dff":(isGoku && gokuActiveForm==="ssj2"?"#39bfff":(isGoku && gokuActiveForm==="ssj"?"#ffd84a":"#55dfff")))));
     ctx.lineWidth=3;
-    ctx.shadowColor=attacking?"#fff16a":(isPikachu?"#ffd000":(isLucario?"#087dff":(isVegeta?"#267bff":"#39cfff")));
+    ctx.shadowColor=attacking?"#fff16a":(isPikachu?"#ffd000":(isLucario?"#087dff":(isVegeta?"#267bff":(isGoku && gokuActiveForm==="ssj2"?"#087dff":(isGoku && gokuActiveForm==="ssj"?"#ffb900":"#39cfff")))));
     ctx.shadowBlur=attacking?18:10;
     ctx.beginPath();
     ctx.ellipse(0,-42,39+Math.sin(t*12)*3,61+Math.cos(t*10)*3,0,0,Math.PI*2);
@@ -1437,3 +1554,4 @@ cancelAnimationFrame(animationFrame);
 })();
 </script>
 </body></html>
+
