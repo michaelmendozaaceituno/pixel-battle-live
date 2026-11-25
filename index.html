@@ -5,10 +5,11 @@ Crea tu identidad, sube de nivel y demuestra quién es el mejor jugador.
 Los personajes se desplazan, buscan rivales y combaten automáticamente.
 ¡El último sobreviviente será el ganador!
 </p><div class="arena-viewport"><canvas id="arenaCanvas" aria-label="Arena automática de combate"></canvas></div><div class="arena-hud"><span id="arenaEstado">Preparando combate...</span><span>👥 Vivos: <b id="arenaVivos">8</b></span><span>💀 Eliminados: <b id="arenaEliminados">0</b></span></div><div class="arena-bar"><div id="arenaProgreso" class="arena-bar-fill" style="width:100%"></div></div><div class="arena-legend"><span>🟢 Personaje con vida</span><span>⚡ Ataque automático</span><span>🏆 Último sobreviviente</span></div></section><section id="perfilJugador" class="panel" style="display:none"><h2>🎮 MI PERFIL GAMER</h2><div style="font-size:55px">👾</div><h3 id="perfilNombre">Jugador</h3><p>🏆 Nivel: <span id="perfilNivel">1</span></p><p>⭐ Experiencia: <span id="perfilXP">0</span> XP</p><p>🪙 Monedas: <span id="perfilMonedas">100</span></p><p>⚔️ Victorias: <span id="perfilVictorias">0</span></p><p>💀 Derrotas: <span id="perfilDerrotas">0</span></p><div id="panelPersonaje" style="display:none;text-align:center;margin:20px auto"><img
-src="assets/characters/goku-common.png"
+id="gokuRetratoPrincipal"
+src="assets/characters/goku-base-preview.png?v=2"
 alt="Mi primer personaje: Goku"
-style="display:block;width:100%;max-width:360px;height:auto;margin:0 auto;border-radius:18px"
-><div id="gokuTransformaciones" style="margin:18px auto 0;padding:16px;background:linear-gradient(145deg,#111d3c,#25194b);border:1px solid #e5b83f;border-radius:16px;max-width:390px"><h3 style="color:#ffd76a;margin:0 0 8px">🐉 TRANSFORMACIONES DE GOKU</h3><p id="gokuFormaEstado" style="color:#dbeafe;font-size:13px;margin:6px 0 12px">Consultando tus transformaciones...</p><div id="gokuFormaPreviewMarco" class="goku-form-preview"><div class="goku-form-aura"></div><img id="gokuFormaPreview" class="goku-form-preview-image" src="assets/characters/goku-base-preview.png?v=1" alt="Vista previa de Goku"></div><img id="gokuFormaPreview" class="goku-form-preview-image" src="assets/characters/goku-common-sprite.png?v=3" alt="Vista previa de Goku"></div><div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap"><button id="botonGokuBase" onclick="seleccionarTransformacionGoku('base')" type="button">BASE</button><button id="botonGokuSSJ" onclick="seleccionarTransformacionGoku('ssj')" type="button" disabled>SUPER SAIYAJIN · NIVEL 15</button><button id="botonGokuSSJ2" onclick="seleccionarTransformacionGoku('ssj2')" type="button" disabled>SUPER SAIYAJIN 2 · NIVEL 30</button></div><p style="font-size:11px;color:#aebbd8;margin:12px 0 0">Las formas se desbloquean con el nivel propio de Goku y se guardan en Supabase.</p></div></div><div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px"><h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2><p>¡Toca para conseguir Cápsulas del Poder!</p><div style="font-size:55px;margin:15px">⚡</div><h2 style="color:#ffd700"><span id="contadorTap">0</span> / 200
+style="display:block;width:100%;max-width:360px;height:230px;object-fit:contain;object-position:center;margin:0 auto 14px;border-radius:18px;image-rendering:pixelated;filter:drop-shadow(0 5px 12px rgba(0,0,0,.35))"
+><div id="gokuTransformaciones" style="margin:18px auto 0;padding:16px;background:linear-gradient(145deg,#111d3c,#25194b);border:1px solid #e5b83f;border-radius:16px;max-width:390px"><h3 style="color:#ffd76a;margin:0 0 8px">🐉 TRANSFORMACIONES DE GOKU</h3><p id="gokuFormaEstado" style="color:#dbeafe;font-size:13px;margin:6px 0 12px">Consultando tus transformaciones...</p><div id="gokuFormaPreviewMarco" class="goku-form-preview"><div class="goku-form-aura"></div><img id="gokuFormaPreview" class="goku-form-preview-image" src="assets/characters/goku-base-preview.png?v=2" alt="Vista previa de Goku"></div></div><div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap"><button id="botonGokuBase" onclick="seleccionarTransformacionGoku('base')" type="button">BASE</button><button id="botonGokuSSJ" onclick="seleccionarTransformacionGoku('ssj')" type="button" disabled>SUPER SAIYAJIN · NIVEL 15</button><button id="botonGokuSSJ2" onclick="seleccionarTransformacionGoku('ssj2')" type="button" disabled>SUPER SAIYAJIN 2 · NIVEL 30</button></div><p style="font-size:11px;color:#aebbd8;margin:12px 0 0">Las formas se desbloquean con el nivel propio de Goku y se guardan en Supabase.</p></div></div><div id="panelTapTap" style="margin-top:25px;padding:20px;background:linear-gradient(145deg,#102c48,#182052);border:2px solid #36dfff;border-radius:18px"><h2 style="color:#50eaff">👆 TAP TAP BATTLE</h2><p>¡Toca para conseguir Cápsulas del Poder!</p><div style="font-size:55px;margin:15px">⚡</div><h2 style="color:#ffd700"><span id="contadorTap">0</span> / 200
 </h2><div style="height:12px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:15px 0"><div id="barraTap" style="height:100%;width:0%;background:linear-gradient(90deg,#36dfff,#a855f7);transition:width .15s"></div></div><button id="botonTap" onclick="registrarToque()" style="padding:18px 35px;font-size:20px">
 ⚡ ¡TOCAR!
 </button><p id="mensajeTap" style="color:#c9c6e9">
@@ -36,19 +37,24 @@ let gokuCharacterLevel = 1;
 let gokuCharacterRowId = null;
 let gokuFormSaveBusy = false;
 const GOKU_FORM_CONFIG = {
-base: {label:"Goku Base",level:1,src:"assets/characters/goku-base-preview.png?v=1"},
-ssj: {label:"Super Saiyajin",level:15,src:"assets/characters/goku-ssj-preview.png?v=1"},
-ssj2: {label:"Super Saiyajin 2",level:30,src:"assets/characters/goku-ssj2-preview.png?v=1"}
+base: {label:"Goku Base",level:1,src:"assets/characters/goku-base-preview.png?v=2"},
+ssj: {label:"Super Saiyajin",level:15,src:"assets/characters/goku-ssj-preview.png?v=2"},
+ssj2: {label:"Super Saiyajin 2",level:30,src:"assets/characters/goku-ssj2-preview.png?v=2"}
 };
 function renderizarTransformacionesGoku(mensajeExtra="") {
 const estado=document.getElementById("gokuFormaEstado");
 const preview=document.getElementById("gokuFormaPreview");
-if(!estado || !preview) return;
+const retrato=document.getElementById("gokuRetratoPrincipal");
+if(!estado || !preview || !retrato) return;
 const labels={base:"BASE",ssj:"SUPER SAIYAJIN",ssj2:"SUPER SAIYAJIN 2"};
 estado.textContent=(labels[gokuActiveForm]||"BASE")+" · Nivel de Goku: "+gokuCharacterLevel+(mensajeExtra?" · "+mensajeExtra:"");
 const config=GOKU_FORM_CONFIG[gokuActiveForm]||GOKU_FORM_CONFIG.base;
-preview.src=config.src;
+// Ambas vistas usan el mismo retrato de la forma activa: el retrato grande
+// y la vista previa nunca quedan mostrando transformaciones diferentes.
+if(preview.getAttribute("src")!==config.src) preview.src=config.src;
+if(retrato.getAttribute("src")!==config.src) retrato.src=config.src;
 preview.alt="Vista previa: "+config.label;
+retrato.alt="Mi personaje: "+config.label;
 for(const [form,id] of [["base","botonGokuBase"],["ssj","botonGokuSSJ"],["ssj2","botonGokuSSJ2"]]){
 const button=document.getElementById(id);
 if(!button) continue;
